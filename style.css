@@ -4,36 +4,48 @@
    ============================================================ */
 
 :root {
-  --bg: #0a0a0f;
-  --bg-card: #13131f;
-  --bg-card-hover: #1a1a2e;
-  --border: #2a2a3e;
-  --text: #e4e4ed;
-  --text-dim: #8888a0;
+  --bg: #0F172A;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --bg-card-solid: #1E293B;
+  --bg-card-hover: #263450;
+  --border: rgba(148, 163, 184, 0.12);
+  --border-accent: rgba(0, 212, 170, 0.25);
+  --text: #F1F5F9;
+  --text-dim: #94A3B8;
   --accent: #00d4aa;
-  --accent-dim: #00d4aa33;
-  --red: #ff4466;
-  --orange: #ff8844;
-  --yellow: #ffcc00;
-  --blue: #4488ff;
-  --purple: #aa66ff;
-  --green: #00d4aa;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --accent-dim: rgba(0, 212, 170, 0.15);
+  --gold: #F59E0B;
+  --gold-dim: rgba(245, 158, 11, 0.15);
+  --red: #EF4444;
+  --orange: #F97316;
+  --yellow: #FBBF24;
+  --blue: #3B82F6;
+  --purple: #8B5CF6;
+  --green: #10B981;
+  --font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --radius: 12px;
-  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-sm: 10px;
   --max-width: 680px;
+  --blur: 12px;
+  --transition: 200ms cubic-bezier(0.25, 0, 0, 1);
+  --shadow-glow: 0 0 20px rgba(0, 212, 170, 0.15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: var(--font);
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .landing-title, .persona-code, .section-title, .btn-start, .btn-nav {
+  font-family: var(--font);
 }
 
 /* ── Screens ── */
@@ -54,13 +66,14 @@ body {
 
 .landing-title {
   font-size: clamp(2rem, 6vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1.2;
+  font-weight: 700;
+  line-height: 1.15;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, var(--accent), var(--blue));
+  background: linear-gradient(135deg, var(--accent) 0%, var(--blue) 50%, var(--purple) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.02em;
 }
 
 .landing-subtitle {
@@ -88,17 +101,32 @@ body {
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--bg);
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), #00b890);
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition);
   letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-start::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
 }
 
 .btn-start:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--accent-dim);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(0, 212, 170, 0.3);
+}
+
+.btn-start:hover::after {
+  transform: translateX(100%);
 }
 
 /* ── Quiz ── */
@@ -162,15 +190,18 @@ body {
 
 .question-card {
   background: var(--bg-card);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
   margin-bottom: 1rem;
-  transition: border-color 0.2s;
+  transition: all var(--transition);
 }
 
 .question-card.answered {
-  border-color: var(--accent-dim);
+  border-color: var(--border-accent);
+  box-shadow: 0 0 0 1px var(--accent-dim);
 }
 
 .question-header {
@@ -220,25 +251,28 @@ body {
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.9rem 1rem;
-  background: transparent;
+  background: rgba(15, 23, 42, 0.5);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: left;
   color: var(--text);
   font-size: 0.9rem;
-  transition: all 0.15s;
+  transition: all var(--transition);
   line-height: 1.4;
 }
 
 .option-btn:hover {
   border-color: var(--accent);
   background: var(--accent-dim);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .option-btn.selected {
   border-color: var(--accent);
   background: var(--accent-dim);
+  box-shadow: inset 0 0 0 1px var(--accent), var(--shadow-glow);
 }
 
 .option-label {
@@ -307,14 +341,18 @@ body {
 }
 
 /* ── Page transition ── */
-@keyframes pageSlideIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-#questions-list.page-enter {
-  animation: pageSlideIn 0.3s ease-out;
+#questions-list.page-enter .question-card {
+  animation: cardFadeUp 0.35s cubic-bezier(0.25, 0, 0, 1) backwards;
 }
+#questions-list.page-enter .question-card:nth-child(1) { animation-delay: 0s; }
+#questions-list.page-enter .question-card:nth-child(2) { animation-delay: 0.06s; }
+#questions-list.page-enter .question-card:nth-child(3) { animation-delay: 0.12s; }
+#questions-list.page-enter .question-card:nth-child(4) { animation-delay: 0.18s; }
 
 /* ── Result ── */
 #result {
@@ -328,21 +366,31 @@ body {
 
 .result-persona-card {
   background: var(--bg-card);
-  border: 2px solid var(--accent);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--border-accent);
   border-radius: var(--radius);
   padding: 2rem;
   text-align: center;
   margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
 }
 
 .result-persona-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--accent), var(--blue), var(--purple));
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--blue), var(--purple), var(--gold));
+  background-size: 200% 100%;
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .persona-badge {
@@ -367,11 +415,16 @@ body {
   width: 110px;
   height: 110px;
   object-fit: cover;
-  border-radius: 16px;
-  border: 2px solid var(--accent-dim);
+  border-radius: var(--radius);
+  border: 2px solid var(--border-accent);
   background: var(--bg);
-  box-shadow: 0 4px 20px rgba(0, 212, 170, 0.1);
+  box-shadow: var(--shadow-glow);
   flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.persona-meme:hover {
+  transform: scale(1.05);
 }
 
 .persona-identity {
@@ -442,6 +495,8 @@ body {
 
 .scatter-wrap {
   background: var(--bg-card);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
@@ -493,10 +548,17 @@ body {
 
 .dim-group {
   background: var(--bg-card);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.25rem;
   margin-bottom: 0.75rem;
+  transition: border-color var(--transition);
+}
+
+.dim-group:hover {
+  border-color: var(--border-accent);
 }
 
 .dim-group-title {
