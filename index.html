@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -57,7 +57,7 @@
   <div id="result" class="screen">
     <div class="result-container">
 
-      <!-- Persona Card -->
+      <!-- Section 1: Persona Hero (the reveal) -->
       <div class="result-persona-card">
         <div id="persona-badge" class="persona-badge"></div>
         <div class="persona-hero">
@@ -70,12 +70,22 @@
         </div>
         <div id="persona-intro" class="persona-intro"></div>
         <div id="persona-intro-en" class="persona-intro persona-intro-sub"></div>
-        <hr style="border: none; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+      </div>
+
+      <!-- Section 2: Share CTA (primary action, right after the reveal) -->
+      <div class="actions-section actions-primary">
+        <button class="btn-action btn-share" onclick="shareResult()">Post on 𝕏</button>
+        <button class="btn-action btn-copy" onclick="copyShareText()">Copy / 复制</button>
+      </div>
+
+      <!-- Section 3: Description (expandable depth) -->
+      <div class="result-desc-card">
+        <div class="section-title">About This Persona / 关于这个人格</div>
         <div id="persona-desc" class="persona-desc"></div>
         <div id="persona-desc-en" class="persona-desc-en"></div>
       </div>
 
-      <!-- Scatter Plot -->
+      <!-- Section 4: Scatter Plot -->
       <div class="scatter-section">
         <div class="section-title">Your Position / 你的位置</div>
         <div class="scatter-wrap">
@@ -91,16 +101,15 @@
         </div>
       </div>
 
-      <!-- Dimensions -->
+      <!-- Section 5: Dimensions -->
       <div class="dims-section">
         <div class="section-title">Dimension Scores / 维度得分</div>
         <div id="dims-list"></div>
       </div>
 
-      <!-- Actions -->
-      <div class="actions-section">
+      <!-- Section 6: Secondary actions + Tips -->
+      <div class="actions-section actions-secondary">
         <button class="btn-action btn-share" onclick="shareResult()">Post on 𝕏</button>
-        <button class="btn-action btn-copy" onclick="copyShareText()">Copy / 复制</button>
         <button class="btn-action btn-retry" onclick="retryTest()">Retry / 重新测试</button>
       </div>
 
@@ -118,7 +127,7 @@
     </div>
   </div>
 
-  <script src="data.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="data.js?v=8"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

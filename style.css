@@ -393,6 +393,20 @@ h1, h2, h3, .landing-title, .persona-code, .section-title, .btn-start, .btn-nav 
   50% { background-position: 100% 50%; }
 }
 
+/* Result reveal animation */
+@keyframes resultReveal {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#result .result-persona-card { animation: resultReveal 0.5s cubic-bezier(0.25, 0, 0, 1) 0s backwards; }
+#result .actions-primary { animation: resultReveal 0.4s cubic-bezier(0.25, 0, 0, 1) 0.15s backwards; }
+#result .result-desc-card { animation: resultReveal 0.4s cubic-bezier(0.25, 0, 0, 1) 0.25s backwards; }
+#result .scatter-section { animation: resultReveal 0.4s cubic-bezier(0.25, 0, 0, 1) 0.35s backwards; }
+#result .dims-section { animation: resultReveal 0.4s cubic-bezier(0.25, 0, 0, 1) 0.45s backwards; }
+#result .actions-secondary { animation: resultReveal 0.4s cubic-bezier(0.25, 0, 0, 1) 0.55s backwards; }
+#result .tips-section { animation: resultReveal 0.4s cubic-bezier(0.25, 0, 0, 1) 0.65s backwards; }
+
 .persona-badge {
   display: inline-block;
   font-size: 0.8rem;
@@ -465,16 +479,26 @@ h1, h2, h3, .landing-title, .persona-code, .section-title, .btn-start, .btn-nav 
   margin-bottom: 1rem;
 }
 
+.result-desc-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+}
+
 .persona-desc {
   font-size: 0.95rem;
-  line-height: 1.7;
+  line-height: 1.75;
   text-align: left;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .persona-desc-en {
   font-size: 0.85rem;
-  line-height: 1.6;
+  line-height: 1.65;
   text-align: left;
   color: var(--text-dim);
 }
@@ -616,6 +640,18 @@ h1, h2, h3, .landing-title, .persona-code, .section-title, .btn-start, .btn-nav 
   gap: 0.75rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
+}
+
+.actions-primary {
+  margin-bottom: 2rem;
+}
+
+.actions-primary .btn-share {
+  flex: 2;
+}
+
+.actions-secondary {
+  margin-bottom: 1rem;
 }
 
 .btn-action {
