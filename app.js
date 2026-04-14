@@ -225,32 +225,75 @@ function computeResult() {
   state.dimScores = dimSums;
   state.dimLevels = dimLevels;
 
-  // Build pattern string: IM1 IM2 IM3 - EM1 EM2 EM3 - MW1 MW2 MW3 - TS1 TS2 TS3 - SB1 SB2 SB3
-  const dimOrder = ['IM1','IM2','IM3','EM1','EM2','EM3','MW1','MW2','MW3','TS1','TS2','TS3','SB1','SB2','SB3'];
-  const pattern = dimOrder.map(d => dimLevels[d]).join('');
+  // Use raw dimension sums (2-6 each) for precise matching
+  // Each persona has a scoring function that returns affinity score
+  var L = dimLevels;
+  var S = dimSums;
 
-  // Find closest persona by pattern matching (Hamming distance)
-  let bestMatch = null;
-  let bestDist = Infinity;
+  // Classify into quadrant first based on key dimensions
+  var riskRaw = S.IM1 || 4;        // 2-6, high = risky
+  var convRaw = S.IM2 || 4;        // 2-6, high = convicted
+  var fomoRaw = S.EM1 || 4;        // 2-6, high = FOMO resistant
+  var lossRaw = S.EM2 || 4;        // 2-6, high = loss tolerant
+  var greedRaw = S.EM3 || 4;       // 2-6, high = greed managed
+  var bullRaw = S.MW1 || 4;        // 2-6, high = bullish
+  var narrRaw = S.MW2 || 4;        // 2-6, high = narrative driven
+  var philoRaw = S.MW3 || 4;       // 2-6, high = pragmatic
+  var timeRaw = S.TS1 || 4;        // 2-6, high = long term
+  var deciRaw = S.TS2 || 4;        // 2-6, high = analytical
+  var execRaw = S.TS3 || 4;        // 2-6, high = systematic
+  var shareRaw = S.SB1 || 4;       // 2-6, high = shares alpha
+  var commRaw = S.SB2 || 4;        // 2-6, high = active community
+  var indepRaw = S.SB3 || 4;       // 2-6, high = independent
 
-  for (const [code, persona] of Object.entries(personas)) {
-    const pPattern = persona.pattern.replace(/-/g, '');
-    let dist = 0;
-    for (let i = 0; i < pattern.length; i++) {
-      if (pattern[i] !== pPattern[i]) {
-        // Weight the distance: H-L = 2, H-M or M-L = 1
-        const a = levelToNum(pattern[i]);
-        const b = levelToNum(pPattern[i]);
-        dist += Math.abs(a - b);
-      }
-    }
-    if (dist < bestDist) {
-      bestDist = dist;
-      bestMatch = persona;
+  // Each persona: 3 key dimensions weighted 3, 2 secondary weighted 2 = total weight always 13
+  // This ensures no persona's score dominates by having more terms
+  var scores = {};
+  for (var k in personas) scores[k] = 0;
+
+  // ── Smart Money (low risk + high conviction) ──
+  scores.HODL  = (7-riskRaw)*3 + convRaw*3 + timeRaw*3 + lossRaw*2 + (7-shareRaw)*2;
+  scores.SNPR  = deciRaw*3 + (7-shareRaw)*3 + convRaw*3 + fomoRaw*2 + (7-riskRaw)*2;
+  scores.FARM  = execRaw*3 + greedRaw*3 + (7-riskRaw)*3 + deciRaw*2 + (7-narrRaw)*2;
+  scores.BUIDL = commRaw*3 + timeRaw*3 + (7-narrRaw)*3 + convRaw*2 + (7-riskRaw)*2;
+  scores.ALPHA = indepRaw*3 + (7-shareRaw)*3 + deciRaw*3 + convRaw*2 + fomoRaw*2;
+  scores.WHALE = (7-shareRaw)*3 + convRaw*3 + (7-commRaw)*3 + lossRaw*2 + timeRaw*2;
+  scores.MAXI  = (7-philoRaw)*3 + convRaw*3 + (7-riskRaw)*3 + commRaw*2 + indepRaw*2;
+  scores.ANON  = (7-shareRaw)*3 + (7-commRaw)*3 + indepRaw*3 + deciRaw*2 + (7-riskRaw)*2;
+  scores.BEAR  = (7-bullRaw)*3 + fomoRaw*3 + (7-riskRaw)*3 + convRaw*2 + indepRaw*2;
+  scores.AIRD  = execRaw*3 + (7-shareRaw)*3 + (7-riskRaw)*3 + deciRaw*2 + greedRaw*2;
+  scores.WAGMI = bullRaw*3 + shareRaw*3 + commRaw*3 + convRaw*2 + (7-fomoRaw)*2;
+
+  // ── Diamond Degen (high risk + high conviction) ──
+  scores.MOON  = bullRaw*3 + (7-greedRaw)*3 + riskRaw*3 + convRaw*2 + shareRaw*2;
+  scores.CHEF  = riskRaw*3 + convRaw*3 + (7-shareRaw)*3 + bullRaw*2 + deciRaw*2;
+
+  // ── Rotating Andy (low risk + low conviction) ──
+  scores.COPE  = philoRaw*3 + lossRaw*3 + (7-indepRaw)*3 + (7-riskRaw)*2 + (7-convRaw)*2;
+  scores.PAPER = (7-convRaw)*3 + (7-lossRaw)*3 + (7-greedRaw)*3 + (7-riskRaw)*2 + fomoRaw*2;
+  scores.FLIP  = narrRaw*3 + (7-timeRaw)*3 + (7-convRaw)*3 + riskRaw*2 + (7-deciRaw)*2;
+  scores.GURU  = shareRaw*3 + narrRaw*3 + (7-indepRaw)*3 + commRaw*2 + (7-convRaw)*2;
+  scores.DEAD  = (7-commRaw)*3 + (7-shareRaw)*3 + (7-convRaw)*3 + (7-riskRaw)*2 + timeRaw*2;
+
+  // ── Absolute Gambler (high risk + low conviction) ──
+  scores.DGEN  = riskRaw*3 + (7-fomoRaw)*3 + (7-deciRaw)*3 + (7-convRaw)*2 + (7-timeRaw)*2;
+  scores.NGMI  = (7-indepRaw)*3 + (7-fomoRaw)*3 + riskRaw*3 + (7-convRaw)*2 + (7-lossRaw)*2;
+  scores.REKT  = riskRaw*3 + (7-lossRaw)*3 + (7-greedRaw)*3 + (7-convRaw)*2 + (7-deciRaw)*2;
+  scores.FOMO  = (7-fomoRaw)*3 + riskRaw*3 + (7-timeRaw)*3 + narrRaw*2 + (7-convRaw)*2;
+  scores.SHILL = shareRaw*3 + narrRaw*3 + (7-indepRaw)*3 + commRaw*2 + riskRaw*2;
+  scores.NEWB  = (7-deciRaw)*3 + riskRaw*3 + (7-indepRaw)*3 + (7-convRaw)*2 + (7-fomoRaw)*2;
+
+  // Find the highest scoring persona
+  var bestCode = null;
+  var bestScore = -Infinity;
+  for (var code in scores) {
+    if (scores[code] > bestScore) {
+      bestScore = scores[code];
+      bestCode = code;
     }
   }
 
-  state.result = bestMatch;
+  state.result = personas[bestCode];
 
   // Compute scatter position from dimension scores
   const riskScore = computeAxisScore(scatterWeights.risk, dimSums);
