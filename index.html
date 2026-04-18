@@ -14,13 +14,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
-  <!-- ═══ Background video (landing + quiz only; hidden on result) ═══ -->
+  <!-- ═══ Background video (landing + quiz only; hidden on result) ═══
+       Note: no `loop` attr — playback is ping-pong (forward → reverse → forward)
+       managed in app.js for a seamless cinematic loop with no hard cut. -->
   <div class="bg-video-wrap" aria-hidden="true">
-    <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/video/bg-poster.jpg">
+    <video class="bg-video" autoplay muted playsinline preload="auto" poster="assets/video/bg-poster.jpg">
       <source src="assets/video/bg.mp4" type="video/mp4">
     </video>
     <div class="bg-video-overlay"></div>
@@ -156,7 +158,7 @@
     </div>
   </div>
 
-  <script src="data.js?v=12"></script>
-  <script src="app.js?v=12"></script>
+  <script src="data.js?v=13"></script>
+  <script src="app.js?v=13"></script>
 </body>
 </html>

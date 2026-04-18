@@ -42,13 +42,10 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
   // Body class drives video visibility as a :has() fallback; pause the video on result.
   document.body.className = 'screen-' + id;
-  var bgVideo = document.querySelector('.bg-video');
-  if (bgVideo) {
-    if (id === 'result') {
-      try { bgVideo.pause(); } catch (e) {}
-    } else {
-      try { bgVideo.play().catch(function(){}); } catch (e) {}
-    }
+  // Hand off video play/pause to the ping-pong controller so direction is preserved.
+  if (typeof BgPingPong !== 'undefined') {
+    if (id === 'result') BgPingPong.pause();
+    else BgPingPong.resume();
   }
   window.scrollTo(0, 0);
 }
@@ -637,6 +634,85 @@ function copyAddress(el) {
 }
 
 // ── Init ──
+// ── Background video: seamless ping-pong loop ──
+// `playbackRate = -1` is not reliable cross-browser (Safari/WebKit doesn't
+// honor negative rates), so we reverse manually by stepping currentTime with
+// requestAnimationFrame. Forward uses native playback; reverse is RAF-driven.
+const BgPingPong = (function () {
+  var video = null;
+  var direction = 1;          // 1 = forward, -1 = reverse
+  var rafId = null;
+  var lastFrameTs = null;
+  var enabled = true;
+
+  function cancelReverseLoop() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    lastFrameTs = null;
+  }
+
+  function reverseTick(now) {
+    if (!video || direction !== -1 || !enabled) { cancelReverseLoop(); return; }
+    if (lastFrameTs == null) lastFrameTs = now;
+    var dt = (now - lastFrameTs) / 1000;
+    lastFrameTs = now;
+    var next = video.currentTime - dt;
+    if (next <= 0.02) {
+      // Reached the start — flip to forward playback
+      video.currentTime = 0;
+      direction = 1;
+      cancelReverseLoop();
+      video.play().catch(function () {});
+      return;
+    }
+    video.currentTime = next;
+    rafId = requestAnimationFrame(reverseTick);
+  }
+
+  function onEnded() {
+    if (!enabled) return;
+    // Reached the end — flip to reverse playback
+    direction = -1;
+    video.pause();
+    lastFrameTs = null;
+    rafId = requestAnimationFrame(reverseTick);
+  }
+
+  return {
+    init: function () {
+      video = document.querySelector('.bg-video');
+      if (!video) return;
+      video.addEventListener('ended', onEnded);
+      // Safety net: some browsers don't reliably fire `ended` on muted autoplay.
+      // If we get within 0.08s of the end while in forward mode, flip manually.
+      video.addEventListener('timeupdate', function () {
+        if (!enabled || direction !== 1) return;
+        var d = video.duration;
+        if (isFinite(d) && d > 0 && d - video.currentTime < 0.08) {
+          onEnded();
+        }
+      });
+    },
+    resume: function () {
+      enabled = true;
+      if (!video) return;
+      if (direction === 1) {
+        video.play().catch(function () {});
+      } else {
+        // Were mid-reverse before a pause — continue reversing
+        lastFrameTs = null;
+        rafId = requestAnimationFrame(reverseTick);
+      }
+    },
+    pause: function () {
+      enabled = false;
+      if (!video) return;
+      video.pause();
+      cancelReverseLoop();
+    },
+  };
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
+  BgPingPong.init();
   showScreen('landing');
 });
