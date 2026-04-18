@@ -86,7 +86,9 @@ body::before {
   z-index: 0;
 }
 
-/* Film grain — gives the black surface texture so it doesn't feel flat */
+/* Film grain — gives the black surface texture so it doesn't feel flat.
+   Promoted to its own compositor layer (transform: translateZ) so the overlay
+   mix-blend doesn't force repaints during the landing blur-in animation. */
 body::after {
   content: '';
   position: fixed;
@@ -95,7 +97,18 @@ body::after {
   opacity: 0.5;
   pointer-events: none;
   mix-blend-mode: overlay;
+  transform: translateZ(0);
   z-index: 1;
+}
+
+/* During the landing reveal (first 2s), drop grain opacity so the GPU isn't
+   composing blend+blur at the same time — smoother framerate on weaker GPUs. */
+body.screen-landing::after {
+  opacity: 0.28;
+  animation: grainReturn 1.2s var(--ease-out) 1.8s forwards;
+}
+@keyframes grainReturn {
+  to { opacity: 0.5; }
 }
 
 /* Everything interactive sits above the grain */
@@ -291,12 +304,15 @@ body.screen-result .bg-video { visibility: hidden; }
   color: var(--fg);
 }
 
-/* Blur-in per-token animation */
+/* Blur-in per-token animation.
+   GPU-compositing (will-change + translate3d) prevents the main-thread paint
+   stutter that a large filter:blur otherwise causes on serif display type. */
 .blur-in {
   display: inline-block;
-  filter: blur(14px);
   opacity: 0;
-  transform: translateY(18px);
+  transform: translate3d(0, 18px, 0);
+  filter: blur(10px);
+  will-change: filter, opacity, transform;
   animation: blurInUp 0.9s var(--ease-out) forwards;
 }
 .blur-in:nth-child(1) { animation-delay: 0.05s; }
@@ -308,9 +324,9 @@ body.screen-result .bg-video { visibility: hidden; }
 .blur-in:nth-child(7) { animation-delay: 0.56s; }
 
 @keyframes blurInUp {
-  0%   { filter: blur(14px); opacity: 0; transform: translateY(18px); }
-  60%  { filter: blur(4px);  opacity: 0.6; transform: translateY(4px); }
-  100% { filter: blur(0);    opacity: 1; transform: translateY(0); }
+  0%   { filter: blur(10px); opacity: 0;   transform: translate3d(0, 18px, 0); }
+  60%  { filter: blur(2px);  opacity: 0.7; transform: translate3d(0, 4px, 0); }
+  100% { filter: blur(0);    opacity: 1;   transform: translate3d(0, 0, 0); }
 }
 
 .landing-subtitle {
@@ -322,6 +338,7 @@ body.screen-result .bg-video { visibility: hidden; }
   color: var(--fg-70);
   margin-bottom: var(--s-7);
   line-height: 1.5;
+  will-change: filter, opacity, transform;
   animation: blurInUp 0.9s var(--ease-out) 0.6s backwards;
 }
 
@@ -353,6 +370,7 @@ body.screen-result .bg-video { visibility: hidden; }
     0 4px 30px rgba(0, 0, 0, 0.35);
   transition: transform var(--dur-short) var(--ease-out),
               box-shadow var(--dur-med) var(--ease-out);
+  will-change: filter, opacity, transform;
   animation: blurInUp 0.9s var(--ease-out) 0.85s backwards;
 }
 
@@ -394,6 +412,7 @@ body.screen-result .bg-video { visibility: hidden; }
   font-size: 14px;
   font-weight: 300;
   color: var(--fg-50);
+  will-change: filter, opacity, transform;
   animation: blurInUp 0.9s var(--ease-out) 1.05s backwards;
 }
 .landing-tagline em {
@@ -421,6 +440,7 @@ body.screen-result .bg-video { visibility: hidden; }
   border-radius: var(--r-pill);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  will-change: filter, opacity, transform;
   animation: blurInUp 0.9s var(--ease-out) 1.2s backwards;
   transition: color var(--dur-short) var(--ease-out),
               border-color var(--dur-short) var(--ease-out),
@@ -441,6 +461,7 @@ body.screen-result .bg-video { visibility: hidden; }
   font-size: 12px;
   color: var(--fg-40);
   font-weight: 300;
+  will-change: filter, opacity, transform;
   animation: blurInUp 0.9s var(--ease-out) 1.35s backwards;
 }
 .landing-credit a {
