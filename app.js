@@ -439,7 +439,8 @@ function renderScatter() {
     label: 'rgba(255,255,255,0.45)'
   };
 
-  const pad = 44;
+  // Single pad value — leaves room above for top quadrant labels and below for bottom labels + axis.
+  const pad = 36;
   const plotSize = size - pad * 2;
 
   // Subtle quadrant washes — very low alpha on black
@@ -472,28 +473,28 @@ function renderScatter() {
   ctx.strokeStyle = C.grid;
   ctx.strokeRect(pad, pad, plotSize, plotSize);
 
-  // Axis labels — mono, lowercase-ish crypto-terminal feel
+  // Axis labels — mono, terminal feel. Risk label sits below the quadrant labels.
   ctx.fillStyle = C.label;
   ctx.font = '10px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('RISK  →  风险偏好', pad + plotSize / 2, size - 6);
+  ctx.fillText('RISK  →  风险偏好', pad + plotSize / 2, pad + plotSize + 34);
   ctx.save();
-  ctx.translate(16, pad + plotSize / 2);
+  ctx.translate(14, pad + plotSize / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillText('CONVICTION  →  信念强度', 0, 0);
   ctx.restore();
 
-  // Quadrant labels — small, uppercase, colored
+  // Quadrant labels — placed OUTSIDE the plot so they never collide with dots
   ctx.font = '9px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
-  ctx.fillStyle = C.sm + '99';
-  ctx.fillText('SMART MONEY',     pad + plotSize * 0.25, pad + 14);
-  ctx.fillStyle = C.dd + '99';
-  ctx.fillText('DIAMOND DEGEN',   pad + plotSize * 0.75, pad + 14);
-  ctx.fillStyle = C.ra + '99';
-  ctx.fillText('ROTATING ANDY',   pad + plotSize * 0.25, pad + plotSize - 8);
-  ctx.fillStyle = C.ag + '99';
-  ctx.fillText('ABSOLUTE GAMBLER', pad + plotSize * 0.75, pad + plotSize - 8);
+  ctx.fillStyle = C.sm + 'B0';
+  ctx.fillText('SMART MONEY',     pad + plotSize * 0.25, pad - 8);
+  ctx.fillStyle = C.dd + 'B0';
+  ctx.fillText('DIAMOND DEGEN',   pad + plotSize * 0.75, pad - 8);
+  ctx.fillStyle = C.ra + 'B0';
+  ctx.fillText('ROTATING ANDY',   pad + plotSize * 0.25, pad + plotSize + 16);
+  ctx.fillStyle = C.ag + 'B0';
+  ctx.fillText('ABSOLUTE GAMBLER', pad + plotSize * 0.75, pad + plotSize + 16);
 
   // Plot other personas as dim dots
   ctx.globalAlpha = 0.45;
@@ -508,10 +509,14 @@ function renderScatter() {
   }
   ctx.globalAlpha = 1;
 
-  // User position (based on their actual answers)
-  const ux = pad + (state.scatterPos.risk / 100) * plotSize;
-  const uy = pad + (1 - state.scatterPos.conviction / 100) * plotSize;
-  // Color the user dot by the PERSONA's canonical quadrant — keeps the whole result visually coherent
+  // User dot is plotted at the PERSONA's canonical position.
+  // Rationale: the rule-based scorer and the risk/conviction axis math can disagree
+  // (different dimensions feed each), so a user scoring BUIDL could end up visually
+  // in the Rotating Andy quadrant, which contradicts the SMART MONEY stamp. Plotting
+  // at canonical keeps everything coherent. The user's actual answer breakdown is
+  // already shown in the dimension bars below.
+  const ux = pad + (state.result.scatter.risk / 100) * plotSize;
+  const uy = pad + (1 - state.result.scatter.conviction / 100) * plotSize;
   const userColor = getQuadrantColor(state.result.scatter.risk, state.result.scatter.conviction);
 
   // Outer glow
@@ -539,11 +544,13 @@ function renderScatter() {
   ctx.fill();
   ctx.stroke();
 
-  // Label with mono font, uppercase code
+  // Label with mono font — position below dot if too close to top edge to avoid clashing with quadrant title
   ctx.fillStyle = '#fff';
   ctx.font = 'bold 11px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText(state.result.code, ux, uy - 18);
+  var labelAbove = (uy - pad) > 40;
+  var labelY = labelAbove ? (uy - 18) : (uy + 24);
+  ctx.fillText(state.result.code, ux, labelY);
 }
 
 function getQuadrantColor(risk, conviction) {
@@ -557,8 +564,11 @@ function getQuadrantColor(risk, conviction) {
 
 function getShareText() {
   const p = state.result;
-  const risk = state.scatterPos.risk;
-  const conv = state.scatterPos.conviction;
+  // Use the PERSONA's canonical risk/conviction so the share text matches
+  // the stamp and scatter dot (otherwise user-derived numbers can contradict
+  // the persona label — e.g. "BUIDL / Smart Money" with "Risk 62%").
+  const risk = p.scatter.risk;
+  const conv = p.scatter.conviction;
   const quadrantMap = {
     sm: { en: 'Smart Money', cn: '聪明钱' },
     dd: { en: 'Diamond Degen', cn: '钻石赌狗' },
