@@ -404,12 +404,44 @@ body.screen-result .bg-video { visibility: hidden; }
   letter-spacing: -0.01em;
 }
 
-.landing-credit {
+.btn-meet {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-top: var(--s-5);
+  padding: 9px 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-70);
+  text-decoration: none;
+  background: rgba(255,255,255,0.022);
+  border: 1px solid var(--fg-10);
+  border-radius: var(--r-pill);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: blurInUp 0.9s var(--ease-out) 1.2s backwards;
+  transition: color var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out),
+              transform var(--dur-short) var(--ease-out),
+              background var(--dur-short) var(--ease-out);
+}
+.btn-meet:hover {
+  color: var(--fg);
+  border-color: var(--fg-20);
+  background: rgba(255,255,255,0.04);
+  transform: translateY(-1px);
+}
+.btn-meet svg { opacity: 0.7; transition: transform var(--dur-short) var(--ease-out); }
+.btn-meet:hover svg { opacity: 1; transform: translateX(2px); }
+
+.landing-credit {
+  margin-top: var(--s-4);
   font-size: 12px;
   color: var(--fg-40);
   font-weight: 300;
-  animation: blurInUp 0.9s var(--ease-out) 1.2s backwards;
+  animation: blurInUp 0.9s var(--ease-out) 1.35s backwards;
 }
 .landing-credit a {
   color: var(--fg-70);
