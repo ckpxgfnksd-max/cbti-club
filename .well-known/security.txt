@@ -1,0 +1,4 @@
+Contact: https://x.com/ChaseWang
+Expires: 2027-04-18T00:00:00.000Z
+Preferred-Languages: en, zh-CN
+Canonical: https://cbti.club/.well-known/security.txt
