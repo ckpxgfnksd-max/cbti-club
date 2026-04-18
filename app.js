@@ -39,15 +39,45 @@ function levelToNum(level) {
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  // Body class drives video visibility as a :has() fallback; pause the video on result.
+  var el = document.getElementById(id);
+  if (!el) { el = document.getElementById('landing'); id = 'landing'; }
+  el.classList.add('active');
+  // Body class drives video visibility as a :has() fallback; pause the video on static pages.
   document.body.className = 'screen-' + id;
-  // Pause the bg video on result (saves battery + removes distraction).
+  // Pause the bg video on screens where it adds nothing (saves battery + removes distraction).
   if (typeof BgVideo !== 'undefined') {
-    if (id === 'result') BgVideo.pause();
+    var quiet = id === 'result' || id === 'chase' || id === 'paper';
+    if (quiet) BgVideo.pause();
     else BgVideo.resume();
   }
   window.scrollTo(0, 0);
+
+  // Kick X widgets to render when we land on #chase (deep-link or from link).
+  // If widgets.js hasn't loaded yet, poll briefly.
+  if (id === 'chase') {
+    setupWritingFallbacks();
+    var tries = 0;
+    (function tryLoadWidgets() {
+      if (window.twttr && window.twttr.widgets) {
+        try { window.twttr.widgets.load(document.getElementById('chase')); } catch (e) {}
+        return;
+      }
+      if (tries++ < 20) setTimeout(tryLoadWidgets, 150);
+    })();
+  }
+}
+
+// ── Hash-based router: supports /#chase and /#paper deep links + browser back/forward.
+// Screens handled by the router (others like #quiz are driven by startTest()).
+var ROUTED_SCREENS = ['landing', 'chase', 'paper'];
+function routeFromHash() {
+  var hash = (location.hash || '').replace('#', '');
+  if (ROUTED_SCREENS.indexOf(hash) !== -1) {
+    showScreen(hash);
+  } else if (!hash) {
+    showScreen('landing');
+  }
+  // else: leave current screen alone (e.g. during quiz)
 }
 
 // ── Quiz rendering ──
@@ -657,5 +687,26 @@ const BgVideo = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  showScreen('landing');
+  // Start wherever the URL hash points (deep links to #chase / #paper), else landing.
+  var hash = (location.hash || '').replace('#', '');
+  if (ROUTED_SCREENS.indexOf(hash) !== -1) showScreen(hash);
+  else showScreen('landing');
 });
+
+window.addEventListener('hashchange', routeFromHash);
+
+// X widget fallback: if a seed tweet fails to render (deleted, private, network
+// blocked) within ~9 seconds after #chase becomes active, show the "visit
+// @ChaseWang" card. We only run this once per session to avoid double-marking.
+var writingFallbacksArmed = false;
+function setupWritingFallbacks() {
+  if (writingFallbacksArmed) return;
+  writingFallbacksArmed = true;
+  var cards = document.querySelectorAll('.writing-card');
+  cards.forEach(function (card) {
+    setTimeout(function () {
+      var rendered = card.querySelector('iframe, .twitter-tweet-rendered');
+      if (!rendered) card.classList.add('writing-card-failed');
+    }, 9000);
+  });
+}
