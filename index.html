@@ -13,18 +13,28 @@
   <meta name="twitter:description" content="MBTI已经过时了，CBTI来了。30道题揭示你的加密人格。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
   <!-- ═══ Landing ═══ -->
   <div id="landing" class="screen active">
     <div class="landing-card">
-      <h1 class="landing-title">MBTI已经过时了，<br>CBTI来了。</h1>
-      <p class="landing-subtitle">Crypto Behavioral Type Indicator<br>30道题，测出你的加密人格</p>
-      <button class="btn-start" onclick="startTest()">开始测试 Start</button>
-      <p class="landing-tagline">25种加密人格，你是哪一种？<br>25 crypto archetypes — which one are you?</p>
+      <span class="landing-eyebrow">CBTI · 2026</span>
+      <h1 class="landing-title">
+        <span class="blur-in">MBTI</span> <span class="blur-in accent"><em>已经过时了</em></span><span class="blur-in">，</span><br>
+        <span class="blur-in"><em>CBTI</em></span> <span class="blur-in">来了</span><span class="blur-in">。</span>
+      </h1>
+      <p class="landing-subtitle">
+        <span>Crypto Behavioral Type Indicator</span>
+        <span class="landing-subtitle-zh">30 道题 · 24 种加密人格 · 测出你的真实面目</span>
+      </p>
+      <button class="btn-start" onclick="startTest()">
+        <span>开始测试 · Start</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
+      </button>
+      <p class="landing-tagline">Which one are you? <em>聪明钱，钻石赌狗，旋转安迪，还是纯赌怪？</em></p>
       <p class="landing-credit">by <a href="https://x.com/ChaseWang" target="_blank" rel="noopener">@ChaseWang</a></p>
     </div>
   </div>
@@ -47,8 +57,14 @@
       <div id="questions-list"></div>
 
       <div class="quiz-nav">
-        <button class="btn-nav btn-prev" onclick="prevPage()">← Back</button>
-        <button class="btn-nav btn-next" onclick="nextPage()">Next →</button>
+        <button class="btn-nav btn-prev" onclick="prevPage()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
+          <span>Back</span>
+        </button>
+        <button class="btn-nav btn-next" onclick="nextPage()">
+          <span>Next</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -58,8 +74,11 @@
     <div class="result-container">
 
       <!-- Section 1: Persona Hero (the reveal) -->
-      <div class="result-persona-card">
-        <div id="persona-badge" class="persona-badge"></div>
+      <div class="result-persona-card" id="persona-card">
+        <div class="persona-stamp">
+          <span id="persona-badge" class="persona-badge">Your Crypto Persona · 你的加密人格</span>
+          <span id="persona-quadrant" class="persona-quadrant"></span>
+        </div>
         <div class="persona-hero">
           <img id="persona-meme" class="persona-meme" src="" alt="" />
           <div class="persona-identity">
@@ -68,8 +87,10 @@
             <div id="persona-en" class="persona-en-label"></div>
           </div>
         </div>
-        <div id="persona-intro" class="persona-intro"></div>
-        <div id="persona-intro-en" class="persona-intro persona-intro-sub"></div>
+        <div class="persona-intro-block">
+          <div id="persona-intro" class="persona-intro"></div>
+          <div id="persona-intro-en" class="persona-intro persona-intro-sub"></div>
+        </div>
       </div>
 
       <!-- Section 2: Share CTA (primary action, right after the reveal) -->
@@ -127,7 +148,7 @@
     </div>
   </div>
 
-  <script src="data.js?v=9"></script>
-  <script src="app.js?v=9"></script>
+  <script src="data.js?v=10"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>

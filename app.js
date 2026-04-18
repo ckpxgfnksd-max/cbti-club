@@ -324,16 +324,43 @@ function renderResult() {
   const p = state.result;
   if (!p) return;
 
-  document.getElementById('persona-badge').textContent = '你的加密人格 / Your Crypto Persona';
+  // Determine quadrant from PERSONA's canonical position (not user's scatter)
+  // This keeps the stamp consistent with the persona identity
+  var pRisk = p.scatter.risk;
+  var pConv = p.scatter.conviction;
+  var qKey = pRisk < 50 && pConv >= 50 ? 'smart_money'
+    : pRisk >= 50 && pConv >= 50 ? 'diamond_degen'
+    : pRisk < 50 && pConv < 50 ? 'rotating_andy'
+    : 'gambler';
+  var qLabel = {
+    smart_money:   'Smart Money · 聪明钱',
+    diamond_degen: 'Diamond Degen · 钻石赌狗',
+    rotating_andy: 'Rotating Andy · 旋转安迪',
+    gambler:       'Absolute Gambler · 纯赌怪'
+  }[qKey];
+
+  // Apply quadrant class to persona card (for glow + accent)
+  var card = document.getElementById('persona-card');
+  if (card) {
+    card.classList.remove('q-smart_money','q-diamond_degen','q-rotating_andy','q-gambler');
+    card.classList.add('q-' + qKey);
+  }
+
+  document.getElementById('persona-badge').textContent = 'Your Crypto Persona · 你的加密人格';
+  var qEl = document.getElementById('persona-quadrant');
+  if (qEl) {
+    qEl.className = 'persona-quadrant q-' + qKey;
+    qEl.textContent = qLabel;
+  }
+
   const memeImg = document.getElementById('persona-meme');
-  // Reset state from previous render
   memeImg.onerror = null;
   memeImg.style.display = '';
-  // Set new image
   const imgSrc = 'assets/personas/' + p.code + '.jpg';
   memeImg.alt = p.cn;
   memeImg.onerror = function() { this.style.display = 'none'; };
   memeImg.src = imgSrc;
+
   document.getElementById('persona-code').textContent = p.code;
   document.getElementById('persona-cn').textContent = p.cn;
   document.getElementById('persona-en').textContent = p.en;
@@ -357,20 +384,16 @@ function renderDimensions() {
     groups[meta.model].push({ dim, ...meta });
   }
 
-  const colors = {
-    '投资心态 Investment Mindset': 'var(--green)',
-    '情绪管理 Emotional Control': 'var(--orange)',
-    '市场观 Market Worldview': 'var(--blue)',
-    '交易风格 Trading Style': 'var(--purple)',
-    '社交行为 Social Behavior': 'var(--yellow)',
-  };
+  // All bars use white — editorial/monochrome. The persona quadrant color is already
+  // established in the stamp + meme card + scatter glow. Keep the dims section as
+  // a clean data readout.
+  const barColor = '#ffffff';
 
   for (const [model, dims] of Object.entries(groups)) {
     const group = document.createElement('div');
     group.className = 'dim-group';
-    const color = colors[model] || 'var(--accent)';
 
-    group.innerHTML = `<div class="dim-group-title" style="color: ${color}">${model}</div>`;
+    group.innerHTML = `<div class="dim-group-title">${model}</div>`;
 
     for (const d of dims) {
       const score = state.dimScores[d.dim] || 2;
@@ -382,7 +405,7 @@ function renderDimensions() {
       row.innerHTML = `
         <span class="dim-label">${d.en}</span>
         <div class="dim-bar-track">
-          <div class="dim-bar-fill" style="width: ${pct}%; background: ${color}"></div>
+          <div class="dim-bar-fill" style="width: ${pct}%; background: ${barColor}"></div>
         </div>
         <span class="dim-level ${level}">${level}</span>
       `;
@@ -405,28 +428,36 @@ function renderScatter() {
   canvas.style.height = size + 'px';
   ctx.scale(dpr, dpr);
 
-  const pad = 40;
+  // New palette (matches CSS tokens)
+  const C = {
+    sm:   '#00E676',  // Smart Money
+    dd:   '#B24BF3',  // Diamond Degen
+    ra:   '#FFB800',  // Rotating Andy
+    ag:   '#FF2E4C',  // Absolute Gambler
+    grid: 'rgba(255,255,255,0.08)',
+    axis: 'rgba(255,255,255,0.35)',
+    label: 'rgba(255,255,255,0.45)'
+  };
+
+  const pad = 44;
   const plotSize = size - pad * 2;
 
-  // Background quadrants
-  const qColors = [
-    { x: 0, y: 0, color: 'rgba(0, 212, 170, 0.06)' },  // Smart Money (low risk, high conviction)
-    { x: 1, y: 0, color: 'rgba(170, 102, 255, 0.06)' }, // Diamond Degen (high risk, high conviction)
-    { x: 0, y: 1, color: 'rgba(255, 204, 0, 0.06)' },   // Rotating Andy (low risk, low conviction)
-    { x: 1, y: 1, color: 'rgba(255, 68, 102, 0.06)' },  // Gambler (high risk, low conviction)
+  // Subtle quadrant washes — very low alpha on black
+  const qWash = [
+    { x: 0, y: 0, fill: 'rgba(0,230,118,0.04)'  },   // Smart Money
+    { x: 1, y: 0, fill: 'rgba(178,75,243,0.05)' },   // Diamond Degen
+    { x: 0, y: 1, fill: 'rgba(255,184,0,0.04)'  },   // Rotating Andy
+    { x: 1, y: 1, fill: 'rgba(255,46,76,0.05)'  },   // Gambler
   ];
-
-  qColors.forEach(q => {
-    ctx.fillStyle = q.color;
+  qWash.forEach(q => {
+    ctx.fillStyle = q.fill;
     ctx.fillRect(pad + q.x * plotSize / 2, pad + q.y * plotSize / 2, plotSize / 2, plotSize / 2);
   });
 
-  // Grid lines
-  ctx.strokeStyle = '#2a2a3e';
+  // Grid: thin mid-lines
+  ctx.strokeStyle = C.grid;
   ctx.lineWidth = 1;
-
-  // Midpoint dashed lines
-  ctx.setLineDash([4, 4]);
+  ctx.setLineDash([3, 5]);
   ctx.beginPath();
   ctx.moveTo(pad + plotSize / 2, pad);
   ctx.lineTo(pad + plotSize / 2, pad + plotSize);
@@ -437,79 +468,89 @@ function renderScatter() {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // Border
-  ctx.strokeStyle = '#2a2a3e';
+  // Outer frame
+  ctx.strokeStyle = C.grid;
   ctx.strokeRect(pad, pad, plotSize, plotSize);
 
-  // Axis labels
-  ctx.fillStyle = '#8888a0';
-  ctx.font = '11px Inter, sans-serif';
+  // Axis labels — mono, lowercase-ish crypto-terminal feel
+  ctx.fillStyle = C.label;
+  ctx.font = '10px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('Risk Appetite / 风险偏好 →', pad + plotSize / 2, size - 5);
+  ctx.fillText('RISK  →  风险偏好', pad + plotSize / 2, size - 6);
   ctx.save();
-  ctx.translate(12, pad + plotSize / 2);
+  ctx.translate(16, pad + plotSize / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillText('Conviction / 信念强度 →', 0, 0);
+  ctx.fillText('CONVICTION  →  信念强度', 0, 0);
   ctx.restore();
 
-  // Quadrant labels
-  ctx.font = '10px Inter, sans-serif';
-  ctx.fillStyle = '#00d4aa66';
-  ctx.fillText('Smart Money', pad + plotSize * 0.25, pad + plotSize * 0.08);
-  ctx.fillStyle = '#aa66ff66';
-  ctx.fillText('Diamond Degen', pad + plotSize * 0.75, pad + plotSize * 0.08);
-  ctx.fillStyle = '#ffcc0066';
-  ctx.fillText('Rotating Andy', pad + plotSize * 0.25, pad + plotSize * 0.95);
-  ctx.fillStyle = '#ff446666';
-  ctx.fillText('Absolute Gambler', pad + plotSize * 0.75, pad + plotSize * 0.95);
+  // Quadrant labels — small, uppercase, colored
+  ctx.font = '9px "JetBrains Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = C.sm + '99';
+  ctx.fillText('SMART MONEY',     pad + plotSize * 0.25, pad + 14);
+  ctx.fillStyle = C.dd + '99';
+  ctx.fillText('DIAMOND DEGEN',   pad + plotSize * 0.75, pad + 14);
+  ctx.fillStyle = C.ra + '99';
+  ctx.fillText('ROTATING ANDY',   pad + plotSize * 0.25, pad + plotSize - 8);
+  ctx.fillStyle = C.ag + '99';
+  ctx.fillText('ABSOLUTE GAMBLER', pad + plotSize * 0.75, pad + plotSize - 8);
 
-  // Plot all personas as small dots
-  ctx.globalAlpha = 0.3;
+  // Plot other personas as dim dots
+  ctx.globalAlpha = 0.45;
   for (const [code, p] of Object.entries(personas)) {
     if (code === state.result.code) continue;
     const x = pad + (p.scatter.risk / 100) * plotSize;
     const y = pad + (1 - p.scatter.conviction / 100) * plotSize;
     ctx.fillStyle = getQuadrantColor(p.scatter.risk, p.scatter.conviction);
     ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.globalAlpha = 1;
 
-  // Plot user position (big dot + label)
+  // User position (based on their actual answers)
   const ux = pad + (state.scatterPos.risk / 100) * plotSize;
   const uy = pad + (1 - state.scatterPos.conviction / 100) * plotSize;
+  // Color the user dot by the PERSONA's canonical quadrant — keeps the whole result visually coherent
+  const userColor = getQuadrantColor(state.result.scatter.risk, state.result.scatter.conviction);
 
-  // Glow
-  const glow = ctx.createRadialGradient(ux, uy, 0, ux, uy, 20);
-  glow.addColorStop(0, 'rgba(0, 212, 170, 0.4)');
-  glow.addColorStop(1, 'rgba(0, 212, 170, 0)');
+  // Outer glow
+  const glow = ctx.createRadialGradient(ux, uy, 0, ux, uy, 28);
+  glow.addColorStop(0, userColor + '66');
+  glow.addColorStop(1, userColor + '00');
   ctx.fillStyle = glow;
   ctx.beginPath();
-  ctx.arc(ux, uy, 20, 0, Math.PI * 2);
+  ctx.arc(ux, uy, 28, 0, Math.PI * 2);
   ctx.fill();
 
-  // Dot
-  ctx.fillStyle = '#00d4aa';
-  ctx.strokeStyle = '#fff';
+  // Inner ring
+  ctx.strokeStyle = userColor + '55';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(ux, uy, 14, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Core dot
+  ctx.fillStyle = userColor;
+  ctx.strokeStyle = '#000';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(ux, uy, 8, 0, Math.PI * 2);
+  ctx.arc(ux, uy, 6, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
 
-  // Label
-  ctx.fillStyle = '#00d4aa';
-  ctx.font = 'bold 12px "JetBrains Mono", monospace';
+  // Label with mono font, uppercase code
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 11px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText(state.result.code, ux, uy - 14);
+  ctx.fillText(state.result.code, ux, uy - 18);
 }
 
 function getQuadrantColor(risk, conviction) {
-  if (risk < 50 && conviction >= 50) return '#00d4aa';
-  if (risk >= 50 && conviction >= 50) return '#aa66ff';
-  if (risk < 50 && conviction < 50) return '#ffcc00';
-  return '#ff4466';
+  if (risk < 50 && conviction >= 50) return '#00E676'; // Smart Money
+  if (risk >= 50 && conviction >= 50) return '#B24BF3'; // Diamond Degen
+  if (risk < 50 && conviction < 50) return '#FFB800'; // Rotating Andy
+  return '#FF2E4C';                                    // Gambler
 }
 
 // ── Share ──
