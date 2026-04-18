@@ -40,6 +40,16 @@ function levelToNum(level) {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  // Body class drives video visibility as a :has() fallback; pause the video on result.
+  document.body.className = 'screen-' + id;
+  var bgVideo = document.querySelector('.bg-video');
+  if (bgVideo) {
+    if (id === 'result') {
+      try { bgVideo.pause(); } catch (e) {}
+    } else {
+      try { bgVideo.play().catch(function(){}); } catch (e) {}
+    }
+  }
   window.scrollTo(0, 0);
 }
 
