@@ -1,0 +1,68 @@
+{
+  "$schema": "./README.md",
+  "version": 1,
+  "items": [
+    {
+      "id": "from-tragedy-of-commons-to-compute-dollar",
+      "publishedAt": "2026-03-22",
+      "primaryLang": "zh",
+      "tags": ["macro", "stablecoin", "ai", "rwa"],
+      "title": {
+        "zh": "从公地悲剧到算力美元：币圈的救赎之路？"
+      },
+      "subtitle": {
+        "zh": "续《币圈是一个没有央行的阿根廷》"
+      },
+      "pullQuote": {
+        "zh": "美元的全球需求锚正在从「石油」扩展为「石油 + 算力」。这不是 crypto 造成的，是 AI 产业驱动的宏观趋势。但这个趋势为 crypto 创造了一个前所未有的机会窗口。"
+      },
+      "excerpt": {
+        "zh": "Crypto 的结构性出路只有两条：被纳入一个有最终贷款人的体系，或自身形成良性的资本循环。两条路有一条走通就行——最好两条都走。从韩国 1997 年到欧洲美元市场，再到正在到来的「石油 + 算力美元」，这是一份关于行业制度化与算力经济的乐观长文。"
+      },
+      "channels": [
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2035850816876097768",
+          "label": "在 X 上阅读"
+        }
+      ]
+    },
+    {
+      "id": "fallacy-of-composition",
+      "publishedAt": "2026-03-15",
+      "primaryLang": "en",
+      "tags": ["crypto", "tokenomics", "macro"],
+      "title": {
+        "en": "Everyone Is Doing the Right Thing. But The Industry Is Dying.",
+        "zh": "每个人都在做正确的事，但行业在死去"
+      },
+      "subtitle": {
+        "en": "Crypto's Fallacy of Composition",
+        "zh": "币圈的合成谬误"
+      },
+      "pullQuote": {
+        "en": "Everyone stands up to see the game, and no one can see anything. Everyone saves more, and total demand collapses.",
+        "zh": "每个人都站起来看比赛，结果谁也看不见。每个人都多储蓄一点，总需求就崩溃了。"
+      },
+      "excerpt": {
+        "en": "Ask anyone in crypto whether they've done anything wrong. The answer, almost universally, is no. Project teams unlocked tokens on schedule per the whitepaper. VCs took early risk and exited. Market makers provided liquidity. KOLs shared views. Retail followed signals. Every participant has a point. Yet the industry has become what it is today.",
+        "zh": "在 crypto，问任何参与者他们做错了什么——几乎没人觉得自己有错。项目方按白皮书解锁，VC 早期承担风险然后退出，做市商提供流动性，KOL 分享观点，散户跟随信号。每个人都站在自己的道理上。但行业，还是变成了今天的样子。"
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/everyone-is-doing-the-right-thing",
+          "label": "Read on Substack"
+        },
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2033309796141551870",
+          "label": "在 X 上阅读"
+        }
+      ]
+    }
+  ]
+}

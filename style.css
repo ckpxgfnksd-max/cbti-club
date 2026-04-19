@@ -1585,42 +1585,212 @@ body.screen-result .bg-video { visibility: hidden; }
   border-color: rgba(178,75,243,0.6);
 }
 
-/* Writing grid */
+/* Writing grid — self-hosted essay cards from writings/index.json */
 .writing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--s-5);
   margin-bottom: var(--s-6);
 }
 .writing-card {
   position: relative;
-  min-height: 220px;
-  padding: var(--s-3);
-  background: rgba(255,255,255,0.012);
-  border: 1px solid var(--fg-06);
-  border-radius: var(--r-card-sm);
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-6) var(--s-6) var(--s-5);
+  background: linear-gradient(180deg, rgba(255,255,255,0.022), rgba(255,255,255,0.008));
+  border: 1px solid var(--fg-10);
+  border-radius: var(--r-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color var(--dur-short) var(--ease-out),
+              transform var(--dur-short) var(--ease-out);
 }
-.writing-card .twitter-tweet {
-  margin: 0 auto !important;
-}
-.writing-card-fallback {
+.writing-card-essay::before {
+  /* hairline accent in the brand purple — signals "thinking" */
+  content: '';
   position: absolute;
-  inset: 0;
-  display: none;
+  left: 0; top: var(--s-6); bottom: var(--s-6);
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--dd-accent, #B24BF3), transparent);
+  opacity: 0.55;
+}
+.writing-card-essay:hover {
+  border-color: rgba(178,75,243,0.32);
+}
+
+/* Skeleton placeholder while index.json loads */
+.writing-card-skeleton {
+  min-height: 260px;
+  pointer-events: none;
+}
+.writing-card-skeleton::before { display: none; }
+.writing-card-skeleton span {
+  display: block;
+  height: 14px;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  background-size: 200% 100%;
+  border-radius: 3px;
+  animation: writingSkeleton 1.6s var(--ease-out) infinite;
+}
+.writing-card-skeleton span:nth-child(1) { width: 35%; }
+.writing-card-skeleton span:nth-child(2) { width: 85%; height: 22px; margin-top: 18px; }
+.writing-card-skeleton span:nth-child(3) { width: 70%; }
+@keyframes writingSkeleton {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.writing-card-meta { margin-bottom: var(--s-3); }
+.writing-card-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-50);
+}
+.writing-card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.writing-card.lang-zh .writing-card-title {
+  font-family: var(--font-display-zh, 'Noto Serif SC', var(--font-display));
+  font-size: 24px;
+  line-height: 1.32;
+  letter-spacing: 0;
+}
+.writing-card-subtitle {
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--fg-60);
+}
+.writing-card.lang-zh .writing-card-subtitle {
+  font-family: var(--font-display-zh, 'Noto Serif SC', var(--font-display));
+  font-style: normal;
+  font-size: 14.5px;
+}
+.writing-card-quote {
+  margin: var(--s-4) 0 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: var(--fg-80, rgba(255,255,255,0.86));
+  position: relative;
+  padding-left: 14px;
+}
+.writing-card-quote::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 2px;
+  background: var(--dd-accent, #B24BF3);
+  opacity: 0.6;
+  border-radius: 1px;
+}
+.writing-card.lang-zh .writing-card-quote {
+  font-family: var(--font-zh, 'Noto Serif SC', var(--font-display));
+  font-style: normal;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.writing-card-excerpt {
+  margin: var(--s-4) 0 var(--s-5);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--fg-60);
+}
+.writing-card.lang-zh .writing-card-excerpt {
+  font-size: 13px;
+  line-height: 1.75;
+}
+.writing-card-channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--fg-06);
+}
+.writing-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-70, rgba(255,255,255,0.72));
+  text-decoration: none;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--fg-10);
+  border-radius: var(--r-pill);
+  transition: color var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out),
+              background var(--dur-short) var(--ease-out);
+}
+.writing-chip:hover {
+  color: var(--fg);
+  border-color: rgba(178,75,243,0.45);
+  background: rgba(178,75,243,0.08);
+}
+.writing-chip-lang {
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: 0.08em;
+}
+.writing-chip-sep { opacity: 0.5; }
+.writing-chip-arrow {
+  margin-left: 2px;
+  opacity: 0.7;
+  transition: transform var(--dur-short) var(--ease-out);
+}
+.writing-chip:hover .writing-chip-arrow {
+  transform: translate(2px, -2px);
+  opacity: 1;
+}
+
+/* Empty / fetch-failed fallback */
+.writing-card-fallback {
   align-items: center;
   justify-content: center;
-  padding: var(--s-5);
-  color: var(--fg-60);
-  font-size: 13px;
   text-align: center;
   text-decoration: none;
-  background: rgba(255,255,255,0.01);
-  transition: color var(--dur-short) var(--ease-out);
+  min-height: 200px;
+  color: var(--fg-60);
+  transition: color var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out);
 }
-.writing-card-fallback:hover { color: var(--fg); }
-.writing-card-failed .twitter-tweet { display: none; }
-.writing-card-failed .writing-card-fallback { display: flex; }
+.writing-card-fallback::before { display: none; }
+.writing-card-fallback:hover {
+  color: var(--fg);
+  border-color: rgba(178,75,243,0.32);
+}
+.writing-card-fallback-text {
+  display: block;
+  margin-top: var(--s-3);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--fg-70, rgba(255,255,255,0.8));
+}
+.writing-card-fallback-arrow {
+  display: block;
+  margin-top: var(--s-3);
+  font-size: 18px;
+  opacity: 0.6;
+}
 
 /* Substack feature */
 .substack-feature {

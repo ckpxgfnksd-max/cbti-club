@@ -52,19 +52,8 @@ function showScreen(id) {
   }
   window.scrollTo(0, 0);
 
-  // Kick X widgets to render when we land on #chase (deep-link or from link).
-  // If widgets.js hasn't loaded yet, poll briefly.
-  if (id === 'chase') {
-    setupWritingFallbacks();
-    var tries = 0;
-    (function tryLoadWidgets() {
-      if (window.twttr && window.twttr.widgets) {
-        try { window.twttr.widgets.load(document.getElementById('chase')); } catch (e) {}
-        return;
-      }
-      if (tries++ < 20) setTimeout(tryLoadWidgets, 150);
-    })();
-  }
+  // Render the writing manifest the first time #chase is shown. Cached after.
+  if (id === 'chase') loadWritings();
 }
 
 // ── Hash-based router: supports /#chase and /#paper deep links + browser back/forward.
@@ -695,18 +684,114 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('hashchange', routeFromHash);
 
-// X widget fallback: if a seed tweet fails to render (deleted, private, network
-// blocked) within ~9 seconds after #chase becomes active, show the "visit
-// @ChaseWang" card. We only run this once per session to avoid double-marking.
-var writingFallbacksArmed = false;
-function setupWritingFallbacks() {
-  if (writingFallbacksArmed) return;
-  writingFallbacksArmed = true;
-  var cards = document.querySelectorAll('.writing-card');
-  cards.forEach(function (card) {
-    setTimeout(function () {
-      var rendered = card.querySelector('iframe, .twitter-tweet-rendered');
-      if (!rendered) card.classList.add('writing-card-failed');
-    }, 9000);
+// ── Writing manifest: render Chase's published essays from writings/index.json.
+// No third-party widgets — works in mainland China, behind ad-blockers, etc.
+// Schema + agent contract: writings/README.md
+var writingsLoaded = false;
+function loadWritings() {
+  if (writingsLoaded) return;
+  writingsLoaded = true;
+  var grid = document.getElementById('writing-grid');
+  if (!grid) return;
+  fetch('writings/index.json', { cache: 'no-cache' })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (manifest) { renderWritings(grid, manifest); })
+    .catch(function (err) {
+      console.warn('[writings] load failed:', err);
+      renderWritingsFallback(grid);
+    });
+}
+
+function renderWritings(grid, manifest) {
+  var items = (manifest && Array.isArray(manifest.items)) ? manifest.items : [];
+  items = items.filter(isValidWriting);
+  if (items.length === 0) { renderWritingsFallback(grid); return; }
+  items.sort(function (a, b) {
+    return (b.publishedAt || '').localeCompare(a.publishedAt || '');
   });
+  grid.setAttribute('data-state', 'ready');
+  grid.innerHTML = items.map(writingCardHTML).join('');
+}
+
+function isValidWriting(it) {
+  if (!it || typeof it !== 'object') return false;
+  if (!it.id || !it.publishedAt || !it.primaryLang) return false;
+  if (!it.title || !it.title[it.primaryLang]) return false;
+  if (!it.excerpt || !it.excerpt[it.primaryLang]) return false;
+  if (!Array.isArray(it.channels) || it.channels.length === 0) return false;
+  return true;
+}
+
+function writingCardHTML(it) {
+  var lang = it.primaryLang;
+  var title = pickLang(it.title, lang);
+  var subtitle = pickLang(it.subtitle, lang);
+  var quote = pickLang(it.pullQuote, lang);
+  var excerpt = pickLang(it.excerpt, lang);
+  var date = formatWritingDate(it.publishedAt, lang);
+  var langClass = lang === 'zh' ? ' lang-zh' : ' lang-en';
+
+  var chips = it.channels.map(function (ch) {
+    var label = ch.label || channelDefaultLabel(ch);
+    var langTag = ch.lang === 'zh' ? '中文' : 'EN';
+    return '<a class="writing-chip" href="' + esc(ch.url) +
+           '" target="_blank" rel="noopener">' +
+           '<span class="writing-chip-lang">' + langTag + '</span>' +
+           '<span class="writing-chip-sep">·</span>' +
+           '<span class="writing-chip-label">' + esc(label) + '</span>' +
+           '<svg class="writing-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>' +
+           '</a>';
+  }).join('');
+
+  return '<article class="writing-card writing-card-essay' + langClass + '" data-id="' + esc(it.id) + '">' +
+           '<div class="writing-card-meta"><span class="writing-card-eyebrow">' +
+             (lang === 'zh' ? '文章' : 'Essay') + ' · ' + esc(date) +
+           '</span></div>' +
+           '<h3 class="writing-card-title">' + esc(title) + '</h3>' +
+           (subtitle ? '<p class="writing-card-subtitle">' + esc(subtitle) + '</p>' : '') +
+           (quote ? '<blockquote class="writing-card-quote">' + esc(quote) + '</blockquote>' : '') +
+           '<p class="writing-card-excerpt">' + esc(excerpt) + '</p>' +
+           '<div class="writing-card-channels">' + chips + '</div>' +
+         '</article>';
+}
+
+function renderWritingsFallback(grid) {
+  grid.setAttribute('data-state', 'fallback');
+  grid.innerHTML =
+    '<a class="writing-card writing-card-fallback" href="https://x.com/ChaseWang" target="_blank" rel="noopener">' +
+      '<span class="writing-card-eyebrow">Writing</span>' +
+      '<span class="writing-card-fallback-text">Follow @ChaseWang on X for the latest essays.</span>' +
+      '<span class="writing-card-fallback-arrow">↗</span>' +
+    '</a>';
+}
+
+function pickLang(map, lang) {
+  if (!map) return '';
+  if (map[lang]) return map[lang];
+  var keys = Object.keys(map);
+  return keys.length ? map[keys[0]] : '';
+}
+
+function channelDefaultLabel(ch) {
+  if (ch.platform === 'substack') return 'Read on Substack';
+  if (ch.platform === 'x') return 'Read on X';
+  if (ch.platform === 'longform') return 'Read';
+  if (ch.platform === 'paper') return 'View paper';
+  return 'Open';
+}
+
+function formatWritingDate(iso, lang) {
+  // ISO YYYY-MM-DD → "Mar 22, 2026" / "2026 年 3 月 22 日"
+  var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+  if (!m) return iso || '';
+  var y = m[1], mm = parseInt(m[2], 10), d = parseInt(m[3], 10);
+  if (lang === 'zh') return y + ' 年 ' + mm + ' 月 ' + d + ' 日';
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[mm - 1] + ' ' + d + ', ' + y;
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }

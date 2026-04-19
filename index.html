@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="style.css?v=18">
 </head>
 <body>
 
@@ -243,30 +243,15 @@
       </section>
 
       <!-- Writing section
-           WRITING FEED v1: two hand-picked X posts seeded below.
-           v2: a Claude Code publishing agent will write writings/index.json.
-           When that file exists, replace this block with a loader that renders
-           entries from the manifest (supports X embeds, Substack, native long-form).
-           See writings/README.md for the planned schema. -->
+           Renders directly from writings/index.json. No external widgets.
+           Future publishing agent writes to that file; this markup stays as-is.
+           Schema + agent contract: writings/README.md -->
       <section class="chase-section chase-writing-section">
-        <span class="section-eyebrow">Writing · selected posts</span>
+        <span class="section-eyebrow">Writing · selected essays</span>
 
-        <div class="writing-grid">
-          <div class="writing-card">
-            <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none" data-dnt="true">
-              <a href="https://x.com/ChaseWang/status/2033309796141551870">Loading post…</a>
-            </blockquote>
-            <a class="writing-card-fallback" href="https://x.com/ChaseWang/status/2033309796141551870" target="_blank" rel="noopener">
-              <span>Post unavailable — visit @ChaseWang ↗</span>
-            </a>
-          </div>
-          <div class="writing-card">
-            <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none" data-dnt="true">
-              <a href="https://x.com/ChaseWang/status/2035850816876097768">Loading post…</a>
-            </blockquote>
-            <a class="writing-card-fallback" href="https://x.com/ChaseWang/status/2035850816876097768" target="_blank" rel="noopener">
-              <span>Post unavailable — visit @ChaseWang ↗</span>
-            </a>
+        <div id="writing-grid" class="writing-grid" data-state="loading">
+          <div class="writing-card writing-card-skeleton" aria-hidden="true">
+            <span></span><span></span><span></span>
           </div>
         </div>
 
@@ -481,7 +466,6 @@
   </div>
 
   <script src="data.js?v=15"></script>
-  <script src="app.js?v=15"></script>
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script src="app.js?v=18"></script>
 </body>
 </html>
