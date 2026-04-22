@@ -3,6 +3,42 @@
   "version": 1,
   "items": [
     {
+      "id": "three-body-problem-of-crypto-dominance",
+      "publishedAt": "2026-04-21",
+      "primaryLang": "en",
+      "tags": ["macro", "industry-structure", "public-goods", "tokenization"],
+      "title": {
+        "en": "The Three-Body Problem of Crypto Dominance",
+        "zh": "加密行业霸权的三体问题"
+      },
+      "subtitle": {
+        "en": "Market share, industry growth, public goods — you only get two.",
+        "zh": "市场份额、行业增长、公共品投入——三者不可得兼"
+      },
+      "pullQuote": {
+        "en": "Wealth lies in stratagem, not in labor of the body; profit lies in commanding position, not in the plough's exertion.",
+        "zh": "富在术数，不在劳身；利在势居，不在力耕。——桑弘羊《盐铁论》"
+      },
+      "excerpt": {
+        "en": "Two thousand years after the Discourses on Salt and Iron, crypto's leading firms are replaying the same argument. Across stablecoins (USDT/USDC), exchanges (Binance/Coinbase) and L1s (BTC/ETH), the pattern is identical: every category has a low-public-goods leader and a high-public-goods number-two, coexisting for a decade. Neither escapes the triangle — they've just picked different pairs of vertices.",
+        "zh": "两千年前《盐铁论》的辩论，今天在 crypto 行业原样上演。稳定币（USDT/USDC）、交易所（Binance/Coinbase）、公链（BTC/ETH）——每个赛道都有一个「低公共品投入」龙头和一个「高公共品投入」的老二，稳定共存了十年。没人逃出三角形，只是选择了不同的两个顶点。"
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "longform",
+          "url": "#essay-three-body",
+          "label": "Read on cbti.club"
+        },
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2046608460830105710",
+          "label": "在 X 上阅读"
+        }
+      ]
+    },
+    {
       "id": "from-tragedy-of-commons-to-compute-dollar",
       "publishedAt": "2026-03-22",
       "primaryLang": "zh",

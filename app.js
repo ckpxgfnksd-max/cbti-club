@@ -46,7 +46,7 @@ function showScreen(id) {
   document.body.className = 'screen-' + id;
   // Pause the bg video on screens where it adds nothing (saves battery + removes distraction).
   if (typeof BgVideo !== 'undefined') {
-    var quiet = id === 'result' || id === 'chase' || id === 'paper';
+    var quiet = id === 'result' || id === 'chase' || id === 'paper' || id === 'essay-three-body';
     if (quiet) BgVideo.pause();
     else BgVideo.resume();
   }
@@ -58,7 +58,7 @@ function showScreen(id) {
 
 // ── Hash-based router: supports /#chase and /#paper deep links + browser back/forward.
 // Screens handled by the router (others like #quiz are driven by startTest()).
-var ROUTED_SCREENS = ['landing', 'chase', 'paper'];
+var ROUTED_SCREENS = ['landing', 'chase', 'paper', 'essay-three-body'];
 function routeFromHash() {
   var hash = (location.hash || '').replace('#', '');
   if (ROUTED_SCREENS.indexOf(hash) !== -1) {
@@ -734,12 +734,20 @@ function writingCardHTML(it) {
   var chips = it.channels.map(function (ch) {
     var label = ch.label || channelDefaultLabel(ch);
     var langTag = ch.lang === 'zh' ? '中文' : 'EN';
-    return '<a class="writing-chip" href="' + esc(ch.url) +
-           '" target="_blank" rel="noopener">' +
+    // Hash URLs (#essay-*, #paper) stay inside the SPA; external URLs open in a new tab.
+    var internal = (ch.url || '').charAt(0) === '#';
+    var anchor = internal
+      ? ' target="_self"'
+      : ' target="_blank" rel="noopener"';
+    var cls = internal ? 'writing-chip writing-chip-internal' : 'writing-chip';
+    var arrow = internal
+      ? '<svg class="writing-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+      : '<svg class="writing-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>';
+    return '<a class="' + cls + '" href="' + esc(ch.url) + '"' + anchor + '>' +
            '<span class="writing-chip-lang">' + langTag + '</span>' +
            '<span class="writing-chip-sep">·</span>' +
            '<span class="writing-chip-label">' + esc(label) + '</span>' +
-           '<svg class="writing-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>' +
+           arrow +
            '</a>';
   }).join('');
 
@@ -775,7 +783,7 @@ function pickLang(map, lang) {
 function channelDefaultLabel(ch) {
   if (ch.platform === 'substack') return 'Read on Substack';
   if (ch.platform === 'x') return 'Read on X';
-  if (ch.platform === 'longform') return 'Read';
+  if (ch.platform === 'longform') return 'Read on cbti.club';
   if (ch.platform === 'paper') return 'View paper';
   return 'Open';
 }

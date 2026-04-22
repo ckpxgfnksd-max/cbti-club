@@ -2345,6 +2345,143 @@ body.screen-result .bg-video { visibility: hidden; }
 }
 .paper-table td strong { color: var(--fg); }
 
+/* ─── Essay reader — extends .paper-article-body ─── */
+.essay-page { max-width: 720px; }
+.essay-article .paper-article-subtitle em {
+  font-style: italic;
+  color: var(--fg-70);
+}
+.essay-article-body { font-size: 18.5px; line-height: 1.72; }
+.essay-article-body p { margin: 0 0 var(--s-4); }
+.essay-article-body ul {
+  margin: var(--s-4) 0;
+  padding-left: 0;
+  list-style: none;
+}
+.essay-article-body ul li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 10px;
+  line-height: 1.65;
+}
+.essay-article-body ul li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0.85em;
+  width: 10px; height: 1px;
+  background: var(--dd-accent, #B24BF3);
+  opacity: 0.6;
+}
+.essay-article-body ul li strong { color: var(--fg); }
+.essay-article-body a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(178,75,243,0.4);
+  padding-bottom: 1px;
+  transition: border-color var(--dur-short) var(--ease-out),
+              color var(--dur-short) var(--ease-out);
+}
+.essay-article-body a:hover {
+  color: var(--dd-accent, #B24BF3);
+  border-bottom-color: var(--dd-accent, #B24BF3);
+}
+.essay-article-body hr {
+  margin: var(--s-7) auto;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--fg-20), transparent);
+  max-width: 120px;
+}
+
+/* Figures with captions */
+.essay-figure {
+  margin: var(--s-6) 0;
+  padding: 0;
+  text-align: center;
+}
+.essay-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--r-card-sm, 10px);
+  border: 1px solid var(--fg-06);
+  background: rgba(255,255,255,0.02);
+}
+.essay-figure figcaption {
+  margin-top: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-50);
+}
+
+/* Table — reuse paper-table visual, but ensure horizontal scroll on mobile */
+.essay-table-wrap {
+  margin: var(--s-5) 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--r-card-sm, 10px);
+  border: 1px solid var(--fg-10);
+}
+.essay-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.essay-table th, .essay-table td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--fg-06);
+  border-right: 1px solid var(--fg-06);
+}
+.essay-table th:last-child, .essay-table td:last-child { border-right: none; }
+.essay-table tr:last-child td { border-bottom: none; }
+.essay-table th {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg);
+  font-weight: 500;
+  background: rgba(255,255,255,0.03);
+  border-bottom-color: var(--fg-10);
+}
+
+/* Closing pull-quote (Sang Hongyang) */
+.essay-pullquote {
+  margin: var(--s-6) 0;
+  padding: var(--s-4) var(--s-5) var(--s-4) var(--s-5);
+  border: 0;
+  border-left: 3px solid var(--dd-accent, #B24BF3);
+  background: rgba(178,75,243,0.04);
+  border-radius: 0 6px 6px 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--fg);
+}
+.essay-pullquote p { margin: 0 0 8px; }
+.essay-pullquote p:last-child { margin-bottom: 0; }
+.essay-pullquote p strong { font-weight: 400; }
+.essay-pullquote-cn {
+  font-family: var(--font-zh, 'Noto Serif SC', var(--font-display));
+  font-style: normal;
+  font-size: 15px !important;
+  letter-spacing: 0.04em;
+  color: var(--fg-60);
+}
+
+@media (max-width: 768px) {
+  .essay-article-body { font-size: 16.5px; line-height: 1.7; }
+  .essay-figure { margin: var(--s-5) 0; }
+  .essay-pullquote { font-size: 17px; padding: var(--s-4); }
+}
+
 .paper-article-footer {
   margin-top: var(--s-8);
   padding-top: var(--s-5);
