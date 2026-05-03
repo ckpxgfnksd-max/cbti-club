@@ -1,0 +1,10 @@
+# Local dev env for `wrangler pages dev`. Copy to `.dev.vars` and fill in.
+# Wrangler treats `.dev.vars` as gitignored by convention — DO NOT commit it.
+# Production values live in the Cloudflare Pages dashboard (Settings → Environment variables).
+
+# Cloudflare Tunnel hostname pointing at the private eth-node-status-dashboard
+NODE_TUNNEL_URL=https://eth-status.example.cfargotunnel.com
+
+# Optional — Cloudflare Access service token (recommended for defense in depth)
+# CF_ACCESS_CLIENT_ID=
+# CF_ACCESS_CLIENT_SECRET=

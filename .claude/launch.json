@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "cbti",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8080"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "wrangler@latest", "pages", "dev", ".", "--compatibility-date=2024-09-01", "--port", "8080", "--ip", "127.0.0.1"],
       "port": 8080
     }
   ]

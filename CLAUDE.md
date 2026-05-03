@@ -205,3 +205,54 @@ Custom domain `cbti.club` is configured on the `cbti-club` Cloudflare Pages proj
 - **Use of `state.result.scatter` (not `state.scatterPos`)** in scatter plot + share text — keeps stamp/dot/tweet consistent.
 - **The `<video loop>` + pre-baked bg.mp4** — previous attempts to do JS-driven reverse caused keyframe jumps.
 - **Cache version bumps** — Cloudflare caches aggressively; stale assets will burn you.
+- **`functions/api/eth-status.js` allow-list** — see "ETH node status" section below. Widening the projection leaks node-fingerprinting fields. Don't.
+
+---
+
+## ETH node status (`#node`)
+
+Public credibility page on cbti.club showing live status from Chase's home Ethereum node pair (Erigon execution + Lighthouse consensus). The dashboard itself lives in the private repo `eth-node-status-dashboard`; cbti.club is just the public face.
+
+### Data path
+
+```
+browser ──► /api/eth-status (same origin, edge-cached 30s)
+              └── Cloudflare Pages Function
+                    └── env.NODE_TUNNEL_URL + /api/status (Cloudflare Tunnel, private)
+                          └── Erigon JSON-RPC + Lighthouse REST on home LAN
+```
+
+The Pages Function (`functions/api/eth-status.js`) is the **only** thing that talks to the private origin. The browser only ever sees a sanitized envelope.
+
+### Env vars (set in Pages dashboard, NOT committed)
+
+| Var | Required | Purpose |
+|---|---|---|
+| `NODE_TUNNEL_URL` | yes | Cloudflare Tunnel hostname for the dashboard, e.g. `https://eth-status.example.cfargotunnel.com` |
+| `CF_ACCESS_CLIENT_ID` | optional | Cloudflare Access service-token id (defense in depth) |
+| `CF_ACCESS_CLIENT_SECRET` | optional | Cloudflare Access service-token secret |
+
+For local dev: copy `.dev.vars.example` → `.dev.vars` and fill in. `.dev.vars` is gitignored by Wrangler convention.
+
+### Field exposure (allow-list — don't widen)
+
+Public envelope keys: `ok`, `block`, `slot`, `peers`, `syncing`, `chain`, `updatedAt`. Anything else upstream is dropped.
+
+**Stripped, never reaches the browser:** `genesisHash`, `version` (lighthouse + erigon), `isOptimistic` raw, `elOffline` raw, `syncDistance` numeric, `specName`. These either fingerprint the node patch level (CVE attack surface) or differentiate testnet specifics — neither is necessary for a public credibility readout.
+
+The function uses an **allow-list projection**, not a strip-list, so any new upstream field added to the dashboard does not leak by default.
+
+### Frontend
+
+`#node` is a routed screen (`/#node` deep-links work). `NodeStatus` module in `app.js` polls `/api/eth-status` every 30s while the screen is visible, pauses on `visibilitychange`, ticks "updated Ns ago" at 1Hz. Pulse dot color: green (synced), amber (syncing), red (offline). Reduced-motion gated.
+
+### Local dev
+
+```bash
+cd crypto-personality-test
+cp .dev.vars.example .dev.vars   # then fill in NODE_TUNNEL_URL etc.
+npx wrangler pages dev . --compatibility-date=2024-09-01
+# visit http://localhost:8788/#node
+```
+
+`python3 -m http.server` will NOT run the function — use `wrangler pages dev` for end-to-end testing.

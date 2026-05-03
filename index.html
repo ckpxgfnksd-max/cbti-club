@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20">
+  <link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 
@@ -406,11 +406,11 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </span>
           </a>
-          <a class="other-card" href="https://github.com/ckpxgfnksd-max/eth-node-status-dashboard" target="_blank" rel="noopener">
+          <a class="other-card" href="#node">
             <div class="other-card-meta">
-              <span class="other-card-eyebrow">Tool · 2026</span>
-              <h3 class="other-card-title">ETH Node Status</h3>
-              <p class="other-card-desc">Single-page health dashboard for an Ethereum execution + consensus pair (Erigon + Lighthouse). Express + Vite, polls every 5s — built to keep an eye on a home node without exposing JSON-RPC.</p>
+              <span class="other-card-eyebrow">Live · Infrastructure</span>
+              <h3 class="other-card-title">ETH Node · live status</h3>
+              <p class="other-card-desc">An Ethereum execution + consensus pair (Erigon + Lighthouse) running on my home network. Sanitized read-out, refreshed every 30s — proof I run my own infra.</p>
             </div>
             <span class="other-card-arrow">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -798,7 +798,83 @@
     </div>
   </div>
 
+  <!-- ═══ Node — live ETH node status ═══ -->
+  <div id="node" class="screen">
+    <div class="chase-container">
+
+      <header class="chase-hero">
+        <span class="landing-eyebrow">infrastructure · live</span>
+        <h1 class="chase-title">
+          <span class="blur-in">I run my own</span> <span class="blur-in"><em>Ethereum node.</em></span>
+        </h1>
+        <p class="chase-tagline">
+          An Erigon + Lighthouse pair on my home network. The numbers below come straight off the node, sanitized at the edge, refreshed every 30 seconds.
+        </p>
+      </header>
+
+      <section class="chase-section node-block-section">
+        <header class="chase-section-header">
+          <span class="section-eyebrow">§ 01 · Block height</span>
+          <h2 class="section-title">Latest block</h2>
+        </header>
+        <div class="node-block-hero" id="node-block-hero">
+          <span class="node-block-num" id="node-block-num">—</span>
+          <span class="node-block-label">mainnet · execution head</span>
+        </div>
+      </section>
+
+      <section class="chase-section node-cards-section">
+        <header class="chase-section-header">
+          <span class="section-eyebrow">§ 02 · Clients</span>
+          <h2 class="section-title">Execution &amp; consensus</h2>
+        </header>
+        <div class="node-cards">
+          <div class="node-card glass">
+            <div class="node-card-head">
+              <span class="pulse-dot is-unknown" id="node-erigon-dot" aria-hidden="true"></span>
+              <div>
+                <div class="node-card-title">Erigon</div>
+                <div class="node-card-sub">execution layer</div>
+              </div>
+            </div>
+            <dl class="node-card-grid">
+              <dt>status</dt>
+              <dd id="node-erigon-status">—</dd>
+              <dt>peers</dt>
+              <dd id="node-erigon-peers">—</dd>
+            </dl>
+          </div>
+          <div class="node-card glass">
+            <div class="node-card-head">
+              <span class="pulse-dot is-unknown" id="node-lighthouse-dot" aria-hidden="true"></span>
+              <div>
+                <div class="node-card-title">Lighthouse</div>
+                <div class="node-card-sub">consensus layer</div>
+              </div>
+            </div>
+            <dl class="node-card-grid">
+              <dt>status</dt>
+              <dd id="node-lighthouse-status">—</dd>
+              <dt>head slot</dt>
+              <dd id="node-lighthouse-slot">—</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <p class="node-meta" id="node-meta">awaiting first read · auto-refresh 30s</p>
+
+      <div class="chase-back">
+        <a class="btn-back" href="#chase">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
+          <span>Back to Chase</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
   <script src="data.js?v=15"></script>
-  <script src="app.js?v=19"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>
