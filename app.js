@@ -1111,6 +1111,14 @@ var PersonaSphere = (function () {
       var depthT = (z2 + R) / (2 * R); // 0..1
       var op = 0.18 + 0.72 * depthT;
       var scale = 0.86 + 0.18 * depthT;
+      // Center fade: orbs that drift directly in front of the hero column
+      // (high z, small |x|, |y|) get extra-dimmed so the brand reads through
+      // them without competition. Falloff radius ≈ 200px from center.
+      var distFromCenter = Math.hypot(x1, y2);
+      if (z2 > -R * 0.2) {
+        var fade = Math.min(1, distFromCenter / 200);
+        op = op * (0.35 + 0.65 * fade);
+      }
       o.style.opacity = op.toFixed(3);
       o.style.zIndex = String(Math.round(z2 + R));
       // Apply scale via CSS variable so :hover can override gracefully.
