@@ -66,6 +66,12 @@ function showScreen(id) {
     if (id === 'node') NodeStatus.start();
     else NodeStatus.stop();
   }
+
+  // Persona sphere: only spin while the landing is visible (saves CPU + battery).
+  if (typeof PersonaSphere !== 'undefined') {
+    if (id === 'landing') PersonaSphere.start();
+    else PersonaSphere.stop();
+  }
 }
 
 // ── Hash-based router: supports /#chase and /#paper deep links + browser back/forward.
@@ -936,3 +942,209 @@ function esc(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
+
+// ── Persona sphere ────────────────────────────────────────────────────────
+// Decorative 3D arrangement of all 24 personas around the landing hero.
+// - Fibonacci-distributed positions on a sphere
+// - Auto-rotates at a slow constant pace
+// - Pointer drag (anywhere on an orb) spins the sphere; momentum on release
+// - Each orb is counter-rotated so it always faces the viewer (billboard)
+// - Z-depth dims the back side, foreground orbs read fully
+// - Click on an orb starts the test (the brand CTA)
+// Hidden via CSS on very small screens to avoid scroll conflicts.
+var PersonaSphere = (function () {
+  var root, orbs = [], positions = [];
+  var rotY = 0, rotX = 8;          // current rotation (deg)
+  var velY = 0.12, velX = 0;       // angular velocity (deg/frame @ 60fps)
+  var dragging = false;
+  var lastX = 0, lastY = 0;
+  var lastMoveT = 0;
+  var rafId = null;
+  var quadrantOf = null;
+  var R = 280;                     // sphere radius in px (overridden on mount)
+
+  function quadrant(p) {
+    var risk = p && p.scatter && typeof p.scatter.risk === 'number' ? p.scatter.risk : 50;
+    var conv = p && p.scatter && typeof p.scatter.conviction === 'number' ? p.scatter.conviction : 50;
+    if (risk < 50 && conv >= 50) return 'smart-money';
+    if (risk >= 50 && conv >= 50) return 'diamond-degen';
+    if (risk < 50 && conv < 50) return 'rotating-andy';
+    return 'gambler';
+  }
+
+  function fibonacci(n, radius) {
+    var out = [];
+    var phi = Math.PI * (3 - Math.sqrt(5)); // golden angle
+    for (var i = 0; i < n; i++) {
+      var y = 1 - (i / Math.max(1, n - 1)) * 2; // -1..1
+      var r = Math.sqrt(1 - y * y);
+      var theta = phi * i;
+      out.push([Math.cos(theta) * r * radius, y * radius, Math.sin(theta) * r * radius]);
+    }
+    return out;
+  }
+
+  function pickRadius() {
+    var w = window.innerWidth || 1200;
+    if (w < 540) return 150;
+    if (w < 900) return 220;
+    if (w < 1300) return 280;
+    return 320;
+  }
+
+  function build() {
+    if (typeof personas === 'undefined') return false;
+    root = document.getElementById('persona-sphere');
+    if (!root) return false;
+    var keys = Object.keys(personas);
+    if (keys.length === 0) return false;
+
+    R = pickRadius();
+    positions = fibonacci(keys.length, R);
+    root.innerHTML = '';
+    var stage = document.createElement('div');
+    stage.className = 'persona-sphere-stage';
+    root.appendChild(stage);
+
+    orbs = keys.map(function (key, i) {
+      var p = personas[key];
+      var pos = positions[i];
+      var orb = document.createElement('a');
+      orb.className = 'persona-orb q-' + quadrant(p);
+      orb.href = '#';
+      orb.dataset.x = pos[0];
+      orb.dataset.y = pos[1];
+      orb.dataset.z = pos[2];
+      orb.dataset.code = p.code || key;
+      orb.innerHTML =
+        '<span class="orb-cn">' + esc(p.cn || '') + '</span>' +
+        '<span class="orb-en">' + esc(p.en || p.code || key) + '</span>';
+      orb.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (suppressClickUntil > Date.now()) return;
+        if (typeof startTest === 'function') startTest();
+      });
+      stage.appendChild(orb);
+      return orb;
+    });
+
+    // Pointer events on the root capture drags anywhere over the sphere area.
+    // CSS makes only the orbs hit-testable, so empty space passes clicks
+    // through to the underlying button.
+    orbs.forEach(function (o) { o.addEventListener('pointerdown', onDown); });
+    return true;
+  }
+
+  var suppressClickUntil = 0;
+
+  function onDown(e) {
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    lastMoveT = performance.now();
+    velY = 0; velX = 0;
+    document.body.classList.add('sphere-dragging');
+    try { e.target.setPointerCapture(e.pointerId); } catch (_) {}
+    e.target.addEventListener('pointermove', onMove);
+    e.target.addEventListener('pointerup', onUp);
+    e.target.addEventListener('pointercancel', onUp);
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    var dx = e.clientX - lastX;
+    var dy = e.clientY - lastY;
+    var now = performance.now();
+    var dt = Math.max(1, now - lastMoveT);
+    rotY += dx * 0.4;
+    rotX = Math.max(-70, Math.min(70, rotX - dy * 0.3));
+    velY = (dx * 0.4) * (16 / dt);
+    velX = (-dy * 0.3) * (16 / dt);
+    lastX = e.clientX;
+    lastY = e.clientY;
+    lastMoveT = now;
+    if (Math.abs(dx) + Math.abs(dy) > 4) suppressClickUntil = Date.now() + 250;
+  }
+  function onUp(e) {
+    if (!dragging) return;
+    dragging = false;
+    document.body.classList.remove('sphere-dragging');
+    try { e.target.releasePointerCapture(e.pointerId); } catch (_) {}
+    e.target.removeEventListener('pointermove', onMove);
+    e.target.removeEventListener('pointerup', onUp);
+    e.target.removeEventListener('pointercancel', onUp);
+  }
+
+  function tick() {
+    if (!dragging) {
+      // Decay momentum, then settle to a slow constant Y spin.
+      velY = velY * 0.96;
+      velX = velX * 0.92;
+      if (Math.abs(velY) < 0.12) velY = 0.12;
+      if (Math.abs(velX) < 0.01) velX = 0;
+      rotY += velY;
+      rotX += velX;
+      // Drift X back toward 8 degrees so it doesn't end up upside down
+      rotX += (8 - rotX) * 0.01;
+      rotX = Math.max(-70, Math.min(70, rotX));
+    }
+
+    // Rotation matrix (Y then X, world coords). Counter-rotate orbs to billboard.
+    var ry = rotY * Math.PI / 180;
+    var rx = rotX * Math.PI / 180;
+    var cosY = Math.cos(ry), sinY = Math.sin(ry);
+    var cosX = Math.cos(rx), sinX = Math.sin(rx);
+
+    for (var i = 0; i < orbs.length; i++) {
+      var o = orbs[i];
+      var lx = +o.dataset.x, ly = +o.dataset.y, lz = +o.dataset.z;
+      // World = Rx · Ry · local
+      var x1 = cosY * lx + sinY * lz;
+      var z1 = -sinY * lx + cosY * lz;
+      var y1 = ly;
+      var y2 = cosX * y1 - sinX * z1;
+      var z2 = sinX * y1 + cosX * z1;
+      // Billboard: each orb counter-rotates so it always faces the camera.
+      // Position in world space from translate3d, then negate parent rotation.
+      o.style.transform =
+        'translate3d(' + x1.toFixed(1) + 'px,' + y2.toFixed(1) + 'px,' + z2.toFixed(1) + 'px)';
+      // Depth fade: front (z2 ≈ +R) opaque; back (z2 ≈ -R) faint.
+      var depthT = (z2 + R) / (2 * R); // 0..1
+      var op = 0.18 + 0.72 * depthT;
+      var scale = 0.86 + 0.18 * depthT;
+      o.style.opacity = op.toFixed(3);
+      o.style.zIndex = String(Math.round(z2 + R));
+      // Apply scale via CSS variable so :hover can override gracefully.
+      o.style.setProperty('--orb-scale', scale.toFixed(3));
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function start() {
+    if (rafId) return;
+    if (!root && !build()) return;
+    rafId = requestAnimationFrame(tick);
+  }
+  function stop() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+
+  // Recompute radius on resize so the sphere always fits the viewport.
+  var resizeT;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function () {
+      if (!root || orbs.length === 0) return;
+      var newR = pickRadius();
+      if (newR === R) return;
+      R = newR;
+      positions = fibonacci(orbs.length, R);
+      orbs.forEach(function (o, i) {
+        o.dataset.x = positions[i][0];
+        o.dataset.y = positions[i][1];
+        o.dataset.z = positions[i][2];
+      });
+    }, 120);
+  });
+
+  return { start: start, stop: stop };
+})();

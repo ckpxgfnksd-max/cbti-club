@@ -265,6 +265,16 @@ body.screen-result .bg-video { visibility: hidden; }
 .landing-card {
   max-width: var(--max-w);
   width: 100%;
+  position: relative;
+  z-index: 10;
+  /* Let pointer events fall through transparent card areas so the persona
+     sphere behind us stays draggable. Interactive children re-enable below. */
+  pointer-events: none;
+}
+.landing-card .btn-start,
+.landing-card .btn-meet,
+.landing-card .landing-credit a {
+  pointer-events: auto;
 }
 
 .landing-eyebrow {
@@ -341,7 +351,7 @@ body.anim-done .landing-fullname,
 body.anim-done .landing-fullname-zh,
 body.anim-done .btn-start,
 body.anim-done .landing-tagline,
-body.anim-done .landing-personas,
+body.anim-done .landing-tease,
 body.anim-done .btn-meet,
 body.anim-done .landing-credit {
   animation: none;
@@ -395,100 +405,152 @@ body.anim-done .landing-credit {
   animation: blurInUp 0.9s var(--ease-out) 0.65s backwards;
 }
 
-/* Persona examples — funny preview of the 24 results */
-.landing-personas {
-  width: 100%;
-  max-width: 580px;
-  margin: var(--s-7) auto 0;
-  text-align: left;
-  will-change: filter, opacity, transform;
-  animation: blurInUp 0.9s var(--ease-out) 1.5s backwards;
-}
-.landing-personas-prompt {
+/* Tiny "drag the sphere" tease line under the Start button */
+.landing-tease {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin: 0 0 var(--s-4);
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--fg-50);
-}
-.landing-personas-prompt-en {
-  color: var(--fg-40);
-}
-.landing-personas-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-}
-.persona-pill {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.022), rgba(255,255,255,0.006));
-  border: 1px solid var(--fg-06);
-  border-radius: var(--r-card-sm, 10px);
-  position: relative;
-  overflow: hidden;
-  transition: border-color var(--dur-short) var(--ease-out),
-              background var(--dur-short) var(--ease-out);
-}
-.persona-pill::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 12px; bottom: 12px;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, var(--dd-accent, #B24BF3), transparent);
-  opacity: 0.4;
-}
-.persona-pill:hover {
-  border-color: rgba(178, 75, 243, 0.28);
-  background: linear-gradient(180deg, rgba(178,75,243,0.04), rgba(255,255,255,0.008));
-}
-.persona-pill-name {
-  font-family: var(--font-display);
-  font-size: 17px;
-  letter-spacing: -0.005em;
-  color: var(--fg);
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.persona-pill-en {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--fg-50);
-}
-.persona-pill-line {
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--fg-60);
-}
-.landing-personas-more {
-  margin: var(--s-4) 0 0;
+  margin: var(--s-5) 0 0;
   text-align: center;
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: var(--fg-50);
+  will-change: filter, opacity, transform;
+  animation: blurInUp 0.9s var(--ease-out) 1.5s backwards;
+}
+.landing-tease-en {
   color: var(--fg-40);
+  letter-spacing: 0.14em;
 }
 
-@media (min-width: 720px) {
-  .landing-personas-list {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+/* ─────────────────────────────────────────────
+   PERSONA SPHERE — 24 result orbs around the hero
+   Decorative; pointer-events fall through except on orbs themselves so the
+   Start button stays clickable. JS in app.js (PersonaSphere) drives rotation,
+   drag, billboarding, and depth fade.
+   ─────────────────────────────────────────────*/
+
+.persona-sphere {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  perspective: 1400px;
+  pointer-events: none;
+  overflow: visible;
+  /* Settle in after the hero animations finish. */
+  opacity: 0;
+  animation: sphereFadeIn 1.2s var(--ease-out) 1.7s forwards;
+}
+@keyframes sphereFadeIn {
+  to { opacity: 1; }
+}
+body.anim-done .persona-sphere {
+  animation: none;
+  opacity: 1;
+}
+
+.persona-sphere-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.persona-orb {
+  --orb-scale: 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 124px;
+  margin: -24px 0 0 -62px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  background: linear-gradient(180deg, rgba(20,20,24,0.7), rgba(10,10,12,0.5));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  text-decoration: none;
+  text-align: center;
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  transition: border-color 0.18s var(--ease-out),
+              background 0.18s var(--ease-out),
+              box-shadow 0.18s var(--ease-out);
+}
+.persona-orb::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+body.sphere-dragging .persona-orb { cursor: grabbing; }
+.persona-orb .orb-cn {
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: rgba(255,255,255,0.95);
+  white-space: nowrap;
+}
+.persona-orb .orb-en {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  line-height: 1.15;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  white-space: nowrap;
+}
+
+/* Quadrant accent — a thin colored halo, matches the result-page palette */
+.persona-orb.q-smart-money    { box-shadow: 0 0 18px rgba(0,230,118,0.10), inset 0 0 8px rgba(0,230,118,0.06); }
+.persona-orb.q-diamond-degen  { box-shadow: 0 0 18px rgba(178,75,243,0.12), inset 0 0 8px rgba(178,75,243,0.06); }
+.persona-orb.q-rotating-andy  { box-shadow: 0 0 18px rgba(255,184,0,0.10), inset 0 0 8px rgba(255,184,0,0.06); }
+.persona-orb.q-gambler        { box-shadow: 0 0 18px rgba(255,46,76,0.12), inset 0 0 8px rgba(255,46,76,0.06); }
+
+.persona-orb:hover {
+  background: linear-gradient(180deg, rgba(40,40,48,0.85), rgba(20,20,24,0.7));
+  border-color: rgba(178,75,243,0.5);
+  z-index: 9999 !important;
+}
+.persona-orb:hover .orb-cn { color: #fff; }
+.persona-orb:hover .orb-en { color: rgba(255,255,255,0.85); }
+
+@media (max-width: 540px) {
+  /* Keep the sphere on mobile but shrink the orbs and dim it further so it
+     doesn't fight the hero or interfere with vertical scrolling. */
+  .persona-orb {
+    width: 102px;
+    margin: -20px 0 0 -51px;
+    padding: 5px 9px;
   }
+  .persona-orb .orb-cn { font-size: 12px; }
+  .persona-orb .orb-en { font-size: 7.5px; letter-spacing: 0.08em; }
+  .persona-sphere { opacity: 0.78; }
+}
+@media (max-width: 360px) {
+  .persona-sphere { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .persona-sphere { opacity: 0.5; }
+  .persona-sphere-stage { animation: none !important; }
 }
 
 .btn-start {
@@ -1516,8 +1578,17 @@ body.anim-done .landing-credit {
   line-height: 1.55;
   color: var(--fg-70);
   max-width: 560px;
-  margin-bottom: var(--s-6);
+  margin-bottom: var(--s-3);
   animation: blurInUp 0.9s var(--ease-out) 0.5s backwards;
+}
+.chase-tagline-zh {
+  font-family: var(--font-zh, 'Noto Serif SC', var(--font-display));
+  font-size: 15px;
+  color: var(--fg-60);
+  line-height: 1.7;
+  margin-top: 0;
+  margin-bottom: var(--s-6);
+  animation-delay: 0.62s;
 }
 
 .chase-links {
