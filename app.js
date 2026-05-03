@@ -719,13 +719,14 @@ const NodeStatus = (function () {
       setText('node-erigon-peers', fmt(payload.peers));
       setText('node-lighthouse-slot', fmt(payload.slot));
 
-      var statusText = payload.syncing ? 'syncing' : 'synced';
-      setText('node-erigon-status', statusText);
-      setText('node-lighthouse-status', statusText);
+      var erigonSyncing = payload.erigonSyncing === true;
+      var lighthouseSyncing = payload.lighthouseSyncing === true;
 
-      var dot = payload.syncing ? 'is-syncing' : 'is-synced';
-      setDot('node-erigon-dot', dot);
-      setDot('node-lighthouse-dot', dot);
+      setText('node-erigon-status', erigonSyncing ? 'syncing' : 'synced');
+      setText('node-lighthouse-status', lighthouseSyncing ? 'syncing' : 'synced');
+
+      setDot('node-erigon-dot', erigonSyncing ? 'is-syncing' : 'is-synced');
+      setDot('node-lighthouse-dot', lighthouseSyncing ? 'is-syncing' : 'is-synced');
     } else {
       // origin unreachable / not configured — keep last good numbers but flag offline
       setDot('node-erigon-dot', 'is-offline');

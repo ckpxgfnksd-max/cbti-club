@@ -68,18 +68,20 @@ function project(raw, now) {
   const slot  = strNumOrNull(lhSync.head_slot);
   const peers = numOrNull(erigonData.peerCount);
 
-  const syncDistance  = strNumOrNull(lhSync.sync_distance);
-  const erigonSyncing = boolOrNull(erigonData.syncing);
-  const lhIsSyncing   = boolOrNull(lhSync.is_syncing);
-  const elOffline     = boolOrNull(lhSync.el_offline);
+  const syncDistance      = strNumOrNull(lhSync.sync_distance);
+  const erigonSyncingRaw  = boolOrNull(erigonData.syncing);
+  const lhIsSyncing       = boolOrNull(lhSync.is_syncing);
+  const elOffline         = boolOrNull(lhSync.el_offline);
 
-  // Single bool collapsed from multiple fields. Raw flags never leave this function.
-  const syncing =
-    erigonSyncing === true ||
+  // Per-client booleans so the UI can render Erigon and Lighthouse independently.
+  // Only the derived booleans leave this function; raw flags / numbers do not.
+  const erigonSyncing =
+    erigonSyncingRaw === true ||
+    raw?.erigon?.ok === false;
+  const lighthouseSyncing =
     lhIsSyncing === true ||
     (syncDistance !== null && syncDistance > 2) ||
     elOffline === true ||
-    raw?.erigon?.ok === false ||
     raw?.lighthouse?.ok === false;
 
   // summary.mainnet is the cleanest source — only confirm mainnet, otherwise hide.
@@ -90,7 +92,8 @@ function project(raw, now) {
     block: block,
     slot: slot,
     peers: peers,
-    syncing: syncing,
+    erigonSyncing: erigonSyncing,
+    lighthouseSyncing: lighthouseSyncing,
     chain: chain,
     updatedAt: now,
   };
