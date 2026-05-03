@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CBTI 加密人格测试 | Crypto Behavioral Type Indicator</title>
-  <meta name="description" content="MBTI已经过时了，CBTI来了。测测你是钻石手还是赌狗？30道题揭示你的加密人格。">
-  <meta property="og:title" content="CBTI 加密人格测试">
-  <meta property="og:description" content="测测你的加密人格！你是钻石手、赌狗、还是撸毛党？">
+  <meta name="description" content="CBTI · Crypto Behavioral Type Indicator · 加密行为类型指标。30 道题告诉你是 24 种加密人格中的哪一种 — 钻石手、赌狗、巨鲸、旋转安迪、爆仓侠……">
+  <meta property="og:title" content="CBTI · Crypto Behavioral Type Indicator">
+  <meta property="og:description" content="加密行为类型指标 · 30 道题 · 24 种人格 · 一个真相。钻石手、赌狗、巨鲸、旋转安迪、爆仓侠、撸毛大军……你是哪一种？">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CBTI 加密人格测试">
-  <meta name="twitter:description" content="MBTI已经过时了，CBTI来了。30道题揭示你的加密人格。">
+  <meta name="twitter:title" content="CBTI · Crypto Behavioral Type Indicator">
+  <meta name="twitter:description" content="加密行为类型指标 · 30 道题 · 24 种人格 · 一个真相。钻石手、赌狗、巨鲸、旋转安迪、爆仓侠……你是哪一种？">
   <meta property="og:image" content="https://cbti.club/assets/icon/og-image.jpg">
   <meta property="og:url" content="https://cbti.club">
   <meta name="twitter:image" content="https://cbti.club/assets/icon/og-image.jpg">
@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=24">
 </head>
 <body>
 
@@ -44,18 +44,58 @@
     <div class="landing-card">
       <span class="landing-eyebrow">CBTI · 2026</span>
       <h1 class="landing-title">
-        <span class="blur-in">MBTI</span> <span class="blur-in accent"><em>已经过时了</em></span><span class="blur-in">，</span><br>
-        <span class="blur-in"><em>CBTI</em></span> <span class="blur-in">来了</span><span class="blur-in">。</span>
+        <span class="blur-in">C</span><span class="blur-in">B</span><span class="blur-in">T</span><span class="blur-in">I</span>
       </h1>
-      <p class="landing-subtitle">
-        <span>Crypto Behavioral Type Indicator</span>
-        <span class="landing-subtitle-zh">30 道题 · 24 种加密人格 · 测出你的真实面目</span>
-      </p>
+      <p class="landing-fullname"><em>Crypto · Behavioral · Type · Indicator</em></p>
+      <p class="landing-fullname-zh">加密 · 行为 · 类型 · 指标</p>
+
       <button class="btn-start" onclick="startTest()">
         <span>开始测试 · Start</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
       </button>
-      <p class="landing-tagline">Which one are you? <em>聪明钱，钻石赌狗，旋转安迪，还是纯赌怪？</em></p>
+
+      <section class="landing-personas" aria-label="Sample personas">
+        <p class="landing-personas-prompt">
+          <span>你可能是这 24 种之一</span>
+          <span class="landing-personas-prompt-en">You'll probably be one of these 24</span>
+        </p>
+        <ul class="landing-personas-list">
+          <li class="persona-pill">
+            <span class="persona-pill-name">钻石手 <span class="persona-pill-en">Diamond Hands</span></span>
+            <span class="persona-pill-line">跌 90% 在睡觉，涨 500% 也在睡觉。</span>
+          </li>
+          <li class="persona-pill">
+            <span class="persona-pill-name">赌狗 <span class="persona-pill-en">Degen Lord</span></span>
+            <span class="persona-pill-line">梭哈是一种信仰，归零是一种修行。</span>
+          </li>
+          <li class="persona-pill">
+            <span class="persona-pill-name">韭菜王 <span class="persona-pill-en">Exit Liquidity</span></span>
+            <span class="persona-pill-line">你买入的那一刻，就是别人的卖出信号。</span>
+          </li>
+          <li class="persona-pill">
+            <span class="persona-pill-name">旋转安迪 <span class="persona-pill-en">Rotation Andy</span></span>
+            <span class="persona-pill-line">你说 AI 我已经在 RWA，你说 RWA 我已经在 DePIN。</span>
+          </li>
+          <li class="persona-pill">
+            <span class="persona-pill-name">爆仓侠 <span class="persona-pill-en">Liquidation Hero</span></span>
+            <span class="persona-pill-line">"这次不一样" — 旁白：每次都一样。</span>
+          </li>
+          <li class="persona-pill">
+            <span class="persona-pill-name">狙击手 <span class="persona-pill-en">Sniper</span></span>
+            <span class="persona-pill-line">一年三枪，枪枪爆头。</span>
+          </li>
+          <li class="persona-pill">
+            <span class="persona-pill-name">撸毛大军 <span class="persona-pill-en">Airdrop Farmer</span></span>
+            <span class="persona-pill-line">47 个钱包，12 条链，收获 1 个 NFT 和 3 封感谢邮件。</span>
+          </li>
+          <li class="persona-pill">
+            <span class="persona-pill-name">巨鲸 <span class="persona-pill-en">Silent Whale</span></span>
+            <span class="persona-pill-line">不说话，不发推，只留下链上足迹。</span>
+          </li>
+        </ul>
+        <p class="landing-personas-more">+ 16 more · 30 道题 · 一个真相</p>
+      </section>
+
       <a class="btn-meet" href="#chase">
         <span>About @ChaseWang · 关于作者</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -875,6 +915,6 @@
   </div>
 
   <script src="data.js?v=15"></script>
-  <script src="app.js?v=22"></script>
+  <script src="app.js?v=24"></script>
 </body>
 </html>

@@ -804,15 +804,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (ROUTED_SCREENS.indexOf(hash) !== -1) showScreen(hash);
   else showScreen('landing');
 
-  // After the longest landing reveal animation finishes (.landing-credit at
-  // 1.35s delay + 0.9s duration ≈ 2.25s), mark the body as anim-done. CSS uses
+  // After the longest landing reveal animation finishes (.landing-personas at
+  // 1.5s delay + 0.9s duration ≈ 2.4s), mark the body as anim-done. CSS uses
   // this to suppress the blur-in animations on subsequent re-shows of #landing
   // — without this, navigating Back to CBTI from #chase replays the animations
-  // and leaves landing content invisible (opacity 0) for ~1.2s, during which
+  // and leaves landing content invisible (opacity 0) for ~1.5s, during which
   // only the bg video is visible. That's the "shows video instead of page" bug.
   setTimeout(function () {
     document.body.classList.add('anim-done');
-  }, 2400);
+  }, 2600);
 });
 
 window.addEventListener('hashchange', routeFromHash);

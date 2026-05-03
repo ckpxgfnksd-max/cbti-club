@@ -337,8 +337,11 @@ body.screen-result .bg-video { visibility: hidden; }
    "the page is missing." */
 body.anim-done .blur-in,
 body.anim-done .landing-subtitle,
+body.anim-done .landing-fullname,
+body.anim-done .landing-fullname-zh,
 body.anim-done .btn-start,
 body.anim-done .landing-tagline,
+body.anim-done .landing-personas,
 body.anim-done .btn-meet,
 body.anim-done .landing-credit {
   animation: none;
@@ -363,6 +366,129 @@ body.anim-done .landing-credit {
 .landing-subtitle-zh {
   color: var(--fg-50);
   font-size: 14px;
+}
+
+/* CBTI fullname pair — sits directly under the H1 acronym */
+.landing-fullname {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 2.4vw, 19px);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: var(--fg-70);
+  will-change: filter, opacity, transform;
+  animation: blurInUp 0.9s var(--ease-out) 0.5s backwards;
+}
+.landing-fullname em {
+  font-style: italic;
+  color: var(--fg);
+}
+.landing-fullname-zh {
+  margin: 6px 0 var(--s-7);
+  font-family: var(--font-zh, 'Noto Serif SC', var(--font-display));
+  font-size: clamp(13px, 2vw, 15px);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--fg-50);
+  will-change: filter, opacity, transform;
+  animation: blurInUp 0.9s var(--ease-out) 0.65s backwards;
+}
+
+/* Persona examples — funny preview of the 24 results */
+.landing-personas {
+  width: 100%;
+  max-width: 580px;
+  margin: var(--s-7) auto 0;
+  text-align: left;
+  will-change: filter, opacity, transform;
+  animation: blurInUp 0.9s var(--ease-out) 1.5s backwards;
+}
+.landing-personas-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 var(--s-4);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-50);
+}
+.landing-personas-prompt-en {
+  color: var(--fg-40);
+}
+.landing-personas-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.persona-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.022), rgba(255,255,255,0.006));
+  border: 1px solid var(--fg-06);
+  border-radius: var(--r-card-sm, 10px);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--dur-short) var(--ease-out),
+              background var(--dur-short) var(--ease-out);
+}
+.persona-pill::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 12px; bottom: 12px;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--dd-accent, #B24BF3), transparent);
+  opacity: 0.4;
+}
+.persona-pill:hover {
+  border-color: rgba(178, 75, 243, 0.28);
+  background: linear-gradient(180deg, rgba(178,75,243,0.04), rgba(255,255,255,0.008));
+}
+.persona-pill-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  letter-spacing: -0.005em;
+  color: var(--fg);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.persona-pill-en {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-50);
+}
+.persona-pill-line {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-60);
+}
+.landing-personas-more {
+  margin: var(--s-4) 0 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-40);
+}
+
+@media (min-width: 720px) {
+  .landing-personas-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
 }
 
 .btn-start {
