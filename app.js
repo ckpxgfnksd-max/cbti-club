@@ -43,7 +43,13 @@ function showScreen(id) {
   if (!el) { el = document.getElementById('landing'); id = 'landing'; }
   el.classList.add('active');
   // Body class drives video visibility as a :has() fallback; pause the video on static pages.
-  document.body.className = 'screen-' + id;
+  // Replace any existing screen-* prefix class while preserving everything else
+  // (e.g. .anim-done, which gates the one-shot landing reveal animations).
+  var preserved = (document.body.className || '').split(/\s+/).filter(function(c) {
+    return c && c.indexOf('screen-') !== 0;
+  });
+  preserved.push('screen-' + id);
+  document.body.className = preserved.join(' ');
   // Pause the bg video on screens where it adds nothing (saves battery + removes distraction).
   if (typeof BgVideo !== 'undefined') {
     var quiet = id === 'result' || id === 'chase' || id === 'paper' || id === 'essay-three-body' || id === 'node';
@@ -797,6 +803,16 @@ document.addEventListener('DOMContentLoaded', () => {
   var hash = (location.hash || '').replace('#', '');
   if (ROUTED_SCREENS.indexOf(hash) !== -1) showScreen(hash);
   else showScreen('landing');
+
+  // After the longest landing reveal animation finishes (.landing-credit at
+  // 1.35s delay + 0.9s duration ≈ 2.25s), mark the body as anim-done. CSS uses
+  // this to suppress the blur-in animations on subsequent re-shows of #landing
+  // — without this, navigating Back to CBTI from #chase replays the animations
+  // and leaves landing content invisible (opacity 0) for ~1.2s, during which
+  // only the bg video is visible. That's the "shows video instead of page" bug.
+  setTimeout(function () {
+    document.body.classList.add('anim-done');
+  }, 2400);
 });
 
 window.addEventListener('hashchange', routeFromHash);

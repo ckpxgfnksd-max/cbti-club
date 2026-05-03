@@ -329,6 +329,24 @@ body.screen-result .bg-video { visibility: hidden; }
   100% { filter: blur(0);    opacity: 1;   transform: translate3d(0, 0, 0); }
 }
 
+/* Once the initial reveal has played (set by app.js ~2.4s after page load),
+   suppress the blur-in animations entirely. Without this, navigating Back to
+   CBTI from #chase / #paper restarts every animation — and the elements with
+   `backwards` fill mode (subtitle, btn-start, tagline, btn-meet, credit) sit
+   at opacity 0 for up to 1.2s while the bg video plays underneath. Looks like
+   "the page is missing." */
+body.anim-done .blur-in,
+body.anim-done .landing-subtitle,
+body.anim-done .btn-start,
+body.anim-done .landing-tagline,
+body.anim-done .btn-meet,
+body.anim-done .landing-credit {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
 .landing-subtitle {
   display: flex;
   flex-direction: column;
