@@ -24,15 +24,35 @@ export async function onRequestGet({ env }) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ORIGIN_TIMEOUT_MS);
 
-  try {
-    const headers = { 'accept': 'application/json' };
-    if (env.CF_ACCESS_CLIENT_ID && env.CF_ACCESS_CLIENT_SECRET) {
-      headers['CF-Access-Client-Id'] = env.CF_ACCESS_CLIENT_ID;
-      headers['CF-Access-Client-Secret'] = env.CF_ACCESS_CLIENT_SECRET;
-    }
+  const headers = { 'accept': 'application/json' };
+  const accessAttempted =
+    Boolean(env.CF_ACCESS_CLIENT_ID) && Boolean(env.CF_ACCESS_CLIENT_SECRET);
+  if (accessAttempted) {
+    headers['CF-Access-Client-Id'] = env.CF_ACCESS_CLIENT_ID;
+    headers['CF-Access-Client-Secret'] = env.CF_ACCESS_CLIENT_SECRET;
+  }
 
+  try {
     const upstreamUrl = env.NODE_TUNNEL_URL.replace(/\/+$/, '') + '/api/status';
-    const res = await fetch(upstreamUrl, { headers, signal: controller.signal });
+    // redirect: 'manual' surfaces a 302 from Cloudflare Access as a real status
+    // (default follows the redirect to the login page and we end up parsing HTML).
+    const res = await fetch(upstreamUrl, {
+      headers,
+      signal: controller.signal,
+      redirect: 'manual',
+    });
+    if (res.status === 302 || res.status === 401 || res.status === 403) {
+      return jsonResponse(
+        {
+          ok: false,
+          reason: 'access_blocked',
+          status: res.status,
+          accessAttempted,
+          updatedAt: now,
+        },
+        { maxAge: 5 }
+      );
+    }
     if (!res.ok) {
       return jsonResponse(
         { ok: false, reason: 'origin_http_' + res.status, updatedAt: now },
