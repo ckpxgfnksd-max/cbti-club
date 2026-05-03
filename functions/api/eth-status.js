@@ -52,30 +52,43 @@ export async function onRequestGet({ env }) {
 
 // Allow-list projection: ANY field not explicitly mapped here is dropped.
 // This is the field-exposure policy. Widening it requires an intentional code change.
+//
+// Upstream shape (from eth-node-status-dashboard /api/status):
+//   { erigon: { ok, data: { chainId(hex), blockNumber(num), peerCount(num), syncing(bool), genesisBlockHash, ... } },
+//     lighthouse: { ok, data: { syncing: { is_syncing, is_optimistic, el_offline, head_slot(str), sync_distance(str) },
+//                                version: { version }, configName, depositChainId } },
+//     summary: { chainId, networkLabel, mainnet } }
 function project(raw, now) {
-  const erigon = (raw && raw.erigon) || {};
-  const lighthouse = (raw && raw.lighthouse) || {};
+  const erigonData     = (raw && raw.erigon && raw.erigon.data) || {};
+  const lighthouseData = (raw && raw.lighthouse && raw.lighthouse.data) || {};
+  const lhSync         = lighthouseData.syncing || {};
+  const summary        = (raw && raw.summary) || {};
 
-  const headBlock = numOrNull(erigon.headBlock);
-  const headSlot = numOrNull(lighthouse.headSlot);
-  const peers = numOrNull(erigon.peerCount);
-  const syncDistance = numOrNull(lighthouse.syncDistance);
-  const erigonSyncing = boolOrNull(erigon.syncing);
-  const chainId = numOrNull(erigon.chainId);
+  const block = numOrNull(erigonData.blockNumber);
+  const slot  = strNumOrNull(lhSync.head_slot);
+  const peers = numOrNull(erigonData.peerCount);
 
-  // Single bool collapsed from multiple fields; raw flags never leave this function.
+  const syncDistance  = strNumOrNull(lhSync.sync_distance);
+  const erigonSyncing = boolOrNull(erigonData.syncing);
+  const lhIsSyncing   = boolOrNull(lhSync.is_syncing);
+  const elOffline     = boolOrNull(lhSync.el_offline);
+
+  // Single bool collapsed from multiple fields. Raw flags never leave this function.
   const syncing =
     erigonSyncing === true ||
+    lhIsSyncing === true ||
     (syncDistance !== null && syncDistance > 2) ||
-    boolOrNull(lighthouse.elOffline) === true;
+    elOffline === true ||
+    raw?.erigon?.ok === false ||
+    raw?.lighthouse?.ok === false;
 
-  // Don't expose testnet specifics — only confirm mainnet, otherwise hide.
-  const chain = chainId === 1 ? 'mainnet' : 'other';
+  // summary.mainnet is the cleanest source — only confirm mainnet, otherwise hide.
+  const chain = summary.mainnet === true ? 'mainnet' : 'other';
 
   return {
     ok: true,
-    block: headBlock,
-    slot: headSlot,
+    block: block,
+    slot: slot,
     peers: peers,
     syncing: syncing,
     chain: chain,
@@ -85,6 +98,14 @@ function project(raw, now) {
 
 function numOrNull(v) {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
+}
+
+// Lighthouse REST returns numeric fields as strings (head_slot, sync_distance).
+function strNumOrNull(v) {
+  if (typeof v === 'number' && Number.isFinite(v)) return v;
+  if (typeof v !== 'string' || v === '') return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
 }
 
 function boolOrNull(v) {
