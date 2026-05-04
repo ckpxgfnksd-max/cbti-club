@@ -1012,6 +1012,10 @@ var PersonaSphere = (function () {
       var orb = document.createElement('a');
       orb.className = 'persona-orb q-' + quadrant(p);
       orb.href = '#';
+      // Sphere parent is aria-hidden; keep orbs out of the keyboard tab
+      // order too so the explicit Start button is the canonical CTA.
+      // Mouse clicks still fire startTest (see addEventListener below).
+      orb.tabIndex = -1;
       orb.dataset.x = pos[0];
       orb.dataset.y = pos[1];
       orb.dataset.z = pos[2];
