@@ -3,6 +3,48 @@
   "version": 1,
   "items": [
     {
+      "id": "uap-release-analyzer-skill",
+      "publishedAt": "2026-05-08",
+      "primaryLang": "en",
+      "tags": ["claude-code", "skills", "evals", "ai-workflow"],
+      "title": {
+        "en": "Shipping a UAP-release Analyzer Skill",
+        "zh": "一个 UAP 解密文件分析 skill 的从 0 到 ship"
+      },
+      "subtitle": {
+        "en": "What the eval loop actually catches.",
+        "zh": "eval loop 真正能抓到什么"
+      },
+      "pullQuote": {
+        "en": "The skill is faster, cheaper, and more accurate — except where the task is small enough that any competent agent nails it.",
+        "zh": "skill 更快、更便宜、更准——除非任务小到任何称职 agent 都能搞定。"
+      },
+      "excerpt": {
+        "en": "I had 2.5 GB of declassified UAP files and built a Claude skill to inventory + analyze them. Then ran the skill-creator eval loop — four cases, with-skill vs baseline, 8 subagents in parallel. Mean pass rate: 96.9% with skill, 74.4% baseline. Wall-clock and tokens both lower with the skill. Here's what the eval loop caught that I would have missed: a PNG/PDF wording bug, an ICAO-airbase-code vocab gap, a bootstrap-response gap on the OTHER bucket, and a turn-management issue where the agent backgrounded a script and ended its turn early.",
+        "zh": "我手头有 2.5 GB 解密 UAP 文件，写了个 Claude skill 给它们做盘点和分析。然后跑 skill-creator 的 eval loop——四个 case，带 skill vs 裸跑，8 个 subagent 并行。带 skill 平均通过率 96.9%，裸跑 74.4%。时间和 token 都更省。下面是 eval loop 帮我抓到的——PNG/PDF 文案 bug、ICAO 机场代码词表缺失、bootstrap 回答漏掉 OTHER 桶、回合管理上 agent 把脚本扔后台就结束回合的问题。"
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "longform",
+          "url": "#essay-uap-skill",
+          "label": "Read on cbti.club"
+        },
+        {
+          "lang": "zh",
+          "platform": "longform",
+          "url": "https://github.com/ckpxgfnksd-max/uap-release-analyzer/blob/main/ARTICLE_CN.md",
+          "label": "在 GitHub 阅读中文版"
+        },
+        {
+          "lang": "en",
+          "platform": "other",
+          "url": "https://github.com/ckpxgfnksd-max/uap-release-analyzer",
+          "label": "Source on GitHub"
+        }
+      ]
+    },
+    {
       "id": "three-body-problem-of-crypto-dominance",
       "publishedAt": "2026-04-21",
       "primaryLang": "en",
