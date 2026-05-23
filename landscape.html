@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Workflow · Practitioner's Field Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   AI Workflow Landscape — design language ported from cbti.club
+   Luxury editorial on black · Instrument Serif + Barlow · liquid glass
+   ============================================================ */
+
+:root {
+  /* Surfaces */
+  --bg: #050506;
+  --bg-2: #0A0A0D;
+  --fg: #FFFFFF;
+  --fg-70: rgba(255, 255, 255, 0.70);
+  --fg-60: rgba(255, 255, 255, 0.60);
+  --fg-50: rgba(255, 255, 255, 0.50);
+  --fg-40: rgba(255, 255, 255, 0.40);
+  --fg-20: rgba(255, 255, 255, 0.20);
+  --fg-10: rgba(255, 255, 255, 0.10);
+  --fg-06: rgba(255, 255, 255, 0.06);
+
+  /* Accents — same palette as cbti */
+  --fact-accent: #00E676;       /* verified — smart-money green */
+  --opinion-accent: #FFB800;    /* author take — warning yellow */
+  --debate-accent: #B24BF3;     /* active tension — diamond-degen purple */
+  --link-accent: #B24BF3;
+
+  /* Typography */
+  --font-display: 'Instrument Serif', 'Noto Serif SC', ui-serif, Georgia, serif;
+  --font-body: 'Barlow', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Radius */
+  --r-pill: 9999px;
+  --r-card: 20px;
+  --r-card-sm: 12px;
+
+  /* Spacing scale */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+
+  /* Layout */
+  --max-w: 780px;
+  --max-w-article: 680px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-short: 180ms;
+  --dur-med: 280ms;
+  --dur-long: 500ms;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ambient glow — real light source, not gradient slop */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(255,255,255,0.04), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 120%, rgba(255,255,255,0.02), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Film grain — gives black surface texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.5;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  transform: translateZ(0);
+  z-index: 1;
+}
+
+.paper-page {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-w);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--s-7) var(--s-5) var(--s-9);
+}
+
+/* ─────────────────────────────────────────────
+   HEADER
+   ─────────────────────────────────────────────*/
+
+.paper-article-eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--debate-accent);
+  opacity: 0.85;
+  margin-bottom: var(--s-5);
+}
+
+h1.paper-article-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6vw, 3.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+  margin-bottom: 10px;
+}
+h1.paper-article-title em { font-style: italic; }
+
+.paper-article-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--fg-70);
+  margin-bottom: var(--s-5);
+  max-width: var(--max-w-article);
+}
+
+.paper-article-authors {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-50);
+  margin-bottom: var(--s-5);
+}
+
+.paper-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  align-items: baseline;
+  margin-bottom: var(--s-7);
+  padding-bottom: var(--s-5);
+  border-bottom: 1px solid var(--fg-06);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--fg-60);
+}
+.paper-meta-row .meta-label {
+  color: var(--fg-40);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-right: 6px;
+}
+.paper-meta-row .meta-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.lede {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--fg-70);
+  margin: 0 0 var(--s-5);
+  max-width: var(--max-w-article);
+  letter-spacing: -0.005em;
+}
+.lede p { margin-bottom: var(--s-3); }
+.lede p:last-child { margin-bottom: 0; }
+
+/* ─────────────────────────────────────────────
+   TOOLBAR
+   ─────────────────────────────────────────────*/
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 var(--s-6);
+}
+
+.toolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-70);
+  background: rgba(255,255,255,0.022);
+  border: 1px solid var(--fg-10);
+  border-radius: var(--r-pill);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out),
+              background var(--dur-short) var(--ease-out),
+              transform var(--dur-short) var(--ease-out);
+}
+.toolbar button:hover {
+  color: var(--fg);
+  border-color: var(--fg-20);
+  background: rgba(255,255,255,0.04);
+  transform: translateY(-1px);
+}
+
+/* ─────────────────────────────────────────────
+   READING PATHS — paper-card treatment
+   ─────────────────────────────────────────────*/
+
+.reading-paths {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,0.018);
+  border: 1px solid var(--fg-10);
+  border-radius: var(--r-card);
+  padding: var(--s-5) var(--s-6);
+  margin-bottom: var(--s-8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.06),
+    0 1px 2px rgba(0,0,0,0.4);
+}
+
+.reading-paths::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--debate-accent) 20%,
+    var(--debate-accent) 80%,
+    transparent 100%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.reading-paths h2 {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-50);
+  margin: 0 0 var(--s-4);
+  border: none;
+  padding: 0;
+  font-weight: 400;
+}
+
+.reading-paths p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--fg-70);
+  margin: var(--s-3) 0;
+}
+.reading-paths p strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+/* ─────────────────────────────────────────────
+   VOICES — pull-quote section
+   ─────────────────────────────────────────────*/
+
+#voices {
+  margin-bottom: var(--s-8);
+}
+
+#voices > h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.85rem, 4vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin: 0 0 var(--s-2);
+}
+
+#voices > .voices-intro {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--fg-60);
+  margin-bottom: var(--s-5);
+  max-width: var(--max-w-article);
+}
+
+.voices-subhead {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-50);
+  margin: var(--s-5) 0 var(--s-3);
+}
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10px;
+}
+
+.pull-quote {
+  position: relative;
+  padding: var(--s-5);
+  background: rgba(178,75,243,0.03);
+  border: 1px solid rgba(178,75,243,0.15);
+  border-left: 2px solid var(--debate-accent);
+  border-radius: var(--r-card-sm);
+}
+
+.pull-quote-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--fg);
+  letter-spacing: -0.005em;
+  margin-bottom: var(--s-3);
+}
+.pull-quote-text::before {
+  content: '“';
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 0;
+  color: var(--debate-accent);
+  margin-right: 4px;
+  opacity: 0.7;
+  vertical-align: -10px;
+}
+.pull-quote-text::after {
+  content: '”';
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 0;
+  color: var(--debate-accent);
+  margin-left: 2px;
+  opacity: 0.7;
+  vertical-align: -8px;
+}
+
+.pull-quote-attrib {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--debate-accent);
+  margin-bottom: 4px;
+}
+
+.pull-quote-source {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-50);
+  line-height: 1.5;
+}
+.pull-quote-source a { font-size: 12px; }
+
+/* ─────────────────────────────────────────────
+   CLUSTERS
+   ─────────────────────────────────────────────*/
+
+.cluster {
+  margin-bottom: var(--s-8);
+}
+
+.cluster h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.85rem, 4vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin: 0 0 var(--s-4);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--fg-06);
+}
+.cluster:first-of-type h2 { border-top: none; padding-top: 0; }
+
+.cluster-intro {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--fg-60);
+  margin-bottom: var(--s-5);
+  max-width: var(--max-w-article);
+}
+.cluster-intro p { margin: 0; }
+
+/* ─────────────────────────────────────────────
+   ENTRY CARDS — liquid glass
+   ─────────────────────────────────────────────*/
+
+.entry {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,0.018);
+  border-radius: var(--r-card-sm);
+  margin-bottom: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+  transition: background var(--dur-med) var(--ease-out);
+}
+
+.entry::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.05) 30%,
+    rgba(255,255,255,0) 50%,
+    rgba(255,255,255,0.04) 80%,
+    rgba(255,255,255,0.16) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.entry[open] {
+  background: rgba(255,255,255,0.028);
+}
+
+.entry > summary {
+  padding: 14px 20px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  user-select: none;
+}
+.entry > summary::-webkit-details-marker { display: none; }
+.entry > summary::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid var(--fg-50);
+  border-bottom: 1px solid var(--fg-50);
+  transform: rotate(-45deg);
+  transition: transform var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out);
+  flex-shrink: 0;
+  margin-top: -2px;
+}
+.entry[open] > summary::before {
+  transform: rotate(45deg);
+  border-color: var(--fg);
+}
+
+.entry > summary > .entry-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--fg-50);
+  flex-shrink: 0;
+}
+
+.entry > summary > .entry-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry .cn-title {
+  color: var(--fg-50);
+  font-size: 14px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  margin-left: 4px;
+}
+
+.entry .body {
+  padding: 0 20px 18px 38px;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--fg-70);
+  letter-spacing: -0.002em;
+}
+.entry .body p { margin: 0 0 var(--s-3); }
+.entry .body p:last-of-type { margin-bottom: 0; }
+.entry .body strong { color: var(--fg); font-weight: 500; }
+.entry .body em {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--fg);
+}
+
+.entry .source {
+  margin-top: var(--s-4);
+  padding-top: var(--s-3);
+  border-top: 1px dashed var(--fg-10);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-50);
+  line-height: 1.6;
+  word-break: break-word;
+}
+.entry .source strong {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--fg-40);
+  font-weight: 400;
+  margin-right: 6px;
+}
+
+/* ─────────────────────────────────────────────
+   TAGS
+   ─────────────────────────────────────────────*/
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: var(--r-pill);
+  vertical-align: middle;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+.tag.fact {
+  background: rgba(0, 230, 118, 0.08);
+  color: var(--fact-accent);
+  border: 1px solid rgba(0, 230, 118, 0.25);
+}
+.tag.opinion {
+  background: rgba(255, 184, 0, 0.08);
+  color: var(--opinion-accent);
+  border: 1px solid rgba(255, 184, 0, 0.25);
+}
+
+/* ─────────────────────────────────────────────
+   DEBATES
+   ─────────────────────────────────────────────*/
+
+#active-debates {
+  margin-top: var(--s-8);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--fg-06);
+}
+
+#active-debates > h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.85rem, 4vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin: 0 0 var(--s-5);
+}
+
+.debate {
+  position: relative;
+  overflow: hidden;
+  background: rgba(178, 75, 243, 0.025);
+  border-radius: var(--r-card-sm);
+  margin-bottom: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+}
+
+.debate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg,
+    rgba(178, 75, 243, 0.35) 0%,
+    rgba(178, 75, 243, 0.08) 30%,
+    rgba(255,255,255,0) 50%,
+    rgba(178, 75, 243, 0.08) 80%,
+    rgba(178, 75, 243, 0.3) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.debate > summary {
+  padding: 14px 20px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.debate > summary::-webkit-details-marker { display: none; }
+.debate > summary::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid var(--debate-accent);
+  border-bottom: 1px solid var(--debate-accent);
+  transform: rotate(-45deg);
+  transition: transform var(--dur-short) var(--ease-out);
+  flex-shrink: 0;
+  margin-top: -2px;
+  opacity: 0.85;
+}
+.debate[open] > summary::before { transform: rotate(45deg); }
+
+.debate .positions {
+  padding: 0 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.position {
+  padding: 14px 18px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--fg-10);
+  border-left: 2px solid var(--debate-accent);
+  border-radius: var(--r-card-sm);
+}
+.position h4 {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--debate-accent);
+  margin: 0 0 8px;
+}
+.position p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--fg-70);
+  margin: 0;
+}
+.position p strong { color: var(--fg); font-weight: 500; }
+.position p em {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--fg);
+}
+
+/* ─────────────────────────────────────────────
+   LINKS, CODE, MISC
+   ─────────────────────────────────────────────*/
+
+a {
+  color: var(--link-accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(178, 75, 243, 0.3);
+  padding-bottom: 1px;
+  transition: color var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out);
+}
+a:hover {
+  color: var(--fg);
+  border-color: var(--fg-50);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--fg-10);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--fg);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--fg-06);
+  margin: var(--s-6) 0;
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+   ─────────────────────────────────────────────*/
+
+footer {
+  margin-top: var(--s-8);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--fg-06);
+}
+
+footer h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+  margin-bottom: var(--s-4);
+}
+
+footer p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--fg-60);
+  margin-bottom: var(--s-3);
+  max-width: var(--max-w-article);
+}
+footer p strong { color: var(--fg); font-weight: 500; }
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+   ─────────────────────────────────────────────*/
+
+@media (max-width: 768px) {
+  .paper-page { padding: var(--s-5) var(--s-4) var(--s-7); }
+  .reading-paths { padding: var(--s-4) var(--s-5); }
+  .entry > summary { padding: 12px 16px; font-size: 16.5px; gap: 10px; }
+  .entry .body { padding: 0 16px 16px 28px; font-size: 14px; }
+  .debate > summary { padding: 12px 16px; font-size: 16.5px; }
+  .debate .positions { padding: 0 16px 16px; }
+}
+
+@media (max-width: 480px) {
+  :root { --s-6: 24px; --s-7: 36px; }
+  h1.paper-article-title { font-size: clamp(2.2rem, 9vw, 2.8rem); }
+  .paper-article-subtitle { font-size: 18px; }
+  .cluster h2 { font-size: 1.55rem; }
+  .toolbar button { font-size: 10px; padding: 8px 14px; }
+  .entry .source { font-size: 10px; }
+}
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="paper-page">
+
+<header>
+<span class="paper-article-eyebrow">Field map · 2026</span>
+<h1 class="paper-article-title">AI Workflow · <em>Practitioner's Field Map</em></h1>
+<p class="paper-article-subtitle">不是研究前沿地图，是从业者的工作集 — every <span style="color:var(--fact-accent)">[FACT]</span> entry cites a workflow that ran for ≥1 month in real use, every <span style="color:var(--opinion-accent)">[OPINION]</span> is our take, named as such.</p>
+<p class="paper-article-authors">Chase Wang · Modeled on <a href="https://grapeot.github.io/ai-self-evolution-landscape/">grapeot's frontier landscape</a></p>
+
+<div class="paper-meta-row">
+<span class="meta-item"><span class="meta-label">Updated</span> 2026-05-23</span>
+<span class="meta-item"><span class="meta-label">Audience</span> AI workflow practitioners (Claude Code, Cursor, agent builders) · EN/CN</span>
+<span class="meta-item"><span class="meta-label">Built on</span> <a href="https://yage.ai/">yage.ai stack</a> — axioms 008 / 009 / 010</span>
+</div>
+
+<div class="lede">
+<p>This is a field map, not a frontier survey. Where grapeot's landscape maps what's possible at the edge, this one maps what survives daily use — the practitioner's working set six months after the hype cycle.</p>
+</div>
+</header>
+
+<div class="toolbar">
+<button id="btn-expand">Expand all</button>
+<button id="btn-collapse">Collapse all</button>
+</div>
+
+<section class="reading-paths">
+<h2>Reading paths</h2>
+<p><strong>5-minute path</strong> (the must-knows — 10 entries):
+<a href="#entry-1.1">1.1 files-over-prompts</a> · <a href="#entry-1.6">1.6 prompts-vs-hooks</a> · <a href="#entry-2.1">2.1 skill-creator loop</a> · <a href="#entry-3.1">3.1 /agents fleet view</a> ·
+<a href="#entry-4.1">4.1 hooks-as-environment</a> · <a href="#entry-5.1">5.1 autoresearch protocol</a> · <a href="#entry-5.2">5.2 EVALS discipline</a> · <a href="#entry-5.4">5.4 compounding ratio</a> ·
+<a href="#entry-6.5">6.5 auto-mode tradeoff</a> · <a href="#debate-D1">D1 long-context vs files</a></p>
+<p><strong>30-minute path</strong>: read in cluster order, top to bottom (~36 entries + 6 debates).</p>
+</section>
+
+<section id="voices">
+<h2>Voices · 声音</h2>
+<p class="voices-intro">Pull-quotes that anchor the field. Top row: the frontier — what grapeot's <a href="https://grapeot.github.io/ai-self-evolution-landscape/">AI 自进化 · 领域直觉地图</a> records about recursive self-improvement. Bottom row: the working set — what this landscape says about daily-use practice. Two landscapes; one operating system.</p>
+
+<span class="voices-subhead">From the frontier — grapeot's AI self-evolution landscape</span>
+<div class="quotes-grid">
+
+<div class="pull-quote">
+<p class="pull-quote-text">The first ultraintelligent machine is the last invention that man need ever make.</p>
+<p class="pull-quote-attrib">I.J. Good · 1965</p>
+<p class="pull-quote-source">Cited in <a href="https://grapeot.github.io/ai-self-evolution-landscape/">grapeot's frontier landscape</a> — the historical anchor of the recursive-improvement thesis.</p>
+</div>
+
+<div class="pull-quote">
+<p class="pull-quote-text">每个 sigmoid 底部像指数。</p>
+<p class="pull-quote-attrib">Nathan Lambert · "Lossy Self-Improvement"</p>
+<p class="pull-quote-source">Cited in grapeot's frontier landscape. Translation: <em>"Every S-curve's bottom looks like exponential."</em> The skeptic's frame against runaway compounding.</p>
+</div>
+
+<div class="pull-quote">
+<p class="pull-quote-text">AI 已经在真实生产环境中优化自己——但离"自主决定优化什么"还有本质距离。</p>
+<p class="pull-quote-attrib">grapeot · frontier landscape, 2026-05</p>
+<p class="pull-quote-source">The synthesis sentence of the frontier landscape. Translation: <em>"AI now optimizes itself in production — but is still far from autonomously deciding what to optimize."</em></p>
+</div>
+
+</div>
+
+<span class="voices-subhead">From the working set — this landscape</span>
+<div class="quotes-grid">
+
+<div class="pull-quote">
+<p class="pull-quote-text">One resets each time, the other compounds continuously.</p>
+<p class="pull-quote-attrib">grapeot · context infrastructure thesis</p>
+<p class="pull-quote-source">The line that names the difference between chat-with-AI and file-based context. See <a href="#entry-1.5">entry 1.5</a> and axiom 008 (Compound, Don't Reset).</p>
+</div>
+
+<div class="pull-quote">
+<p class="pull-quote-text">Anything you find yourself reminding the AI of across multiple sessions belongs in the environment, not the prompt.</p>
+<p class="pull-quote-attrib">Vince Mask · X, 2026-05-22</p>
+<p class="pull-quote-source">The cleanest articulation of the hooks-vs-CLAUDE.md split. See <a href="#entry-1.6">entry 1.6</a> and <a href="#entry-4.1">entry 4.1</a>.</p>
+</div>
+
+<div class="pull-quote">
+<p class="pull-quote-text">If you cannot answer "what did this session leave behind?" five minutes after closing the window, the workflow is broken — fix the environment, not the model.</p>
+<p class="pull-quote-attrib">This landscape · entry 1.5</p>
+<p class="pull-quote-source">The compounding test as a single-question diagnostic. The mechanical version is now a Stop hook (2026-05-23) writing one row per session.</p>
+</div>
+
+</div>
+</section>
+
+<section class="cluster" id="cluster-1">
+<h2>1. Context Infrastructure · 上下文基础设施</h2>
+<div class="cluster-intro"><p>The foundation layer: how knowledge stays alive between sessions. Without this layer every session resets to zero; with it, work compounds. This is the highest-leverage cluster — every other cluster degrades by 50% without it.</p></div>
+
+<details class="entry" id="entry-1.1"><summary><span class="entry-num">1.1</span><span class="entry-title">Files-over-prompts is the load-bearing axiom <span class="cn-title">· 文件优于提示</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Knowledge that can live in a file should never be stuffed into a prompt. Files are persistent, searchable, shareable, and let the AI develop its own understanding by reading raw evidence instead of consuming pre-digested summaries. This single discipline is what separates 10x AI users from 1x users.</p>
+<p>Concrete evidence: grapeot's published Context Infrastructure stack uses this as its first operating principle; vczh applies the same pattern across 8 C++ repos via <code>Learning.md</code>; on this machine, <code>~/.claude/rules/axioms/009_files_over_prompts.md</code> has been referenced across 8+ sessions and survived three model upgrades (Sonnet 4.5 → 4.6 → 4.7) without revision.</p><p class="source"><strong>Source</strong> <a href="https://yage.ai/context-infrastructure.html">yage.ai context-infrastructure</a> · <code>~/.claude/rules/axioms/009_files_over_prompts.md</code> · vczh <code>Learning.md</code> across <code>vczh-libraries/*</code></p></div></details>
+
+<details class="entry" id="entry-1.2"><summary><span class="entry-num">1.2</span><span class="entry-title">Counter-based memory compaction beats append-only <span class="cn-title">· 计数器式记忆压缩</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Every memory entry carries a <code>[N]</code> counter for how many independent times the lesson has been re-derived. Bump on re-derivation, promote to axiom at <code>[3]+</code>, prune at 90+ days untouched. This turns memory from a write-only log into a write-and-distill loop — duplicates merge into the highest-counter entry, signal sharpens, dead entries get pruned in a weekly refine cycle.</p>
+<p>Adopted from vczh's <code>Learning.md</code> discipline applied across 8 C++ repos; implemented as <code>~/.claude/rules/MEMORY_PROTOCOL.md</code> (2026-04-03). On this machine the counter system has promoted 10 memories to axioms over 12 months, with 0 axiom reversions.</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/MEMORY_PROTOCOL.md</code> · vczh <code>Learning.md</code> system</p></div></details>
+
+<details class="entry" id="entry-1.3"><summary><span class="entry-num">1.3</span><span class="entry-title">Three-layer hierarchy: L1 Observer → L2 Reflector → L3 Axiom <span class="cn-title">· 三层记忆层级</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Memory has tiers, not flatness. L1 = raw observations (session scratch in <code>tmp/</code>). L2 = consolidated reflections (memory files with counters). L3 = axioms (decision rules promoted from <code>[3]+</code> patterns). Each tier has a different write/read frequency and a different lifetime. Skipping tiers — writing axioms before observations accumulate — produces brittle rules that get reverted.</p>
+<p>On this machine: <code>~/.claude/tmp/</code> (L1, ephemeral) → <code>~/.claude/projects/.../memory/</code> (L2, 27 entries, counter-tracked) → <code>~/.claude/rules/axioms/</code> (L3, 10 promoted, each backed by ≥3 sessions of evidence). The skill that publishes this hierarchy as a reusable artifact is grapeot's <code>context-infrastructure</code>.</p><p class="source"><strong>Source</strong> <a href="https://yage.ai/context-infrastructure.html">yage.ai context-infrastructure</a> · <code>~/.claude/rules/axioms/INDEX.md</code></p></div></details>
+
+<details class="entry" id="entry-1.4"><summary><span class="entry-num">1.4</span><span class="entry-title">1M-token context didn't kill RAG/memory — it changed where they apply <span class="cn-title">· 长上下文未杀死 RAG</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Anthropic shipped 1M context for Claude Sonnet in 2025. The naive read was "long context replaces RAG." The practitioner's read is different: long context is the right tool for <strong>single-session deep work</strong> (read 50 files in one go, never lose them mid-task); RAG/files are the right tool for <strong>cross-session compounding</strong> (the next session needs to find them). The two sit on different time axes. A 1M-token paste resets at session end; a file-system memory survives indefinitely. Treating them as substitutes is the most common context-infra mistake.</p>
+<p>Observed on this machine: the 1M-context release (May 2025) did not reduce file-based memory writes — it increased them, because longer sessions produced more compoundable artifacts and the cost of NOT externalizing them got steeper.</p><p class="source"><strong>Source</strong> <a href="https://www.anthropic.com/news/claude-3-7-sonnet">Anthropic 1M context announcement</a> · author's usage data 2025-04 → 2026-05 · axiom 008</p></div></details>
+
+<details class="entry" id="entry-1.5"><summary><span class="entry-num">1.5</span><span class="entry-title">The compounding test: did this session leave an artifact? <span class="cn-title">· 复利测试</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Health check for any AI workflow, single question: at session end, does the work disappear or does the next session find something to read? Disappear = 1x usage. Artifact left behind (file, axiom, skill, memory entry, daily-record row) = compounding. <em>"One resets each time, the other compounds continuously"</em> — grapeot's framing. The Stop hook on this machine (wired 2026-05-23) makes the test mechanical: every session end appends a row to <code>~/.claude/contexts/daily_records/YYYY-MM-DD.md</code> automatically, taking artifact creation from 0/85 sessions (prompt-side reminder) to 100% (hook-enforced).</p>
+<p>If you cannot answer "what did this session leave behind?" five minutes after closing the window, the workflow is broken — fix the environment, not the model.</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/axioms/008_compound_dont_reset.md</code> · <a href="https://yage.ai/">grapeot Context Infrastructure thread</a> · this machine's Stop hook implementation 2026-05-23</p></div></details>
+
+<details class="entry" id="entry-1.6"><summary><span class="entry-num">1.6</span><span class="entry-title">Prompts express intent; environment enforces rules <span class="cn-title">· Prompt 表达意图，Hook 固化规则</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>The cleanest articulation of when to leave a rule in CLAUDE.md vs move it to a hook: prompts are for context-dependent intent, hooks are for stable repeated forget-prone enforcement. Anything you find yourself reminding the AI of across multiple sessions belongs in the environment, not the prompt. Seven canonical hook patterns: format-on-save, lint/test pre-commit, forbidden-path block, type-check, high-risk gate, session-start context inject, task-end change summary.</p>
+<p>Quantified on this machine from 85 session transcripts: prompt-only phase-announcement compliance was 4/6 in non-trivial (&gt;50-turn) sessions — 67% pass, 33% miss; prompt-only session-artifact production was 0/85 across all sessions. Hook-enforced compliance is 100% on both. The CLAUDE.md is doing the work of a 50-line hook script — and losing.</p><p class="source"><strong>Source</strong> <a href="https://x.com/vincemask/status/2057788920327520305">Vince Mask, X, 2026-05-22</a> · this session's quantified audit of <code>~/.claude/projects/-Users-chasewang-Documents-Claude-Code/*.jsonl</code></p></div></details>
+</section>
+
+<section class="cluster" id="cluster-2">
+<h2>2. Skill Systems · 技能系统</h2>
+<div class="cluster-intro"><p>Slash commands are the second layer of the working set. They reify reusable workflows into named operations that the user can invoke and the model can introspect. The question isn't whether to use skills — it's how to design them so they survive model upgrades, stay sharply scoped, and don't ossify into procedural straitjackets.</p></div>
+
+<details class="entry" id="entry-2.1"><summary><span class="entry-num">2.1</span><span class="entry-title">Anthropic's skill-creator is the canonical test-measure-refine loop <span class="cn-title">· 官方技能生成器</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Anthropic publishes a <code>skill-creator</code> skill that runs the create-edit-eval-benchmark loop with four subagents: executor (runs the skill on test cases), grader (scores against rubric), comparator (A/B against alternatives), analyzer (proposes refinements). It is the operational artifact of the autoresearch axiom — single-pass skill drafts hit a consensus ceiling; this loop breaks through by attacking the weakest rubric dimension each round.</p>
+<p>Available via the Anthropic skills marketplace; on this machine it lives at <code>~/.claude/skills/anthropic-skills/skill-creator/</code>. Used to produce <code>/why-token</code>, <code>/tokenomics</code>, and the planned <code>/landscape</code> skill.</p><p class="source"><strong>Source</strong> <a href="https://github.com/anthropics/claude-plugins-official">Anthropic skills marketplace</a> · <code>~/.claude/rules/axioms/001_iterative_refinement.md</code></p></div></details>
+
+<details class="entry" id="entry-2.2"><summary><span class="entry-num">2.2</span><span class="entry-title">Slash commands beat prompt repetition <span class="cn-title">· 斜杠命令优于重复提示</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>If you have re-typed the same multi-line instruction more than twice, it should be a slash command. The economics are obvious in retrospect — a skill costs ~20 minutes to write once and amortizes across thousands of invocations — but in practice most users keep typing. Symptoms of underutilization: bookmarked prompt snippets, copy-paste from Notes app, recurring sentences in CLAUDE.md that fire only for one task type.</p>
+<p>Practitioner heuristic: third repeat = write the skill. On this machine, 20 skills (<code>/why-token</code>, <code>/tokenomics</code>, <code>/last30days</code>, <code>/deep-research</code>, <code>/x-control-chase</code>, <code>/ship</code>, <code>/qa</code>, <code>/loop</code>, <code>/schedule</code>, etc.) cover the bulk of weekly work; without them the CLAUDE.md would have to be 3× its current size.</p><p class="source"><strong>Source</strong> <code>~/.claude/skills/</code> directory · <code>~/.claude/rules/skills/INDEX.md</code></p></div></details>
+
+<details class="entry" id="entry-2.3"><summary><span class="entry-num">2.3</span><span class="entry-title">Marketplace economics: skills as personal IP <span class="cn-title">· 技能即个人知识产权</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>A skill is a packaged opinion. The marketplace is therefore a stage where opinions about how work should be done get distributed. This is closer to a substack than to npm — quality is opinionated, not commodity. Sahil Lavingia's <code>OPC-skills</code> (minimalist entrepreneur frameworks: <code>/find-community</code>, <code>/validate-idea</code>, <code>/mvp</code>, <code>/processize</code>) demonstrates the model: ten skills encoding one person's worldview, useful precisely because the author has taste.</p>
+<p>Implication for practitioners: publishing skills is a higher-leverage form of content than writing about workflows. Each skill the user installs is a vote for that author's mental model.</p><p class="source"><strong>Source</strong> <a href="https://github.com/ckpxgfnksd-max/OPC-skills">Sahil Lavingia OPC-skills</a> · marketplace usage on this machine (Anthropic + OPC sources)</p></div></details>
+
+<details class="entry" id="entry-2.4"><summary><span class="entry-num">2.4</span><span class="entry-title">Model-version durability: well-designed skills survive 4.5→4.6→4.7 <span class="cn-title">· 跨模型版本耐用度</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>The fear that skills will rot across model upgrades is largely unfounded if the skills are written as outcomes + constraints (axiom 010) rather than step-by-step procedures. On this machine: of ~20 skills installed before Sonnet 4.5, the upgrades to 4.6 and 4.7 required two refactors (skills that had hard-coded a model name or token budget); the rest continued to work unchanged. Sample is small; the pattern matches the broader practitioner consensus that outcome-shaped skills survive model upgrades better than procedure-shaped ones.</p>
+<p>Practitioner rule: never reference a specific model in a skill body; never assume a specific context window; treat the model as a capability not a fixed signature.</p><p class="source"><strong>Source</strong> this machine's skill upgrade audit 2025-12 → 2026-05 · axiom 010</p></div></details>
+
+<details class="entry" id="entry-2.5"><summary><span class="entry-num">2.5</span><span class="entry-title">When skill beats prompt — and when it doesn't <span class="cn-title">· 技能与提示的边界</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Skills beat prompts when the workflow is stable, repeated, and benefits from named structure. Prompts beat skills when the request is one-off, exploratory, or requires negotiated scope with the user. The failure mode is over-skillification — wrapping every prompt in a skill produces a brittle DSL that nobody remembers how to use. Symptoms: skills with 1 invocation per quarter, skills that always need 3 arguments to do anything useful, skills that get rewritten more often than invoked.</p>
+<p>Heuristic: a skill must be invoked at least 5 times before it earns its keep. Lower than that, revert to prompt and save the cognitive load.</p><p class="source"><strong>Source</strong> author observation across 20-skill setup · <code>~/.claude/rules/skills/INDEX.md</code></p></div></details>
+
+<details class="entry" id="entry-2.6"><summary><span class="entry-num">2.6</span><span class="entry-title">Skill granularity: atomic actions vs orchestrating skills <span class="cn-title">· 技能粒度</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Two valid skill shapes. <strong>Atomic</strong>: one verb, one outcome (<code>/ship</code> lands a PR, <code>/qa</code> runs the test loop). <strong>Orchestrating</strong>: multi-phase, chains atomic skills (<code>/x-control-chase</code> runs pulse + drafts + posts). Orchestrating skills are higher-leverage but riskier — they fail in more places and are harder to debug. Atomic skills compose better.</p>
+<p>Practitioner rule: build atomic first; only build the orchestrator after three atomic skills have been used together more than five times. Premature orchestration is the skill-system version of premature abstraction (axiom 006).</p><p class="source"><strong>Source</strong> author skill design experience · axiom 006</p></div></details>
+</section>
+
+<section class="cluster" id="cluster-3">
+<h2>3. Agentic Patterns · 智能体模式</h2>
+<div class="cluster-intro"><p>The shift from "one conversation at a time" to "fleet of agents working in parallel." This cluster matures faster than any other right now — patterns that didn't exist in early 2025 are production-stable by mid-2026.</p></div>
+
+<details class="entry" id="entry-3.1"><summary><span class="entry-num">3.1</span><span class="entry-title">The /agents fleet view exists (Claude Code v2.1.139+) <span class="cn-title">· /agents 舰队视图</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Anthropic shipped a research-preview fleet view in late 2025. A terminal table lists all background sessions grouped by state (Working / Needs input / Ready for review / Completed / Failed / Stopped), each row carries a Haiku-generated one-line summary, runtime, PR link, and CI status. Keybindings: <code>Space</code> peek, <code>Enter</code> attach, <code>Ctrl+T</code> pin, <code>/</code> dispatch skill.</p>
+<p>This collapses an entire category of third-party tooling — at least 8 community projects (claude-view, mission-control, claude-code-hooks-multi-agent-observability, AgentCraft, Claudia, Hermes HUD, etc.) had built fleet views by mid-2026; the official answer subsumed most of them. Anyone building a fleet HUD now must answer: "why isn't this just <code>claude agents</code> with a skin?"</p><p class="source"><strong>Source</strong> <a href="https://code.claude.com/docs/en/agent-view">Claude Code Agent View docs</a> · <code>~/.claude/contexts/survey_sessions/aggro_agent_viz_landscape_2026-05-12.md</code></p></div></details>
+
+<details class="entry" id="entry-3.2"><summary><span class="entry-num">3.2</span><span class="entry-title">Subagent boundary: goals not procedures <span class="cn-title">· 子智能体应给目标而非步骤</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Subagents (spawned via the Agent tool or <code>claude -p</code>) work better when given an objective and tool access than when handed a step-by-step procedure. Axiom 007 (goals over instructions) was promoted from this exact pattern recurring across 5+ session contexts. The mistake — and almost everyone makes it once — is pre-chewing the search strategy for the subagent, which caps its output at the calling agent's imagination.</p>
+<p>Concrete rule for <code>claude -p</code> spawning: match <code>--tools</code> to task type (file edits get <code>Read,Edit,Write</code>; research gets <code>Bash,Read,Write</code>), propagate user language explicitly (don't rely on inference), land outputs to files not stdout, default to <code>--model opus</code>.</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/axioms/007_goals_over_instructions.md</code> · <code>~/.claude/CLAUDE.md</code> "Claude Code CLI as Sub-tool" section</p></div></details>
+
+<details class="entry" id="entry-3.3"><summary><span class="entry-num">3.3</span><span class="entry-title">Background tasks vs foreground for parallelism <span class="cn-title">· 后台与前台任务的取舍</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>The Agent tool's <code>run_in_background: true</code> parameter is the single most underused capability. Foreground agents block the main thread for 2–10 minutes per call; background agents let the main thread continue and notify on completion. Rule: foreground if you need the result to proceed; background if you have genuinely independent work to do in parallel.</p>
+<p>Misuse pattern: spawning two foreground agents serially when they could have run concurrently. Cost: ~5 minutes wall-clock per occurrence. Frequency on this machine before correction: ~3× per non-trivial session. After correction: ~0.</p><p class="source"><strong>Source</strong> Claude Code Agent tool docs · <code>~/.claude/CLAUDE.md</code> agent guidance</p></div></details>
+
+<details class="entry" id="entry-3.4"><summary><span class="entry-num">3.4</span><span class="entry-title">Multi-harness coordination (cello pattern) — promising but unproven <span class="cn-title">· 多 harness 协调</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>The "director agent coordinating multiple Claude Code harnesses" pattern (private project <code>cello</code>, inheriting from <code>aggro</code>) explored whether a single planner could steer 3–10 worker agents across separate harnesses. Result: coordination tax dominated parallel benefit at small scale (&lt;5 workers); the pattern only pays off when workers are doing genuinely orthogonal tasks (e.g., one researching, one coding, one QA'ing) for ≥30 minutes each. Below that threshold, a single focused agent with <code>run_in_background</code> ships faster.</p>
+<p>The user's <code>cello</code> project is frozen pending validation of the simpler <code>beto</code> inbox approach — itself a vote for "focused over swarm" at current model capability.</p><p class="source"><strong>Source</strong> <code>~/.claude/projects/-Users-chasewang-Documents-Claude-Code/memory/reference_beto_cello.md</code> · <code>~/.claude/contexts/survey_sessions/beto_iteration_plan_2026_05_17.md</code></p></div></details>
+
+<details class="entry" id="entry-3.5"><summary><span class="entry-num">3.5</span><span class="entry-title">/loop for state-watching, /schedule for cron-style recurrence <span class="cn-title">· 循环与定时任务</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Two complementary patterns. <code>/loop</code> runs a prompt or slash command on a recurring interval (e.g., <code>/loop 5m /qa</code>) — good for polling state that can't notify (CI, deploys, remote queues). Dynamic-pacing mode lets the model self-pace by calling <code>ScheduleWakeup</code> with cache-aware intervals (avoid 300s — that's the worst-of-both for prompt caching). <code>/schedule</code> creates cron-style remote agents that fire without prompting — good for daily digests (the user runs <code>x-brief-morning</code> daily).</p>
+<p>The mistake to avoid: short-interval <code>/loop</code> to poll background agents the harness already tracks. The harness re-invokes you on completion; polling burns cache.</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/skills/INDEX.md</code> · <code>/loop</code> and <code>/schedule</code> skill docs · <code>~/.claude/CLAUDE.md</code> ScheduleWakeup guidance</p></div></details>
+
+<details class="entry" id="entry-3.6"><summary><span class="entry-num">3.6</span><span class="entry-title">Scheduled remote agents change the unit of work <span class="cn-title">· 定时远程任务改变工作单元</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Once you have <code>/schedule</code>, the unit of AI work is no longer "a conversation" — it's "a recurring routine." The user runs <code>x-brief-morning</code> daily; it pulls trending crypto/DeFi/AI topics via <code>/last30days</code> + <code>/deep-research</code>, drafts three post suggestions, and lands them in <code>~/Documents/Last30Days/</code> for review. Effort per output: ~5 minutes of human review. Frequency: 7×/week. Annualized: ~30 hours of human effort yielding ~365 content drafts.</p>
+<p>This is what compounding looks like at the workflow level — the conversation that would have happened reactively (manually researching X each morning) becomes proactive infrastructure.</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/skills/INDEX.md</code> "Scheduled Tasks" · <code>~/Documents/Last30Days/</code> 141 output files</p></div></details>
+</section>
+
+<section class="cluster" id="cluster-4">
+<h2>4. Tool Integration · 工具集成</h2>
+<div class="cluster-intro"><p>Tools are the agent's nervous system. The 2026 stack has matured into roughly four kinds: hooks (environment-level enforcement), MCP servers (external tool access), browser tooling (web interaction), and the deferred-tool/Tool-search pattern (cost control). Mastering tool integration is what separates power users from regular users.</p></div>
+
+<details class="entry" id="entry-4.1"><summary><span class="entry-num">4.1</span><span class="entry-title">Hooks-as-environment: the Vince Mask thesis <span class="cn-title">· Hook 即环境层</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Hooks are the cleanest mechanism for "things you keep reminding the AI to do." Vince's seven canonical patterns: auto-format after edits, lint/test pre-commit, forbid edits to certain paths, post-generation type-check, high-risk-file gate, session-start context inject, task-end change summary. Each replaces a prompt-side reminder that has ≥50% miss rate with environment-level enforcement at 100%.</p>
+<p>Implemented on this machine 2026-05-23: SessionStart hook injects phase-status banner; Stop hook appends one line per session to <code>~/.claude/contexts/daily_records/YYYY-MM-DD.md</code>. Compliance went from 33% / 0% (prompt-only) to 100% / 100% (hook-enforced). See entry 1.6 for the audit data.</p><p class="source"><strong>Source</strong> <a href="https://x.com/vincemask/status/2057788920327520305">Vince Mask thread, X, 2026-05-22</a> · <code>~/.claude/settings.json</code> · <code>~/.claude/hooks/</code> (this machine's implementation)</p></div></details>
+
+<details class="entry" id="entry-4.2"><summary><span class="entry-num">4.2</span><span class="entry-title">MCP server taxonomy: official / community / self-hosted <span class="cn-title">· MCP 服务分类</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>MCP (Model Context Protocol) standardized how external tools plug into Claude Code. Three tiers in practice: <strong>official</strong> (Anthropic-bundled — Chrome, Preview, scheduled-tasks, ccd-directory, mcp-registry) maximally trusted, batteries-included; <strong>community</strong> (third-party — Control-Chrome, Claude-in-Chrome) wider variety, varying maintenance quality; <strong>self-hosted</strong> (you wrote it) full control, full responsibility.</p>
+<p>Selection heuristic: start official, escalate to community only when the official tool can't do what you need, self-host only when the integration is unique to your stack. The mistake is jumping straight to self-host because the surface area looks small — protocol-level edge cases will burn 10× the time you saved.</p><p class="source"><strong>Source</strong> <code>mcp__mcp-registry__list_connectors</code> · author's MCP audit across 5 projects</p></div></details>
+
+<details class="entry" id="entry-4.3"><summary><span class="entry-num">4.3</span><span class="entry-title">Chrome extension for live observation <span class="cn-title">· Chrome 扩展用于实时观察</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>The Claude Chrome extension exposes the user's real browser tab to the model — read page text, click elements, fill forms, observe network requests. Critical distinction from headless browsers (cluster 4.4): the Chrome extension is for <strong>operating an existing session</strong> (you're logged in, you have cookies, you have history); headless is for <strong>fresh automated workflows</strong> (QA, testing, scraping).</p>
+<p>Used in this very session at 07:50 PT to fetch grapeot's landscape live (JS-rendered, <code>curl</code> returned 650 bytes; Chrome extension returned the full rendered text). Substitute for "open in your browser, then I'll look at the screen" workflows that previously required screenshot-paste.</p><p class="source"><strong>Source</strong> Claude-in-Chrome MCP · this session's read of <code>grapeot.github.io/ai-self-evolution-landscape/</code></p></div></details>
+
+<details class="entry" id="entry-4.4"><summary><span class="entry-num">4.4</span><span class="entry-title">Headless browser for QA loops (gstack pattern) <span class="cn-title">· 无头浏览器 QA 循环</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>The <code>/qa</code>, <code>/qa-design-review</code>, <code>/browse</code> and related skills are built on the <code>gstack</code> headless browser framework. ~100ms per command, navigate any URL, interact with elements, diff before/after, take annotated screenshots, assert state. Critical for the full test-fix-verify loop: report bugs → fix in source → re-verify with screenshot evidence, atomic commits per fix.</p>
+<p>This is where Claude Code most clearly beats LLM-via-API: the integrated browser + edit + commit loop runs in &lt;2 minutes per cycle. The same workflow stitched together manually with playwright + git + LLM API takes 10–15 minutes per cycle.</p><p class="source"><strong>Source</strong> <code>~/.claude/skills/gstack/</code> · <code>/qa</code> skill documentation · author's design-review workflows</p></div></details>
+
+<details class="entry" id="entry-4.5"><summary><span class="entry-num">4.5</span><span class="entry-title">Deferred-tool / ToolSearch: schema-on-demand <span class="cn-title">· 按需加载工具 Schema</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>The deferred-tool pattern (visible in this session's prompt) keeps the available tool surface small at session start, then expands it on demand via <code>ToolSearch</code>. Each MCP server costs prompt tokens even if unused; deferring schemas until they're needed cuts the always-loaded surface by an order of magnitude. Practitioner cost: one extra tool call per first-use of an MCP tool. Practitioner benefit: cache-friendly prompt at session boot, no prompt bloat from 50+ unused tools.</p>
+<p>This is invisible to most users but matters at scale — once you have 5+ MCP servers wired, the deferred pattern is the difference between a usable boot prompt and an exhausted one.</p><p class="source"><strong>Source</strong> deferred-tool system reminder in this session's prompt · <code>ToolSearch</code> tool docs</p></div></details>
+
+<details class="entry" id="entry-4.6"><summary><span class="entry-num">4.6</span><span class="entry-title">Hooks compliance is measurable — and the gap is huge <span class="cn-title">· Hook 合规性可量化</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>On this machine, 85 session transcripts were graphed against four rules from CLAUDE.md. Prompt-only enforcement compliance: phase announcements 67% (33% miss), EVALS.md with skill edits 33%, session artifacts 0%, MEMORY counter checks unmeasurable (sample too small). The same rules wired as hooks: ≥100% compliance projected, 100% confirmed for the two implemented (SessionStart, Stop).</p>
+<p>The gap between prompt-side discipline and environment-side enforcement is not a 10% improvement — it's the difference between "rule that mostly works" and "rule that always works." If you only audit one thing about your AI workflow, audit hook coverage.</p><p class="source"><strong>Source</strong> this session's quantified audit of <code>~/.claude/projects/-Users-chasewang-Documents-Claude-Code/*.jsonl</code></p></div></details>
+</section>
+
+<section class="cluster" id="cluster-5">
+<h2>5. Iteration Methodology · 迭代方法论</h2>
+<div class="cluster-intro"><p>How quality is produced when single-pass output isn't good enough. The unifying insight: AI output has a "consensus ceiling" — the most likely next token is usually generic. Breaking through the ceiling requires iteration with explicit evaluation criteria, not longer prompts.</p></div>
+
+<details class="entry" id="entry-5.1"><summary><span class="entry-num">5.1</span><span class="entry-title">Karpathy-style autoresearch (10-25 rounds) <span class="cn-title">· Karpathy 式自我研究</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Iterative refinement loop: generate first attempt, evaluate against explicit criteria, identify the weakest dimension, improve it, re-evaluate. Repeat 10–25 rounds until convergence. Originally from ML training research; the practitioner insight is that the same loop applies to <strong>any task with evaluable output</strong> — skill design, architecture, writing, agent prompts, landscape entries.</p>
+<p>The compounding mechanism: each round can attack a different weakness, so quality compounds in a way that single-pass cannot match no matter how long the single pass runs. Used on this machine for: <code>/why-token</code> skill (15 rounds), tokenomics reference data (12 rounds), Hermes onboarding skill (22 rounds).</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/axioms/001_iterative_refinement.md</code> · <code>~/.claude/projects/-Users-chasewang-Documents-Claude-Code/memory/autoresearch.md</code></p></div></details>
+
+<details class="entry" id="entry-5.2"><summary><span class="entry-num">5.2</span><span class="entry-title">EVALS.md publishing discipline <span class="cn-title">· 评估文档发布纪律</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>After any autoresearch cycle with a positive outcome and a repo push, publish <code>EVALS.md</code> in the same commit. Required content: rubric (dimensions scored), personas (if applicable), round log (what changed each iteration and why), final score. Without this artifact the research is a black box — future sessions and humans can't tell whether the output was iterated 3 times or 25, what criteria drove improvements, where diminishing returns kicked in.</p>
+<p>Measured compliance on this machine before the discipline was codified: 33% (1 of 3 SKILL.md-editing sessions also touched EVALS.md). After codification as axiom 002: target 100%; not yet hook-enforced.</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/axioms/002_publish_evals.md</code> · this very landscape's <code>EVALS.md</code></p></div></details>
+
+<details class="entry" id="entry-5.3"><summary><span class="entry-num">5.3</span><span class="entry-title">Refine cycle for memory compression <span class="cn-title">· 记忆压缩刷新周期</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Weekly (or whenever MEMORY.md feels noisy) pass: dedup entries that say the same thing in different words (merge into highest-counter, sum counters), bump counters from session evidence, promote <code>[3]+</code> to axioms, prune dead entries (&gt;90 days untouched and likely stale). The refine cycle is what keeps memory from becoming a write-only graveyard.</p>
+<p>Concrete trigger: when scanning MEMORY.md takes longer than scanning the top-level project, the index has outgrown its compaction. Run a refine pass.</p><p class="source"><strong>Source</strong> <code>~/.claude/rules/MEMORY_PROTOCOL.md</code> "Refine cycle" section · vczh <code>Learning.md</code> weekly refine practice</p></div></details>
+
+<details class="entry" id="entry-5.4"><summary><span class="entry-num">5.4</span><span class="entry-title">The compounding ratio: ~60:1 input to landscape <span class="cn-title">· 输入与地图的压缩比</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Grapeot's AI self-evolution landscape compresses an estimated 200–500K words of source material (60+ papers, blog posts, conference talks) into ~3,800 characters of structured intuition. Compression ratio ≈ 60:1. The deep-research survey artifacts on this machine sit at compression ratio ~1:1 (no upward fold), which explains why 229K words of research feels like it hasn't compounded.</p>
+<p>Implication: research artifacts that don't compress upward into landscapes are paying full storage cost for diminishing access benefit. The landscape format is the missing tier above survey reports.</p><p class="source"><strong>Source</strong> grapeot landscape word count vs estimated input · this machine's 229K-word research corpus · this session's quantified comparison</p></div></details>
+
+<details class="entry" id="entry-5.5"><summary><span class="entry-num">5.5</span><span class="entry-title">Document-before-test discipline (the investigate pattern) <span class="cn-title">· 先记录后测试</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>For any non-trivial bug or implementation puzzle, maintain an <code>INVESTIGATE.md</code> state file: Problem → Test → Proposals with <code>[CONFIRMED]</code> / <code>[DENIED]</code> labels. Enforces two disciplines: (a) write down the proposal before testing it (otherwise you can't tell post-hoc what you actually tested), (b) revert between proposals (otherwise effects compound and you can't isolate causes). Adapted from vczh's <code>Copilot_Investigate.md</code>.</p>
+<p>Survives context loss: if the session window closes mid-investigation, the next session reads the state file and continues. This is one of the rare workflows where the AI's amnesia stops being a tax.</p><p class="source"><strong>Source</strong> <code>~/.claude/skills/investigate/SKILL.md</code> · vczh <code>Copilot_Investigate.md</code> system</p></div></details>
+
+<details class="entry" id="entry-5.6"><summary><span class="entry-num">5.6</span><span class="entry-title">Phase-based workflow with explicit transitions <span class="cn-title">· 阶段化工作流</span></span> <span class="tag fact">FACT</span></summary><div class="body"><p>Phases: Product Review → Eng Review → Implement → Code Review → Ship → QA. Each has a different persona, different judgment criteria, different exit criteria. Mixing them (architecting during product review, coding during eng review) produces mediocre output across all dimensions. The fix: announce the phase, complete it, state the exit criteria met, transition explicitly.</p>
+<p>Compliance measured on this machine: 67% on non-trivial sessions (4 of 6 sessions &gt;50 turns announced phases). Hook-enforced via SessionStart phase banner (wired 2026-05-23): target 100%.</p><p class="source"><strong>Source</strong> <code>~/.claude/CLAUDE.md</code> Phases section · <code>~/.claude/rules/axioms/003_phase_discipline.md</code> · this machine's SessionStart hook</p></div></details>
+</section>
+
+<section class="cluster" id="cluster-6">
+<h2>6. Skepticism & Limits · 怀疑与边界</h2>
+<div class="cluster-intro"><p>Where the methodology breaks. A practitioner's field map without a skepticism cluster is propaganda. Some entries below come from post-incident notes (6.1 skill granularity, 6.3 multi-agent tax, 6.5 auto-mode); others extrapolate known principles to predicted failure modes (6.2 cache windows, 6.4 axiom decay, 6.6 over-architecture). Both kinds are tagged [OPINION] and explained.</p></div>
+
+<details class="entry" id="entry-6.1"><summary><span class="entry-num">6.1</span><span class="entry-title">Skills underperform when granularity is wrong <span class="cn-title">· 技能粒度错误时表现不佳</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>A skill written too narrow (<code>/format-typescript-file</code>) is invoked rarely and forgotten. A skill written too wide (<code>/do-everything-for-the-blog-post</code>) hides too many decisions and produces bad output when one decision is wrong. The right granularity is "one verb, one outcome" for atomic skills and "three-to-five chained verbs" for orchestrators (cluster 2.6).</p>
+<p>Symptom of wrong granularity: a skill rewritten more than three times in two months. Fix: split (if too wide) or merge with neighbors (if too narrow).</p><p class="source"><strong>Source</strong> author skill audit · ~/.claude/skills/ usage stats</p></div></details>
+
+<details class="entry" id="entry-6.2"><summary><span class="entry-num">6.2</span><span class="entry-title">/loop wastes context if interval is sub-cache-window <span class="cn-title">· /loop 短于缓存窗口浪费上下文</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Anthropic's prompt cache TTL is 5 minutes. <code>/loop</code> intervals shorter than 270 seconds keep the cache warm; intervals at exactly 300 seconds pay the cache miss without amortizing it (worst case); intervals at 1200+ seconds (20+ minutes) commit to the cache miss and amortize it over a long wait. The mistake: choosing "every 5 minutes" because the number is round. The fix: think in cache windows, not minutes.</p>
+<p>Concrete: a 5-minute poll burns the cache 12× per hour; a 27-minute poll burns it 2× per hour while providing similar coverage for most state-watching tasks.</p><p class="source"><strong>Source</strong> <code>~/.claude/skills/loop/SKILL.md</code> ScheduleWakeup guidance · Anthropic prompt cache TTL docs</p></div></details>
+
+<details class="entry" id="entry-6.3"><summary><span class="entry-num">6.3</span><span class="entry-title">Multi-agent coordination tax dominates at small scale <span class="cn-title">· 多智能体协调成本主导小规模场景</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>The "swarm beats focused" intuition is wrong below ~5 workers. Coordination overhead — passing state between agents, handling partial failures, reconciling outputs — costs more than the parallelism saves. The <code>cello</code> private project (multi-harness director) was frozen for exactly this reason: at the workloads we actually ran, a single focused agent with <code>run_in_background</code> for the genuinely orthogonal subtask outperformed.</p>
+<p>Threshold from observation: swarm pays off only when workers are doing ≥30 minutes of genuinely orthogonal work each. Below that, the planner becomes the bottleneck.</p><p class="source"><strong>Source</strong> <code>~/.claude/projects/-Users-chasewang-Documents-Claude-Code/memory/reference_beto_cello.md</code> · <code>~/.claude/contexts/survey_sessions/beto_competitive_survey_20260513.md</code></p></div></details>
+
+<details class="entry" id="entry-6.4"><summary><span class="entry-num">6.4</span><span class="entry-title">Axiom decay: rules that stopped applying <span class="cn-title">· 公理失效</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Axioms can become wrong. The rules that promoted them — domain context, model capability, tool availability — change. An axiom written before 1M context that says "always summarize before passing to subagent" should be revisited after the upgrade. An axiom written before hooks existed that says "remind the model at session start" is obsolete now.</p>
+<p>Hygiene: every refine cycle, ask whether any L3 axiom is still earning its keep. Decay is not an embarrassment — it's the system working. The mistake is preserving axioms because you wrote them, not because they're still correct.</p><p class="source"><strong>Source</strong> author observation · axiom INDEX has not yet seen a deprecation; first review due 2026-Q3</p></div></details>
+
+<details class="entry" id="entry-6.5"><summary><span class="entry-num">6.5</span><span class="entry-title">The auto-mode tradeoff: terse-commander style needs trust <span class="cn-title">· Auto-mode 需要信任</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>Operating Claude in <code>bypassPermissions</code> / auto mode is the highest-throughput configuration — terse one-word commands ("ship", "go", "proceed") execute end-to-end without prompts. It is also the highest-risk configuration. The user signs up for the model's judgment on every intermediate step. The mode works when (a) the user understands what the model will do, (b) the model has been calibrated by hundreds of prior sessions, (c) destructive operations are still gated by classifier rules.</p>
+<p>Practitioner observation: auto-mode works dramatically better with a mature CLAUDE.md + axiom system than without one. The same model in auto-mode without context infrastructure is dangerous; with context infrastructure it's a force multiplier.</p><p class="source"><strong>Source</strong> <code>~/.claude/settings.json</code> <code>bypassPermissions</code> · this session's settings.json self-modification block (classifier correctly intervened)</p></div></details>
+
+<details class="entry" id="entry-6.6"><summary><span class="entry-num">6.6</span><span class="entry-title">The "context infrastructure" frame can over-architect <span class="cn-title">· 上下文基础设施可能过度设计</span></span> <span class="tag opinion">OPINION</span></summary><div class="body"><p>The infrastructure mindset — write axioms, build skills, wire hooks, maintain memory — has a failure mode of premature scaffolding. A user with two months of light Claude Code use does not need a 10-axiom system, a 20-skill library, and four hooks. They need to type good prompts. Scaffolding pays off when you have evidence of repeated patterns to scaffold around. Scaffolding before that point produces a system that feels organized but covers no real workflow.</p>
+<p>Heuristic: don't write an axiom until you've re-derived the rule three times. Don't write a skill until you've typed the prompt five times. Don't wire a hook until you've measured a compliance miss across ≥10 sessions. The methodology is durable precisely because it waits for evidence.</p><p class="source"><strong>Source</strong> this machine's MEMORY_PROTOCOL <code>[3]+</code> promotion rule · author observation</p></div></details>
+</section>
+
+<section id="active-debates">
+<h2>Active Debates · 活跃争论</h2>
+
+<details class="debate" id="debate-D1"><summary>D1 · Long context vs RAG vs file-system memory <span class="cn-title">· 长上下文 vs RAG vs 文件记忆</span></summary><div class="positions">
+<div class="position"><h4>Long-context-wins (Anthropic-1M camp)</h4><p>1M tokens cover most non-trivial single-session work. RAG is a 2022-era workaround for context limits that no longer bind. File-system memory is a special case of RAG and inherits its weaknesses (retrieval errors, chunking artifacts). The simpler stack — "load everything, let attention do the work" — beats the complex stack in 80% of real workflows.</p></div>
+<div class="position"><h4>Files-over-prompts (grapeot / vczh camp)</h4><p>Long context is single-session; files are cross-session. They sit on different time axes and don't substitute. The 1M release didn't reduce file writes; it increased them. File-system memory is the only mechanism that lets work compound across sessions; without it, every conversation resets to zero. Long context inside a session, files between sessions, RAG only when retrieval beats reading.</p></div>
+<div class="position"><h4>Hybrid (most practitioners)</h4><p>Both, situationally. Long context for the active task, files for what persists, RAG only when the corpus is too big for context and too inert for memory. The mistake is treating any one as universal.</p></div>
+</div></details>
+
+<details class="debate" id="debate-D2"><summary>D2 · Skill durability across model upgrades <span class="cn-title">· 跨模型版本耐用度</span></summary><div class="positions">
+<div class="position"><h4>Durable (Karpathy / Anthropic skill-creator camp)</h4><p>Well-designed skills (outcomes + constraints, not procedures) survive model upgrades. The skill is a contract with the user, not a contract with the model. New model versions usually improve adherence to the contract, not break it. Evidence: zero skill rewrites required across Sonnet 4.5 → 4.6 → 4.7 on this machine.</p></div>
+<div class="position"><h4>Fragile (skeptic camp)</h4><p>Skills bake in implicit assumptions about model behavior that aren't visible in the SKILL.md (token budgets, output formats, tool-call patience). Major model upgrades reveal these assumptions when behavior shifts. Maintenance cost is hidden until the upgrade breaks something subtle.</p></div>
+<div class="position"><h4>Empirical (practitioner consensus)</h4><p>Audit your skill library after each major model release. ~10% will need revision; ~90% will not. The 10% are usually the skills that hard-coded model-specific signals — refactor them to read from environment.</p></div>
+</div></details>
+
+<details class="debate" id="debate-D3"><summary>D3 · Single focused agent vs multi-agent swarm <span class="cn-title">· 单一专注智能体 vs 多智能体协同</span></summary><div class="positions">
+<div class="position"><h4>Swarm-wins</h4><p>Parallel agents complete more work in wall-clock time than serial agents, period. The coordination cost is real but bounded; the parallelism gain is unbounded. As models get faster and cheaper, the breakeven shifts toward swarms. Failure cases mostly reflect immature orchestration tooling that will mature.</p></div>
+<div class="position"><h4>Focused-wins</h4><p>Below ~5 workers (which is most real workloads), the planner becomes the bottleneck. A single focused agent with <code>run_in_background</code> for one genuinely orthogonal subtask outperforms a swarm by 2× wall-clock and 5× simplicity. Most observed swarm wins are confounded by parallelism the swarm framework didn't add (e.g., the parallelism could have been achieved with two background calls).</p></div>
+<div class="position"><h4>Workload-dependent (hybrid)</h4><p>Focused for ≤5 workers and ≤30 minutes of orthogonal work each; swarm for 5–20 workers doing genuinely independent long-running tasks (research-coding-QA in parallel). Above 20 workers, you're building infrastructure not running a workflow.</p></div>
+</div></details>
+
+<details class="debate" id="debate-D4"><summary>D4 · Files-over-prompts vs prompt-loaded context <span class="cn-title">· 文件优先 vs 提示加载</span></summary><div class="positions">
+<div class="position"><h4>Files-by-default (axiom 009 camp)</h4><p>Default to files; promote to prompt only when the context is one-shot and ephemeral. Stuffing context into prompts is a regression to chat-with-AI thinking; files let the model build its own understanding by reading.</p></div>
+<div class="position"><h4>Prompt-when-fast (counter-position)</h4><p>Files cost setup time. For genuinely one-off tasks, typing the context into the prompt is faster than writing a file the AI has to discover. Premature file-creation is the practitioner version of premature abstraction.</p></div>
+<div class="position"><h4>Threshold (working consensus)</h4><p>If the context will be re-used in ≥2 sessions, write the file. If not, prompt is fine. The rule is "reusability," not "size."</p></div>
+</div></details>
+
+<details class="debate" id="debate-D5"><summary>D5 · Autoresearch saturation point <span class="cn-title">· 自我研究的饱和点</span></summary><div class="positions">
+<div class="position"><h4>25-rounds-compounds (Karpathy / iterative-refinement camp)</h4><p>Each round attacks a different weakness; quality compounds for 20–25 rounds before diminishing returns. Stopping at 5 rounds is the most common practitioner mistake — they hit a local plateau and assume it's the global ceiling.</p></div>
+<div class="position"><h4>Diminishes-by-10 (Lambert-style "lossy self-improvement")</h4><p>Nathan Lambert's LSI argument applied to iteration depth: most autoresearch runs flatten by round 10–12 because the autoresearcher cannot keep widening the dimensions it grades against. The grader's blindspots accumulate, and rounds 13–25 polish along the dimensions the grader can see while regressing on the dimensions it cannot. Karpathy's "compounds to 25" claim is calibrated on ML training where the grader (validation loss) is unusually robust; for writing, design, or skill prose, that condition doesn't hold.</p></div>
+<div class="position"><h4>Domain-specific (working consensus)</h4><p>Mathematical / code / benchmark-able tasks with robust automatic graders compound to 20+ rounds. Subjective tasks (writing, design, skill prose) flatten by 8–12 unless the grader is widened mid-run. Calibrate per domain by stopping when two consecutive rounds produce indistinguishable output against your full rubric.</p></div>
+</div></details>
+
+<details class="debate" id="debate-D6"><summary>D6 · Auto-mode vs guardrails <span class="cn-title">· Auto-mode vs 护栏</span></summary><div class="positions">
+<div class="position"><h4>Auto-mode (terse-commander camp)</h4><p>For users with mature context infrastructure, auto-mode is the throughput configuration. One-word commands execute end-to-end; the model's judgment is calibrated by hundreds of prior sessions; destructive operations are still gated by classifier rules. Check-ins on every step would destroy 90% of the value.</p></div>
+<div class="position"><h4>Guardrails (safety camp)</h4><p>The classifier catches some destructive operations but not all. Hook-enforced rules cover known gaps but not unknown ones. Most users do not have the context infrastructure to make auto-mode safe; rolling it out broadly invites the kind of error a check-in cadence would have caught.</p></div>
+<div class="position"><h4>Phase-discipline (the compromise)</h4><p>Auto-mode within a phase; explicit user check-in at phase transitions (Product → Eng → Implement → Review → Ship). The phase boundary is the natural place to surface decisions that a single one-word command can't disambiguate. This machine implements the configuration partially — auto-mode + SessionStart phase banner enforce the within-phase half; the explicit transition gate is still convention not hook, with the classifier catching the highest-stakes operations (e.g., self-modification of settings.json) as a backstop.</p></div>
+</div></details>
+
+</section>
+
+<footer>
+<h3>Notes on methodology</h3>
+<p>This is a <strong>field map</strong>, not a literature review. Selection criteria: cite ≥1 month of real workflow use, or tag the claim as <span style="color:var(--opinion-accent)">[OPINION]</span>; source per entry, no exceptions; tensions preserved as Active Debates, not resolved in prose; sections cluster around the practitioner's mental model, not an academic taxonomy.</p>
+<p>Inspired by <a href="https://grapeot.github.io/ai-self-evolution-landscape/">grapeot's AI self-evolution landscape</a> (frontier). This one maps the working set — what's running in your terminal six months after the hype cycle. Where the two overlap, defer to grapeot; where they diverge, the practitioner's lens applies.</p>
+<p><strong>Citation discipline</strong>: every entry above either cites a public source (URL) or a file path on this machine that anyone with the user's setup can verify. Opinions are tagged as such. No "research says" without "where."</p>
+<p><strong>Bilingual note</strong>: section and entry titles are EN-primary with CN-equivalent where the CN term is standard in the practitioner community. Body prose is EN; CN terminology is inserted in parens where the CN reader would benefit from anchoring.</p>
+<p><strong>License</strong>: this is reference content. Reuse with attribution.</p>
+</footer>
+
+</div>
+
+<script>
+const expandAll = () => document.querySelectorAll('details').forEach(d => d.open = true);
+const collapseAll = () => document.querySelectorAll('details').forEach(d => d.open = false);
+document.getElementById('btn-expand').addEventListener('click', expandAll);
+document.getElementById('btn-collapse').addEventListener('click', collapseAll);
+</script>
+</body>
+</html>
