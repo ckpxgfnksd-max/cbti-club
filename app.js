@@ -608,36 +608,19 @@ function getQuadrantColor(risk, conviction) {
 
 function getShareText() {
   const p = state.result;
-  // Use the PERSONA's canonical risk/conviction so the share text matches
-  // the stamp and scatter dot (otherwise user-derived numbers can contradict
-  // the persona label — e.g. "BUIDL / Smart Money" with "Risk 62%").
-  const risk = p.scatter.risk;
-  const conv = p.scatter.conviction;
-  const quadrantMap = {
-    sm: { en: 'Smart Money', cn: '聪明钱' },
-    dd: { en: 'Diamond Degen', cn: '钻石赌狗' },
-    ra: { en: 'Rotating Andy', cn: '旋转安迪' },
-    ag: { en: 'Absolute Gambler', cn: '纯赌怪' },
-  };
-  const qKey = risk < 50 && conv >= 50 ? 'sm'
-    : risk >= 50 && conv >= 50 ? 'dd'
-    : risk < 50 && conv < 50 ? 'ra' : 'ag';
-  const q = quadrantMap[qKey];
-
+  // Twitter caps at 280 chars (CJK chars weight 2). Old share text packed in
+  // both intros + dual quadrant labels + scatter percentages + dual CTAs and
+  // tipped over 350 weighted chars. Trim to the essentials: persona line,
+  // intro hook in both languages, single CTA. Quadrant + scatter are visible
+  // on the card screenshot if a user attaches one — they don't need to be
+  // in the text. Twitter shortens URLs to a fixed 23-char weight.
   return [
-    `我的加密人格是 ${p.code}「${p.cn}」${p.en}`,
-    `My crypto persona is ${p.code}「${p.cn}」${p.en}`,
+    `${p.code} · ${p.cn} / ${p.en}`,
     ``,
     `"${p.intro}"`,
     `"${p.introEn}"`,
     ``,
-    `象限 Quadrant: ${q.cn} ${q.en}`,
-    `风险 Risk: ${Math.round(risk)}% | 信念 Conviction: ${Math.round(conv)}%`,
-    ``,
-    `来测测你的加密人格 👉 https://cbti.club`,
-    `Take the test 👉 https://cbti.club`,
-    ``,
-    `#CBTI #CryptoPersonality`
+    `cbti.club  #CBTI`
   ].join('\n');
 }
 
