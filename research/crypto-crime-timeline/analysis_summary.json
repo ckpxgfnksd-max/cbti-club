@@ -1,0 +1,255 @@
+{
+  "selected_event_count": 24,
+  "date_range": [
+    "2013-10-02",
+    "2025-10-21"
+  ],
+  "median_returns_pct": {
+    "BTC": {
+      "1": -1.551,
+      "7": -0.489,
+      "30": -4.123
+    },
+    "Gold (GLD)": {
+      "1": 0.548,
+      "7": 0.846,
+      "30": 0.428
+    },
+    "S&P 500": {
+      "1": -0.29,
+      "7": 0.334,
+      "30": -0.091
+    }
+  },
+  "btc_by_event_class": [
+    {
+      "event_class": "公开危机/盗窃",
+      "window_days": 1,
+      "count": 9,
+      "median": -5.962,
+      "mean": -8.199
+    },
+    {
+      "event_class": "公开危机/盗窃",
+      "window_days": 7,
+      "count": 9,
+      "median": -12.241,
+      "mean": -9.302
+    },
+    {
+      "event_class": "公开危机/盗窃",
+      "window_days": 30,
+      "count": 9,
+      "median": -12.838,
+      "mean": -11.039
+    },
+    {
+      "event_class": "司法/执法节点",
+      "window_days": 1,
+      "count": 15,
+      "median": -0.503,
+      "mean": -1.053
+    },
+    {
+      "event_class": "司法/执法节点",
+      "window_days": 7,
+      "count": 15,
+      "median": 1.208,
+      "mean": 0.405
+    },
+    {
+      "event_class": "司法/执法节点",
+      "window_days": 30,
+      "count": 15,
+      "median": 5.061,
+      "mean": 13.555
+    }
+  ],
+  "btc_extremes": {
+    "1": {
+      "bottom": [
+        {
+          "event_date": "2022-11-08",
+          "event_zh": "FTX 挤兑与救助失败预期爆发",
+          "return_pct": -23.387
+        },
+        {
+          "event_date": "2022-06-12",
+          "event_zh": "Celsius 暂停提款",
+          "return_pct": -21.313
+        },
+        {
+          "event_date": "2014-02-24",
+          "event_zh": "Mt. Gox 停止交易并下线",
+          "return_pct": -12.519
+        },
+        {
+          "event_date": "2022-05-09",
+          "event_zh": "TerraUSD 脱锚进入失控阶段",
+          "return_pct": -9.008
+        },
+        {
+          "event_date": "2013-10-02",
+          "event_zh": "丝绸之路被查封、Ulbricht 被捕",
+          "return_pct": -7.838
+        }
+      ],
+      "top": [
+        {
+          "event_date": "2020-07-31",
+          "event_zh": "PlusToken 跨国传销团伙主要成员归案",
+          "return_pct": 5.947
+        },
+        {
+          "event_date": "2017-07-26",
+          "event_zh": "BTC-e 与 Vinnik 被起诉",
+          "return_pct": 4.161
+        },
+        {
+          "event_date": "2018-01-26",
+          "event_zh": "Coincheck 流出 5.23 亿枚 NEM",
+          "return_pct": 1.712
+        },
+        {
+          "event_date": "2022-02-08",
+          "event_zh": "Bitfinex 被盗币洗钱案逮捕与追缴",
+          "return_pct": 1.176
+        },
+        {
+          "event_date": "2023-08-23",
+          "event_zh": "Tornado Cash 创办人被起诉",
+          "return_pct": 0.572
+        }
+      ]
+    },
+    "7": {
+      "bottom": [
+        {
+          "event_date": "2022-06-12",
+          "event_zh": "Celsius 暂停提款",
+          "return_pct": -27.744
+        },
+        {
+          "event_date": "2018-01-26",
+          "event_zh": "Coincheck 流出 5.23 亿枚 NEM",
+          "return_pct": -21.063
+        },
+        {
+          "event_date": "2022-11-08",
+          "event_zh": "FTX 挤兑与救助失败预期爆发",
+          "return_pct": -18.052
+        },
+        {
+          "event_date": "2025-02-21",
+          "event_zh": "Bybit 被盗约 15 亿美元",
+          "return_pct": -14.38
+        },
+        {
+          "event_date": "2024-04-24",
+          "event_zh": "Samourai Wallet 创办人被捕并查封服务",
+          "return_pct": -12.418
+        }
+      ],
+      "top": [
+        {
+          "event_date": "2014-02-24",
+          "event_zh": "Mt. Gox 停止交易并下线",
+          "return_pct": 10.888
+        },
+        {
+          "event_date": "2023-01-18",
+          "event_zh": "Bitzlato 创办人被捕、平台被打击",
+          "return_pct": 9.117
+        },
+        {
+          "event_date": "2024-10-09",
+          "event_zh": "FBI 以自建代币侦破刷量与拉盘案",
+          "return_pct": 8.912
+        },
+        {
+          "event_date": "2019-02-05",
+          "event_zh": "QuadrigaCX 申请债权人保护",
+          "return_pct": 5.174
+        },
+        {
+          "event_date": "2017-07-26",
+          "event_zh": "BTC-e 与 Vinnik 被起诉",
+          "return_pct": 5.137
+        }
+      ]
+    },
+    "30": {
+      "bottom": [
+        {
+          "event_date": "2022-06-12",
+          "event_zh": "Celsius 暂停提款",
+          "return_pct": -31.81
+        },
+        {
+          "event_date": "2025-10-21",
+          "event_zh": "CZ 获美国总统完全无条件赦免",
+          "return_pct": -21.447
+        },
+        {
+          "event_date": "2022-11-08",
+          "event_zh": "FTX 挤兑与救助失败预期爆发",
+          "return_pct": -16.224
+        },
+        {
+          "event_date": "2022-03-29",
+          "event_zh": "Ronin 跨链桥盗窃公开",
+          "return_pct": -15.83
+        },
+        {
+          "event_date": "2018-01-26",
+          "event_zh": "Coincheck 流出 5.23 亿枚 NEM",
+          "return_pct": -13.721
+        }
+      ],
+      "top": [
+        {
+          "event_date": "2017-07-26",
+          "event_zh": "BTC-e 与 Vinnik 被起诉",
+          "return_pct": 70.131
+        },
+        {
+          "event_date": "2013-10-02",
+          "event_zh": "丝绸之路被查封、Ulbricht 被捕",
+          "return_pct": 59.151
+        },
+        {
+          "event_date": "2019-03-06",
+          "event_zh": "OneCoin 核心人物被捕并公开起诉",
+          "return_pct": 31.069
+        },
+        {
+          "event_date": "2020-10-01",
+          "event_zh": "BitMEX 创办人与高管被刑事起诉",
+          "return_pct": 28.173
+        },
+        {
+          "event_date": "2024-10-09",
+          "event_zh": "FBI 以自建代币侦破刷量与拉盘案",
+          "return_pct": 23.148
+        }
+      ]
+    }
+  },
+  "relative_and_correlation": {
+    "1": {
+      "btc_minus_sp500_median": -1.489,
+      "btc_minus_gld_median": -1.976,
+      "btc_sp500_event_correlation": 0.579
+    },
+    "7": {
+      "btc_minus_sp500_median": -0.869,
+      "btc_minus_gld_median": -2.234,
+      "btc_sp500_event_correlation": 0.507
+    },
+    "30": {
+      "btc_minus_sp500_median": -4.106,
+      "btc_minus_gld_median": -1.577,
+      "btc_sp500_event_correlation": 0.404
+    }
+  }
+}

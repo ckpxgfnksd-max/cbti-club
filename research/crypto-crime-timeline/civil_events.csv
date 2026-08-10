@@ -1,0 +1,14 @@
+date,event_zh,event_en,phase,type,scale_or_outcome,status,source_url,profile,chart_label,avatar_bg,avatar_fg,date_confidence
+2017-07-25,SEC 发布 The DAO 调查报告,SEC DAO Report,监管结论,民事/证券法,SEC 认定 DAO 代币属于证券但未提起指控,成为美国将证券法适用于代币发行的起点,https://www.sec.gov/newsroom/press-releases/2017-131,SEC,DAO 代币被认定为证券,#17365D,#FFFFFF,高
+2019-10-11,SEC 紧急叫停 Telegram 的 Gram 代币发行,SEC v. Telegram filed,起诉/禁令,民事/未注册发行,涉及约17亿美元融资并取得临时限制令,Telegram 后终止 TON 发行并和解,https://www.sec.gov/newsroom/press-releases/2019-212,TG,SEC 叫停 Telegram Gram,#27A7E7,#FFFFFF,高
+2020-12-22,SEC 起诉 Ripple 及两名高管,SEC v. Ripple filed,起诉,民事/未注册发行,被指通过 XRP 进行逾13亿美元未注册发行,2025年双方撤回上诉；1.25亿美元罚款与禁令保留,https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26369,XRP,SEC 起诉 Ripple,#23292F,#FFFFFF,高
+2022-02-14,BlockFi 与 SEC 达成一亿美元和解,BlockFi SEC settlement,和解,民事/借贷产品,首宗针对加密借贷产品的证券执法和解,BlockFi支付SEC与州监管合计一亿美元,https://www.sec.gov/newsroom/press-releases/2022-26,BFI,BlockFi 一亿美元和解,#3D5AFE,#FFFFFF,高
+2023-02-09,Kraken 关闭美国质押服务并支付三千万美元,Kraken staking settlement,和解,民事/质押服务,SEC 指控其未注册质押即服务产品,相关实体同意停止美国质押项目并支付三千万美元,https://www.sec.gov/newsroom/press-releases/2023-25,KRK,Kraken 质押案和解,#5741D9,#FFFFFF,高
+2023-02-16,SEC 起诉 Terraform 与 Do Kwon,SEC v. Terraform filed,起诉,民事/欺诈与证券法,指控数十亿美元加密资产证券欺诈,陪审团2024年认定民事责任；刑事案另行推进,https://www.sec.gov/newsroom/press-releases/2023-32,LUNA,SEC 起诉 Terraform,#111827,#FFFFFF,高
+2023-06-05,SEC 对 Binance 与 CZ 提出十三项指控,SEC v. Binance filed,起诉,民事/交易平台与证券法,涉及未注册交易所、证券发行与市场控制等指控,2025-05-29双方有偏见撤诉,https://www.sec.gov/newsroom/press-releases/2023-101-sec-files-13-charges-against-binance-entities-founder-changpeng-zhao,BNB,SEC 起诉 Binance,#F3BA2F,#111827,高
+2023-06-06,SEC 起诉 Coinbase,SEC v. Coinbase filed,起诉,民事/交易平台与证券法,指控未注册交易所、经纪商、清算机构与质押项目,2025-02-27有偏见撤诉且不代表对指控实体判断,https://www.sec.gov/newsroom/press-releases/2023-102,CB,SEC 起诉 Coinbase,#0052FF,#FFFFFF,高
+2023-08-29,Grayscale 在现货比特币 ETF 案中胜诉,Grayscale v. SEC decision,法院裁定,民事/行政法,联邦上诉法院撤销SEC拒绝GBTC转ETF的命令,为2024年现货比特币ETF批准清除关键障碍,https://media.cadc.uscourts.gov/opinions/docs/2023/08/22-1142-2014527.pdf,GBTC,Grayscale 胜诉 SEC,#111111,#FFFFFF,高
+2023-11-20,SEC 再次起诉 Kraken 交易平台,SEC v. Kraken filed,起诉,民事/交易平台与证券法,指控未注册交易所、经纪商、交易商和清算机构,2025-03-27有偏见撤诉,https://www.sec.gov/newsroom/press-releases/2023-237,KRK,SEC 起诉 Kraken,#5741D9,#FFFFFF,高
+2024-01-10,SEC 批准美国现货比特币 ETP,Spot Bitcoin ETP approval,监管批准,政策/市场准入,批准多项交易所规则变更使现货比特币产品上市交易,批准仅针对比特币商品型ETP并非对其他代币定性,https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023,ETF,现货 BTC ETF 获批,#6B7280,#FFFFFF,高
+2024-06-28,SEC 起诉 Consensys,SEC v. Consensys filed,起诉,民事/经纪与质押服务,围绕MetaMask相关经纪与质押服务提起民事诉讼,2025-03-27有偏见撤诉,https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26277,MM,SEC 起诉 Consensys,#FF4A8D,#FFFFFF,高
+2025-02-27,SEC 开始撤回七宗前政府时期加密民事案件,SEC crypto case dismissal wave,撤诉/政策转折,民事/执法政策,自Coinbase案起陆续撤回Coinbase、Kraken、Consensys、Binance等七案,撤诉基于监管政策调整而非对原指控实体判断,https://www.sec.gov/newsroom/press-releases/2026-34,SEC,SEC 连续撤回七案,#17365D,#FFFFFF,高

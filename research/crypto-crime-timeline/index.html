@@ -1,0 +1,1049 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="2013–2026 年重大 Crypto 刑事、民事、线下暴力与政策事件，以及 BTC 价格时间轴研究。">
+  <meta name="author" content="Chase Wang">
+  <link rel="canonical" href="https://cbti.club/research/crypto-crime-timeline/">
+  <meta property="og:title" content="Crypto 重大刑事 / 民事事件、线下暴力与 BTC（2013–2026）">
+  <meta property="og:description" content="74 个可核验事件节点，对照 BTC 价格，区分平台危机、司法落地与线下人身风险。">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://cbti.club/research/crypto-crime-timeline/">
+  <meta property="og:image" content="https://cbti.club/research/crypto-crime-timeline/timeline.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@ChaseWang">
+  <title>Crypto 重大刑事 / 民事事件、线下暴力与 BTC（2013–2026）</title>
+  <style>
+    :root {
+      --background:#fafaf8;
+      --foreground:#0a0a0a;
+      --card:#fafaf8;
+      --card-foreground:#0a0a0a;
+      --primary:#0a0a0a;
+      --primary-foreground:#fafaf8;
+      --muted:#f0f0ee;
+      --muted-foreground:#656565;
+      --border:#d4d4d2;
+      --ring:#ff6b35;
+      --viz-series-1:#ff6b35;
+      --accent:#ff6b35;
+      --max:1440px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      background:var(--background);
+      color:var(--foreground);
+      font-family:Inter,Helvetica,"PingFang SC","Microsoft YaHei UI","Noto Sans SC",sans-serif;
+      font-size:16px;
+      line-height:1.68;
+      text-rendering:optimizeLegibility;
+    }
+    a { color:inherit; text-underline-offset:.2em; }
+    a:hover { color:var(--accent); }
+    .report-chrome { border-bottom:1px solid var(--border); }
+    .report-chrome-inner {
+      max-width:var(--max);
+      margin:0 auto;
+      padding:14px 28px;
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      font:500 12px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .report-home-link { text-decoration:none; }
+    .report-home-link:hover { color:var(--accent); }
+    main { max-width:var(--max); margin:0 auto; padding:44px 28px 96px; }
+    article { min-width:0; }
+    h1,h2,h3 { margin-left:0; line-height:1.12; letter-spacing:-.035em; }
+    h1 { max-width:1100px; margin:0 0 20px; font-size:clamp(42px,6.2vw,92px); font-weight:300; }
+    h2 { margin:72px 0 24px; padding-top:16px; border-top:1px solid var(--foreground); font-size:clamp(28px,3vw,44px); font-weight:400; }
+    h3 { margin:44px 0 16px; font-size:24px; font-weight:500; }
+    p { max-width:920px; margin:14px 0; }
+    article>p:first-of-type { color:var(--muted-foreground); font:500 13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace; }
+    ul,ol { max-width:980px; padding-left:1.35em; }
+    li { margin:8px 0; }
+    blockquote { max-width:980px; margin:28px 0; padding:8px 0 8px 20px; border-left:6px solid var(--accent); }
+    blockquote p { margin:0; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; background:var(--muted); padding:.12em .3em; }
+    .table-wrap { width:100%; margin:22px 0 36px; overflow-x:auto; border-top:1px solid var(--foreground); }
+    table { width:100%; border-collapse:collapse; font-size:14px; line-height:1.48; }
+    th,td { padding:12px 11px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; }
+    th { background:var(--muted); font-weight:500; white-space:nowrap; }
+    .viz-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+    .viz-row { display:flex; flex-wrap:wrap; align-items:center; }
+    .btn { appearance:none; border:1px solid var(--border); background:var(--background); color:var(--foreground); padding:8px 12px; font:500 14px/1.2 inherit; cursor:pointer; border-radius:0; }
+    .btn:hover { border-color:var(--foreground); }
+    .btn:focus-visible { outline:2px solid var(--ring); outline-offset:2px; }
+    .text-small { font-size:13px; }
+    .text-muted { color:var(--muted-foreground); }
+    .tooltip { padding:9px 11px; background:var(--foreground); color:var(--background); font-size:13px; line-height:1.4; }
+    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+    #btc-btc { width:100%; }
+    #btc-legal-explorer-v2 { margin:10px 0 34px; }
+    #executive-summary + ul { padding:24px 28px 24px 50px; border-left:10px solid var(--accent); background:var(--muted); }
+    @media (max-width:700px) {
+      .report-chrome-inner,main { padding-left:16px; padding-right:16px; }
+      main { padding-top:30px; }
+      h1 { font-size:40px; }
+      h2 { margin-top:54px; }
+      table { min-width:760px; }
+    }
+    @media print {
+      @page { size:A4; margin:14mm; }
+      .report-chrome { display:none; }
+      main { max-width:none; padding:0; }
+      .timeline-controls { display:none!important; }
+      h2 { page-break-after:avoid; }
+      .table-wrap { overflow:visible; }
+      table { font-size:8pt; }
+    }
+
+  #btc-legal-explorer-v2.timeline-component {
+    width: 100%;
+    color: var(--foreground);
+  }
+  #btc-legal-explorer-v2 .timeline-controls {
+    margin-bottom: 0.65rem;
+  }
+  #btc-legal-explorer-v2 .timeline-range[aria-pressed="true"] {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+  }
+  #btc-legal-explorer-v2 .timeline-legend {
+    gap: 1rem;
+    justify-content: flex-start;
+    margin: 0 0 0.7rem;
+  }
+  #btc-legal-explorer-v2 .timeline-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+  }
+  #btc-legal-explorer-v2 .legend-shape {
+    display: inline-block;
+    width: 0.7rem;
+    height: 0.7rem;
+    border: 1.5px solid currentColor;
+    background: var(--background);
+  }
+  #btc-legal-explorer-v2 .legend-circle { border-radius: 50%; }
+  #btc-legal-explorer-v2 .legend-diamond { transform: rotate(45deg) scale(.78); }
+  #btc-legal-explorer-v2 .legend-triangle {
+    width:0;height:0;border-left:.42rem solid transparent;border-right:.42rem solid transparent;
+    border-bottom:.75rem solid currentColor;border-top:0;background:transparent;
+  }
+  #btc-legal-explorer-v2 .timeline-plot {
+    position: relative;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  #btc-legal-explorer-v2 .timeline-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  #btc-legal-explorer-v2 .timeline-grid,
+  #btc-legal-explorer-v2 .timeline-rule {
+    stroke: var(--border);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  #btc-legal-explorer-v2 .timeline-grid { opacity: .72; }
+  #btc-legal-explorer-v2 .event-link .event-connector {
+    stroke: var(--border);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  #btc-legal-explorer-v2 .event-link .event-shape {
+    fill: var(--background);
+    stroke: var(--foreground);
+    stroke-width: 1.7;
+    vector-effect: non-scaling-stroke;
+  }
+  #btc-legal-explorer-v2 .event-link:hover .event-shape,
+  #btc-legal-explorer-v2 .event-link:focus-visible .event-shape,
+  #btc-legal-explorer-v2 .event-link.is-selected .event-shape {
+    fill: var(--viz-series-1);
+    stroke: var(--viz-series-1);
+  }
+  #btc-legal-explorer-v2 .event-link .avatar-text,
+  #btc-legal-explorer-v2 .event-link .event-label,
+  #btc-legal-explorer-v2 .axis-label,
+  #btc-legal-explorer-v2 .price-label {
+    fill: var(--foreground);
+    font-family: inherit;
+  }
+  #btc-legal-explorer-v2 .event-link:hover .avatar-text,
+  #btc-legal-explorer-v2 .event-link:focus-visible .avatar-text,
+  #btc-legal-explorer-v2 .event-link.is-selected .avatar-text {
+    fill: var(--background);
+  }
+  #btc-legal-explorer-v2 .avatar-text { font-weight: 500; }
+  #btc-legal-explorer-v2 .event-label { font-weight: 500; }
+  #btc-legal-explorer-v2 .axis-label { fill: var(--muted-foreground); }
+  #btc-legal-explorer-v2 .price-line {
+    fill: none;
+    stroke: var(--viz-series-1);
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+  }
+  #btc-legal-explorer-v2 .price-end {
+    fill: var(--viz-series-1);
+  }
+  #btc-legal-explorer-v2 .timeline-tooltip {
+    position: absolute;
+    z-index: 3;
+    max-width: min(23rem, calc(100% - 1rem));
+    pointer-events: none;
+    transform: translate(-50%, calc(-100% - .8rem));
+  }
+  #btc-legal-explorer-v2 .timeline-detail {
+    min-height: 2.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .7rem;
+    padding: .55rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  #btc-legal-explorer-v2 .timeline-detail a { color: inherit; font-weight: 500; }
+  @media (max-width: 700px) {
+    #btc-legal-explorer-v2 .timeline-legend { gap: .55rem 1rem; }
+    #btc-legal-explorer-v2 .timeline-tooltip { transform: translate(-50%, calc(-100% - .45rem)); }
+  }
+</style>
+</head>
+<body>
+  <header class="report-chrome">
+    <div class="report-chrome-inner"><a class="report-home-link" href="/">CBTI / Deep Research</a><span>Updated 2026-08-10</span></div>
+  </header>
+  <main><article><h1 id="crypto-btc20132026">Crypto 重大刑事 / 民事事件、线下暴力与 BTC（2013–2026）</h1>
+<p>研究日期：2026-08-10<br />
+范围：全球重大、具有行业代表性或足以改变市场信任、资金安全、个人安全或执法边界的 Crypto 刑事、民事、线下暴力与关键司法/政策事件。不是全球案件穷举。</p>
+<h2 id="btc">BTC 价格与案件时间轴</h2>
+<p>HTML 版用形状区分事件：圆形为刑事、方形为民事、菱形为政策/判决、三角形为线下暴力或涉 Crypto 可疑死亡；橙线只表示 BTC。全景显示全部 74 个头像，点击年份分段会展开日期与事件名，点击头像可查看结论、证据状态与来源。</p>
+<div id="btc-legal-explorer-v2" class="timeline-component">
+  <div class="viz-controls timeline-controls" aria-label="时间范围">
+    <button type="button" class="btn timeline-range" data-range="all" aria-pressed="true">全景 · 74</button>
+    <button type="button" class="btn timeline-range" data-range="2013-2018" aria-pressed="false">2013–18</button>
+    <button type="button" class="btn timeline-range" data-range="2019-2021" aria-pressed="false">2019–21</button>
+    <button type="button" class="btn timeline-range" data-range="2022" aria-pressed="false">2022</button>
+    <button type="button" class="btn timeline-range" data-range="2023" aria-pressed="false">2023</button>
+    <button type="button" class="btn timeline-range" data-range="2024" aria-pressed="false">2024</button>
+    <button type="button" class="btn timeline-range" data-range="2025-2026" aria-pressed="false">2025–26</button>
+  </div>
+  <div class="viz-row timeline-legend text-small text-muted" aria-label="事件类型图例">
+    <span><b class="legend-shape legend-circle" aria-hidden="true"></b>刑事</span>
+    <span><b class="legend-shape legend-square" aria-hidden="true"></b>民事</span>
+    <span><b class="legend-shape legend-diamond" aria-hidden="true"></b>政策 / 判决</span>
+    <span><b class="legend-shape legend-triangle" aria-hidden="true"></b>线下暴力 / 可疑死亡</span>
+    <span>橙线 = BTC / USD（对数轴）</span>
+  </div>
+  <div class="timeline-plot">
+    <svg class="timeline-svg" role="img" aria-labelledby="btc-timeline-title btc-timeline-desc"></svg>
+    <div class="tooltip timeline-tooltip" hidden></div>
+  </div>
+  <div class="timeline-detail text-small" aria-live="polite">
+    <span class="text-muted">点击任一头像固定事件；分段视图会直接展开日期与事件名。</span>
+  </div>
+  <p class="sr-only">2013 至 2026 年 BTC 对数价格线，以及 74 个重大 Crypto 刑事、民事、政策、判决与线下暴力节点。</p>
+</div>
+<h2 id="executive-summary">结论（Executive Summary）</h2>
+<ul>
+<li>Crypto 刑事风险对价格最重要的分界，不是“案件金额有多大”，而是事件是否立即破坏可提现性、资产负债表或核心基础设施。样本中 9 个“公开危机/盗窃”节点后的 BTC 中位数回报为 1 日 -6.0%、7 日 -12.2%、30 日 -12.8%；15 个“司法/执法”节点则为 -0.5%、+1.2%、+5.1%。</li>
+<li>FTX、Celsius 与 Terra 是最清晰的价格冲击。FTX 危机后 1 日 BTC -23.4%，Celsius 暂停提款后 -21.3%，Terra 失控脱锚后 -9.0%；共同点都是资金安全或可提现性突然失效。</li>
+<li>“执法 = BTC 利空”不成立。Binance/CZ 认罪后 BTC 1 日仅 -0.3%，30 日 +16.9%；BTC-e/Vinnik 被起诉后 1 日 +4.2%，30 日 +70.1%。司法节点往往是旧信息落地，甚至会消除尾部不确定性。</li>
+<li>线下风险已经形成独立类别。2017 年的 Pavel Lerner 绑架仍像孤立事件；2024–2025 年出现跨美国多州入室团伙、加拿大 CEO 绑架、法国连续绑架与断指、纽约 Bitcoin 密码酷刑、基辅因 3 BTC 发生的绑架杀人。它们通常不会改变 BTC 市场价格，却直接改变持有人、创办人及其家属的安全边界。</li>
+</ul>
+<p>一句话结论：犯罪公开与平台危机主要作用于价格，起诉与判决主要作用于制度边界，线下暴力主要作用于个人安全；三类风险需要分开判断。</p>
+<h2 id="1">1. 研究口径</h2>
+<p>本报告把刑事事件分成六种：黑客盗窃、平台欺诈/挪用、诈骗/庞氏、洗钱/制裁与无牌汇款、内幕交易/市场操纵、以 Crypto 资产或身份为目标的线下暴力。民事层只纳入足以改变发行、借贷、质押、交易平台或 ETF 规则边界的案件。</p>
+<p>四个边界尤其重要：</p>
+<ol>
+<li>黑客攻击本身是犯罪事件，即使尚无被告；只有获得 FBI、财政部等官方归因时才写明行为人。</li>
+<li>起诉书中的事实仍是指控，必须无罪推定；认罪、陪审团定罪、法院判决与总统赦免分别记录。</li>
+<li>Terra、Celsius、FTX 的“事件日”选市场首次充分看见危机的日期；后来的认罪与判刑用于确认欺诈性质，不能倒推为市场当日已经掌握全部案情。</li>
+<li>线下案件分成“Crypto 目标确认”和“关联待证”。Harry Yeh 案只确认其 Crypto 身份、可疑坠亡现场和被翻乱的公寓；公开证据尚未证明他杀或 Crypto 动机。</li>
+</ol>
+<p>图表包括 <a href="events.csv">49 个刑事/司法节点</a>、<a href="civil_events.csv">13 个重大民事/监管节点</a>和<a href="physical_events.csv">12 个线下暴力/可疑死亡节点</a>，共 74 个标注。用于收益统计的仍是 24 个公开市场节点；线下案件不进入 BTC 回报统计，因为它们没有可辩护的市场价格传导假设。</p>
+<h2 id="2">2. 时间线</h2>
+<h3 id="20132018">2013–2018：暗网与交易所托管风险</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>事件与阶段</th>
+<th>已核实结果</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2013-10-02</td>
+<td>Silk Road 被查封、Ross Ulbricht 被捕</td>
+<td>美国检方查封暗网市场；Ulbricht 后被定罪并判终身监禁，2025-01-21 获完全无条件赦免</td>
+<td>首次证明公开链资产并不妨碍执法追踪、查封与刑事没收；后续赦免改变刑罚结果，不改变历史定罪事实。<a href="https://www.justice.gov/archive/usao/nys/pressreleases/October13/SilkRoadSeizurePR.php" target="_blank" rel="noopener noreferrer">DOJ 查封</a>、<a href="https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present" target="_blank" rel="noopener noreferrer">赦免记录</a></td>
+</tr>
+<tr>
+<td>2014-02-24</td>
+<td>Mt. Gox 停止交易并下线</td>
+<td>数日后申请破产，声称约 85 万 BTC 丢失；Karpelès 后因数据操纵获缓刑，但在侵占指控上无罪</td>
+<td>行业第一次遭遇系统级托管失败；“平台倒闭”与“谁构成刑事盗窃”必须分开。<a href="https://time.com/10657/mt-gox-bitcoin-bankruptcy/" target="_blank" rel="noopener noreferrer">TIME</a>、<a href="https://arxiv.org/abs/1403.6676" target="_blank" rel="noopener noreferrer">事件研究论文</a>、<a href="https://www.japantimes.co.jp/news/2019/03/15/national/crime-legal/mtgox/" target="_blank" rel="noopener noreferrer">日本法院结果报道</a></td>
+</tr>
+<tr>
+<td>2016-08-02</td>
+<td>Bitfinex 被盗约 119,754 BTC</td>
+<td>2022 年美国司法部宣布逮捕洗钱嫌疑人并查扣大部分被盗币</td>
+<td>建立了跨多年链上追踪、私钥扣押与巨额追赃范式。<a href="https://www.justice.gov/usao-dc/2016-bitfinex-hack" target="_blank" rel="noopener noreferrer">DOJ 案件页</a></td>
+</tr>
+<tr>
+<td>2017-07-26</td>
+<td>BTC-e 与 Alexander Vinnik 被起诉</td>
+<td>BTC-e 被指处理超过 40 亿美元交易，并帮助清洗 Mt. Gox 等来源的被盗币；运营者 2024 年认罪</td>
+<td>执法从“抓黑客”延伸到交易所、无牌汇款与清洗基础设施。<a href="https://www.justice.gov/usao-ndca/pr/russian-national-and-bitcoin-exchange-charged-21-count-indictment-operating-alleged" target="_blank" rel="noopener noreferrer">DOJ</a>、<a href="https://www.justice.gov/archives/opa/pr/btc-e-operator-pleads-guilty-money-laundering-conspiracy" target="_blank" rel="noopener noreferrer">认罪</a></td>
+</tr>
+<tr>
+<td>2018-01-26</td>
+<td>Coincheck 流出 5.23 亿枚 NEM</td>
+<td>日本金融厅称流出资产约值 580 亿日元</td>
+<td>说明交易所运营安全、资产隔离和内部治理比链本身更常成为单点故障。<a href="https://www.fsa.go.jp/en/conference/minister/2018/20180202.html" target="_blank" rel="noopener noreferrer">日本金融厅</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="20192021-aml">2019–2021：庞氏、平台创办人与 AML 责任</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>事件与阶段</th>
+<th>已核实结果</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2019-02-05</td>
+<td>QuadrigaCX 申请债权人保护</td>
+<td>欠客户约 2.15 亿加元，仅追回或识别 4,600 万；安大略证监会认定其本质是创办人欺诈、伪造交易与类庞氏运作</td>
+<td>“创办人死亡、私钥遗失”叙事后来被官方账目重构为传统财务欺诈。<a href="https://www.osc.ca/quadrigacxreport/web/files/QuadrigaCX-A-Review-by-Staff-of-the-Ontario-Securities-Commission.pdf" target="_blank" rel="noopener noreferrer">OSC 报告</a></td>
+</tr>
+<tr>
+<td>2019-03-06</td>
+<td>OneCoin 核心人物被捕、起诉公开</td>
+<td>官方后续认定至少 350 万受害者、涉款逾 40 亿美元；联合创办人 Greenwood 被判 20 年，Ruja Ignatova 仍在逃</td>
+<td>最大教训不是“币价归零”，而是没有公开链与可验证资产仍可借 Crypto 叙事募资。<a href="https://www.justice.gov/usao-sdny/pr/manhattan-us-attorney-announces-charges-against-leaders-onecoin-multibillion-dollar" target="_blank" rel="noopener noreferrer">DOJ 起诉</a>、<a href="https://www.justice.gov/usao-sdny/pr/co-founder-multibillion-dollar-cryptocurrency-scheme-onecoin-sentenced-20-years-prison" target="_blank" rel="noopener noreferrer">量刑</a></td>
+</tr>
+<tr>
+<td>2020-07-31</td>
+<td>PlusToken 跨国传销主犯归案</td>
+<td>中国警方称参与者超过 200 万、层级超过 3,000、涉案金额逾 400 亿元人民币</td>
+<td>Crypto 传销已成为跨境组织犯罪与链上大额处置问题。<a href="https://www.yncaw.gov.cn/html/2020/gczs_0731/65725.html" target="_blank" rel="noopener noreferrer">中国官方通报</a></td>
+</tr>
+<tr>
+<td>2020-10-01</td>
+<td>BitMEX 创办人与高管被刑事起诉</td>
+<td>四名高管后来分别认罪；公司与四名相关个人于 2025-03-27 获完全无条件赦免</td>
+<td>首次把全球离岸衍生品平台的高管个人责任推到行业中心；赦免又显示刑事结局可以被政治程序反转。<a href="https://www.justice.gov/usao-sdny/pr/founders-and-executives-shore-cryptocurrency-derivatives-exchange-charged-violation" target="_blank" rel="noopener noreferrer">DOJ 起诉</a>、<a href="https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present" target="_blank" rel="noopener noreferrer">赦免记录</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="2022">2022：信用危机、跨链桥与国家支持型盗窃集中爆发</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>事件与阶段</th>
+<th>已核实结果</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2022-02-08</td>
+<td>Bitfinex 洗钱案逮捕与追缴</td>
+<td>司法部宣布查扣逾 36 亿美元等值 BTC；两名被告后来认罪</td>
+<td>否定“被盗币只要沉睡足够久就无法追回”的假设。<a href="https://www.justice.gov/archives/opa/pr/two-arrested-alleged-conspiracy-launder-45-billion-stolen-cryptocurrency" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2022-02-25</td>
+<td>BitConnect 创办人被起诉</td>
+<td>被指策划约 24 亿美元全球庞氏骗局；创办人仍在逃</td>
+<td>高收益承诺、推荐返佣和平台币支撑仍是经典庞氏结构。<a href="https://www.justice.gov/archives/opa/pr/bitconnect-founder-indicted-global-24-billion-cryptocurrency-scheme" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2022-03-29</td>
+<td>Ronin 跨链桥盗窃公开</td>
+<td>173,600 ETH 与 2,550 万 USDC 被盗；美国财政部把攻击归因于朝鲜 Lazarus</td>
+<td>跨链桥验证者成为国家支持型黑客的高价值入口。<a href="https://blog.roninchain.com/p/the-ronin-bridge-is-open-" target="_blank" rel="noopener noreferrer">Ronin</a>、<a href="https://home.treasury.gov/news/press-releases/jy0768" target="_blank" rel="noopener noreferrer">美国财政部</a></td>
+</tr>
+<tr>
+<td>2022-05-09</td>
+<td>TerraUSD 脱锚进入失控阶段</td>
+<td>UST/LUNA 崩盘造成逾 400 亿美元损失；Do Kwon 2025 年认罪并被判 15 年</td>
+<td>算法稳定币的机制失效、隐瞒外部救市与市场操纵最终进入刑事欺诈框架。<a href="https://www.sec.gov/files/terraform-labs-pte-ltd-amended-complaint.pdf" target="_blank" rel="noopener noreferrer">SEC 时间线</a>、<a href="https://www.justice.gov/usao-sdny/pr/do-kwon-pleads-guilty-fraud" target="_blank" rel="noopener noreferrer">Kwon 认罪</a>、<a href="https://www.justice.gov/usao-sdny/pr/crypto-enabled-fraudster-sentenced-orchestrating-40-billion-fraud" target="_blank" rel="noopener noreferrer">量刑</a></td>
+</tr>
+<tr>
+<td>2022-06-12</td>
+<td>Celsius 暂停提款</td>
+<td>约 47 亿美元客户资产一度无法提取；Mashinsky 后承认商品欺诈与 CEL 操纵，2025 年被判 12 年</td>
+<td>“收益产品”把信用错配、关联交易和代币操纵包装成近似存款的流动性承诺。<a href="https://www.justice.gov/usao-sdny/pr/celsius-founder-and-former-chief-revenue-officer-charged-connection-multibillion" target="_blank" rel="noopener noreferrer">DOJ 起诉</a>、<a href="https://www.justice.gov/usao-sdny/pr/founder-celsius-sentenced-12-years-fraud-and-market-manipulation" target="_blank" rel="noopener noreferrer">量刑</a></td>
+</tr>
+<tr>
+<td>2022-11-08</td>
+<td>FTX 挤兑与救助失败预期爆发</td>
+<td>72 小时内约 60 亿美元提款压力；SBF 后被七项罪名定罪并判 25 年、没收 110 亿美元</td>
+<td>行业冲击来自客户资产挪用、关联方风险和提款承诺同时破裂，而不是之后的判决新闻。<a href="https://www.investing.com/news/stock-market-news/cryptocurrencies-slide-as-concerns-over-ftx-exchange-rattle-markets-2935612" target="_blank" rel="noopener noreferrer">危机报道</a>、<a href="https://www.justice.gov/usao-sdny/pr/statement-us-attorney-damian-williams-conviction-samuel-bankman-fried" target="_blank" rel="noopener noreferrer">DOJ 定罪</a>、<a href="https://www.justice.gov/archives/opa/pr/samuel-bankman-fried-sentenced-25-years-his-orchestration-multiple-fraudulent-schemes" target="_blank" rel="noopener noreferrer">量刑</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="20232024">2023–2024：企业认罪、混币器与市场完整性</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>事件与阶段</th>
+<th>已核实结果</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2023-01-18</td>
+<td>Bitzlato 创办人被捕、平台被打击</td>
+<td>平台被指处理逾 7 亿美元与 Hydra 等相关的非法资金；创办人后认罪</td>
+<td>执法继续针对“低 KYC 交易所—暗网市场”的基础设施连接层。<a href="https://www.justice.gov/archives/opa/pr/founder-and-majority-owner-cryptocurrency-exchange-charged-processing-over-700-million" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2023-05-09</td>
+<td>Coinbase 前员工获刑</td>
+<td>两年监禁；被司法部称为首宗加密资产内幕交易刑事案</td>
+<td>传统市场的信息滥用规则开始直接套用到代币上币信息。<a href="https://www.justice.gov/usao-sdny/pr/former-coinbase-insider-sentenced-first-ever-cryptocurrency-insider-trading-case" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2023-07-13</td>
+<td>Celsius 创办人 Mashinsky 被捕、起诉</td>
+<td>2024 年认罪，2025 年被判 12 年</td>
+<td>司法责任从公司破产延伸到高管陈述、个人套现与代币操纵。<a href="https://www.justice.gov/usao-sdny/pr/celsius-founder-and-former-chief-revenue-officer-charged-connection-multibillion" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2023-08-23</td>
+<td>Tornado Cash 创办人被起诉</td>
+<td>被控洗钱、制裁与无牌汇款；Roman Storm 2025 年仅在无牌汇款合谋罪上被定罪，另外两项未形成有罪裁决</td>
+<td>“中立代码、前端服务、运营控制、明知犯罪所得”之间的责任边界仍未完全定型。<a href="https://www.justice.gov/usao-sdny/pr/tornado-cash-founders-charged-money-laundering-and-sanctions-violations" target="_blank" rel="noopener noreferrer">起诉</a>、<a href="https://www.justice.gov/usao-sdny/pr/founder-tornado-cash-crypto-mixing-service-convicted-knowingly-transmitting-criminal" target="_blank" rel="noopener noreferrer">2025 判决结果</a></td>
+</tr>
+<tr>
+<td>2023-11-21</td>
+<td>Binance 与 CZ 认罪</td>
+<td>Binance 支付逾 43 亿美元；CZ 认罪、支付 5,000 万美元并服刑四个月，2025 年获完全无条件赦免</td>
+<td>企业存续、领导层退出和协同和解让冲击远小于 FTX；赦免消除刑罚后果，不抹去认罪事实。<a href="https://www.justice.gov/archives/opa/pr/binance-and-ceo-plead-guilty-federal-charges-4b-resolution" target="_blank" rel="noopener noreferrer">DOJ</a>、<a href="https://www.justice.gov/criminal/case/united-states-v-changpeng-zhao" target="_blank" rel="noopener noreferrer">CZ 案件页</a>、<a href="https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present" target="_blank" rel="noopener noreferrer">赦免记录</a></td>
+</tr>
+<tr>
+<td>2024-01-09</td>
+<td>SEC 的 X 账号被劫持、发布虚假 ETF 批准消息</td>
+<td>假消息使 BTC 短时上涨约 1,000 美元后回吐约 2,000 美元；涉案者后认罪</td>
+<td>最清晰的分钟级“信息完整性犯罪—价格跳变”案例之一，但日线会低估冲击。<a href="https://www.justice.gov/usao-dc/pr/fbi-arrests-alabama-man-january-2024-sec-x-hack-spiked-value-bitcoin" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2024-03-26</td>
+<td>KuCoin 与两名创办人被起诉</td>
+<td>公司 2025 年就无牌汇款认罪、支付近 2.97 亿美元并退出美国两年</td>
+<td>企业级 AML 案继续从民事罚款升级为刑事认罪。<a href="https://www.justice.gov/usao-sdny/pr/prominent-global-cryptocurrency-exchange-kucoin-and-two-its-founders-criminally" target="_blank" rel="noopener noreferrer">起诉</a>、<a href="https://www.justice.gov/usao-sdny/pr/kucoin-pleads-guilty-unlicensed-money-transmission-charge-and-agrees-pay-penalties" target="_blank" rel="noopener noreferrer">认罪</a></td>
+</tr>
+<tr>
+<td>2024-04-24</td>
+<td>Samourai Wallet 创办人被捕、服务被查封</td>
+<td>两名创办人 2025 年承认无牌汇款；检方称服务处理逾 2 亿美元犯罪所得并同意没收约 2.378 亿美元</td>
+<td>执法重点从中心化交易所延伸到具运营控制、收费与犯罪客群的隐私工具。<a href="https://www.justice.gov/usao-sdny/pr/founders-and-ceo-cryptocurrency-mixing-service-arrested-and-charged-money-laundering" target="_blank" rel="noopener noreferrer">起诉</a>、<a href="https://www.justice.gov/usao-sdny/pr/founders-samourai-wallet-cryptocurrency-mixing-service-plead-guilty" target="_blank" rel="noopener noreferrer">认罪</a></td>
+</tr>
+<tr>
+<td>2024-10-09</td>
+<td>Operation Token Mirrors</td>
+<td>FBI 自建 NexFundAI 代币侦查刷量；18 个个人和实体被起诉、逾 2,500 万美元资产被查扣</td>
+<td>做市商的 wash trading 与 pump-and-dump 被作为传统市场欺诈处理。<a href="https://www.justice.gov/usao-ma/pr/eighteen-individuals-and-entities-charged-international-operation-targeting-widespread" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2024-04-18 → 2025-05-23</td>
+<td>Mango Markets 操纵案先定罪、后撤销</td>
+<td>一审曾被称为首宗加密开放市场操纵案；法院后来撤销两项定罪并对第三项作无罪判决</td>
+<td>这是不要把检方新闻稿当最终法理的最佳反例。<a href="https://www.justice.gov/archives/opa/pr/man-convicted-110m-cryptocurrency-scheme" target="_blank" rel="noopener noreferrer">原定罪稿</a>、<a href="https://nysd.uscourts.gov/sites/default/files/2025-05/23cr10%20Opinion%20and%20Order.pdf" target="_blank" rel="noopener noreferrer">法院裁定</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="20252026">2025–2026：政策收窄，但犯罪向国家、园区与线下迁移</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>事件与阶段</th>
+<th>已核实结果</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-01 至 03 月</td>
+<td>Ulbricht、BitMEX 公司及四名相关个人先后获赦免</td>
+<td>赦免均为完全无条件；覆盖已存在的联邦定罪或认罪案件</td>
+<td>2025 年的制度转向不仅是未来执法收窄，也包括对部分历史 Crypto 刑案的刑罚后果进行政治性终结。<a href="https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present" target="_blank" rel="noopener noreferrer">DOJ 赦免总表</a></td>
+</tr>
+<tr>
+<td>2025-02-21</td>
+<td>Bybit 被盗约 15 亿美元</td>
+<td>FBI 归因朝鲜 TraderTraitor，并称其迅速把资产转换、分散到多个地址</td>
+<td>单次盗窃规模进入国家融资级别；基础设施攻击继续是最大尾部风险。<a href="https://www.fbi.gov/investigate/cyber/alerts/2025/north-korea-responsible-for-1-5-billion-bybit-hack" target="_blank" rel="noopener noreferrer">FBI</a></td>
+</tr>
+<tr>
+<td>2025-02-24</td>
+<td>OKX 对无牌汇款罪认罪</td>
+<td>同意支付逾 5.04 亿美元罚没与处罚；司法部称超过 50 亿美元可疑或犯罪相关交易流经其平台</td>
+<td>即使没有倒闭，长期服务美国客户而未合规也可形成企业刑责。<a href="https://www.justice.gov/usao-sdny/pr/okx-pleads-guilty-violating-us-anti-money-laundering-laws-and-agrees-pay-penalties" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2025-04-07</td>
+<td>美国司法部解散 NCET</td>
+<td>备忘录要求结束“以起诉代监管”，聚焦欺诈、恐怖融资、毒品、黑客、盗窃等有明确受害者或非法用途的行为人</td>
+<td>不是停止执法，而是减少对平台用户或纯监管争议的刑事扩张。<a href="https://www.justice.gov/dag/media/1395781/dl?inline=" target="_blank" rel="noopener noreferrer">DOJ 备忘录</a></td>
+</tr>
+<tr>
+<td>2025-08 至 12 月</td>
+<td>Storm 部分定罪；Do Kwon 认罪并被判 15 年；Samourai 两名创办人分别被判 5 年与 4 年；CZ 获赦免；Paxful 认罪</td>
+<td>同期出现定罪、认罪、量刑和赦免四种不同司法结局</td>
+<td>“案件标题”不能替代精确法律状态。<a href="https://www.justice.gov/usao-sdny/pr/founder-tornado-cash-crypto-mixing-service-convicted-knowingly-transmitting-criminal" target="_blank" rel="noopener noreferrer">Storm</a>、<a href="https://www.justice.gov/usao-sdny/pr/crypto-enabled-fraudster-sentenced-orchestrating-40-billion-fraud" target="_blank" rel="noopener noreferrer">Do Kwon</a>、<a href="https://www.justice.gov/usao-sdny/pr/founders-samourai-wallet-cryptocurrency-mixing-service-sentenced-five-and-four-years" target="_blank" rel="noopener noreferrer">Samourai</a>、<a href="https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present" target="_blank" rel="noopener noreferrer">CZ</a>、<a href="https://www.justice.gov/opa/pr/virtual-asset-trading-platform-pleads-guilty-violating-travel-act-and-other-federal-criminal" target="_blank" rel="noopener noreferrer">Paxful</a></td>
+</tr>
+<tr>
+<td>2026-03-30</td>
+<td>十名跨国做市人员被起诉或押解</td>
+<td>涉及 Gotbit、Vortex、Antier、Contrarian 的刷量与拉盘；部分人此前已认罪，其余仍属指控</td>
+<td>2024 年卧底行动继续形成跨境个人责任链。<a href="https://www.justice.gov/usao-ndca/pr/ten-foreign-nationals-charged-international-operation-targeting-cryptocurrency-market" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2026-04-29</td>
+<td>跨国诈骗园区联合行动</td>
+<td>至少 276 人被捕、九个诈骗中心被打击</td>
+<td>Crypto 投资诈骗已与人口贩运、强迫劳动、洗钱网络合流。<a href="https://www.justice.gov/opa/pr/coordinated-takedown-scam-centers-leads-at-least-276-arrests-alleged-managers-and-recruiters" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2026-05-11</td>
+<td>600 万美元 Crypto 绑架抢劫案起诉</td>
+<td>三人被控多州家庭入侵、绑架并强迫受害者转币；目前仅属指控</td>
+<td>自托管财富可见性与不可逆结算把数字风险带到物理安全层。<a href="https://www.justice.gov/usao-ndca/pr/three-tennessee-men-indicted-robbery-kidnapping-and-conspiracy-charges-related-6" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+<tr>
+<td>2026-06-30</td>
+<td>郭文贵因十亿美元级诈骗被判 30 年</td>
+<td>检方称所谓 H Coin 与 H Dollar 并非真实链上资产，而只是内部表格中的虚假数字</td>
+<td>与 OneCoin 类似，最大风险仍可能是借 Crypto 包装的传统募资欺诈。<a href="https://www.justice.gov/usao-sdny/pr/miles-guo-sentenced-30-years-prison-leading-billion-dollar-fraud" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="crypto">线下暴力、绑架与涉 Crypto 可疑死亡</h3>
+<p>这组事件只回答个人安全问题，不用于解释 BTC 涨跌。纳入条件是：公开材料明确显示加密资产、钱包密码或行业身份是作案目标；若关联尚未确认，则必须存在绑架、房间被洗劫、暴力死亡等独立犯罪迹象，并在表内注明“关联待证”。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>事件</th>
+<th>已核实结果</th>
+<th>Crypto 关联</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-12-26</td>
+<td>Pavel Lerner 在基辅被绑架</td>
+<td>EXMO 员工被蒙面人绑架，超过 100 万美元等值 Bitcoin 赎金支付后获释；警方启动刑事调查。<a href="https://www.theguardian.com/uk-news/2017/dec/29/ukraine-kidnappers-release-hostage-after-1m-bitcoin-ransom-paid" target="_blank" rel="noopener noreferrer">Reuters / Guardian</a></td>
+<td>确认：Bitcoin 作为赎金</td>
+</tr>
+<tr>
+<td>2022-12-05</td>
+<td>Aiden Pleterski 被绑架并连续三日遭殴打</td>
+<td>多伦多警方称受害者被持枪控制、连续三日遭反复殴打并被索要大额赎金；多人被起诉，指控尚未审结。<a href="https://toronto.citynews.ca/2023/07/21/5th-person-charged-in-toronto-kidnapping-of-crypto-king-aiden-pleterski/" target="_blank" rel="noopener noreferrer">CityNews</a></td>
+<td>确认：受害者的 Crypto 投资业务与债权关系进入案件材料</td>
+</tr>
+<tr>
+<td>2024-06-21</td>
+<td>Kevin Mirshahi 被绑架后遇害</td>
+<td>这名 Crypto influencer 与三人一同被绑架；其余三人获释，Mirshahi 遇害。法院报道指行凶者试图取得手机密码并转走 Crypto。<a href="https://www.tvanouvelles.ca/2026/01/06/meurtre-de-linfluenceur-en-cryptomonnaie-kevin-mirshahi--elle-veut-une-peine-a-la-maison-pour-avoir-prete-son-sous-sol-aux-suspects" target="_blank" rel="noopener noreferrer">TVA</a></td>
+<td>确认：Crypto 钱包是勒索目标</td>
+</tr>
+<tr>
+<td>2024-06-25</td>
+<td>Remy St Felix 暴力入室团伙被定罪</td>
+<td>DOJ 称团伙在 2022–2023 年跨美国多州锁定 Crypto 持有人，绑架、持枪威胁并强迫清空账户；St Felix 九项罪名成立，另有十三名同谋认罪。<a href="https://www.justice.gov/archives/opa/pr/man-convicted-violent-home-invasion-robberies-steal-cryptocurrency" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+<td>确认：Crypto 持有人是预先侦察目标</td>
+</tr>
+<tr>
+<td>2024-07-28</td>
+<td>基辅 29 岁持有人因约 3 BTC 被绑架杀害</td>
+<td>乌克兰警方称四人跟踪受害者，强迫其转移 Bitcoin 后勒死、埋尸并套现；嫌疑人被羁押，刑责仍待法院裁判。<a href="https://www.pravda.com.ua/rus/news/2024/07/29/7467895/" target="_blank" rel="noopener noreferrer">乌克兰真理报引警方</a></td>
+<td>确认：约 3 BTC 是直接动机</td>
+</tr>
+<tr>
+<td>2024-11-06</td>
+<td>WonderFi CEO Dean Skurka 被绑架</td>
+<td>多伦多警方确认受害者被强行拉入车辆并遭索款；WonderFi 与 Skurka 确认事件及其安全，CBC 报道支付 100 万加元电子赎金。<a href="https://betakit.com/wonderfi-ceo-dean-skurka-kidnapped-released-after-reportedly-paying-1-million-ransom/" target="_blank" rel="noopener noreferrer">BetaKit</a></td>
+<td>确认：Crypto 公司 CEO 被定向绑架</td>
+</tr>
+<tr>
+<td>2025-01-21</td>
+<td>Ledger 联合创办人 David Balland 及妻子被绑架</td>
+<td>绑匪索要大额 Crypto 赎金并切断 Balland 一根手指；法国 GIGN 解救两人，十人被捕。<a href="https://www.lemonde.fr/en/pixels/article/2025/01/24/kidnappers-of-french-crypto-figure-and-his-wife-arrested-after-massive-manhunt_6737379_13.html" target="_blank" rel="noopener noreferrer">Le Monde</a></td>
+<td>确认：Crypto 赎金与 Ledger 身份</td>
+</tr>
+<tr>
+<td>2025-05-01</td>
+<td>法国 Crypto 投资者的父亲 Dominique B. 被绑架</td>
+<td>绑匪索要 800 万欧元 Crypto 赎金并切断受害者一截手指；约 58 小时后警方解救。<a href="https://www.lemonde.fr/en/france/article/2025/05/30/how-french-police-tracked-the-kidnappers-of-a-crypto-investor-s-relative_6741826_7.html" target="_blank" rel="noopener noreferrer">Le Monde</a></td>
+<td>确认：家属成为替代目标</td>
+</tr>
+<tr>
+<td>2025-05-06</td>
+<td>纽约 SoHo Bitcoin 密码酷刑案</td>
+<td>受害者称被控制 17 日、遭电击殴打并被要求交出 Bitcoin 密码；两名被告被起诉并否认指控，案件仍在审理。<a href="https://www.investing.com/news/world-news/second-man-charged-in-violent-new-york-kidnapping-crypto-case-appears-in-court-4073396" target="_blank" rel="noopener noreferrer">Reuters</a></td>
+<td>确认：Bitcoin 密码是直接目标</td>
+</tr>
+<tr>
+<td>2025-05-13</td>
+<td>Paymium 创办人女儿遭街头绑架未遂</td>
+<td>蒙面人当街袭击受害者及其伴侣；两人反抗且邻居介入后脱险。警方后续逮捕涉嫌参与该案和其他 Crypto 绑架的人员。<a href="https://www.lemonde.fr/en/france/article/2025/05/30/how-french-police-tracked-the-kidnappers-of-a-crypto-investor-s-relative_6741826_7.html" target="_blank" rel="noopener noreferrer">Le Monde</a></td>
+<td>确认：创办人家属被定向选择</td>
+</tr>
+<tr>
+<td>2025-09-19</td>
+<td>明尼苏达家庭遭持枪绑架并被迫转移 800 万美元 Crypto</td>
+<td>一家三口被控制九小时，一名受害者被押往三小时车程外取硬件钱包；两兄弟被州与联邦起诉。<a href="https://www.justice.gov/usao-mn/pr/brothers-charged-8-million-armed-crypto-kidnapping-heist-0" target="_blank" rel="noopener noreferrer">DOJ</a></td>
+<td>确认：账户与硬件钱包是直接目标</td>
+</tr>
+<tr>
+<td>2026-08-07</td>
+<td>Harry Yeh 在巴拉圭高层公寓坠亡，房间被翻乱</td>
+<td>二手报道指其裸体死于 Asunción Jade Park 楼外，30 层公寓门开着且内部被翻乱；检方下令尸检，意外、自杀与他杀均在调查。<a href="https://www.dimsumdaily.hk/chinese-crypto-investor-harry-chun-tak-yeh-found-dead-after-falling-from-thirty-storey-building-in-paraguay/" target="_blank" rel="noopener noreferrer">Dimsum Daily</a></td>
+<td><strong>关联待证</strong>：尚无公开证据证明他杀或 Crypto 动机</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>“targeted cryptocurrency owners through violent home invasions.” — <a href="https://www.justice.gov/archives/opa/pr/man-convicted-violent-home-invasion-robberies-steal-cryptocurrency" target="_blank" rel="noopener noreferrer">DOJ 对 St Felix 团伙的审判摘要</a></p>
+</blockquote>
+<p>Harry Yeh 节点的证据等级低于其余条目。截至 2026-08-10，公开检索只找到二手媒体与多个社交账号交叉传播，没有找到巴拉圭警方、检方或法医部门的公开原始通报。报告保留这条线索，同时把结论限制在“可疑死亡现场正在调查”。</p>
+<h3 id="_1">重大民事与监管节点</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>民事/监管事件</th>
+<th>最新结果与规则意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2017-07-25</td>
+<td>SEC 发布 The DAO 调查报告</td>
+<td>DAO 代币被认定属于证券，但当时未提起指控；成为美国把证券法适用于代币发行的起点。<a href="https://www.sec.gov/newsroom/press-releases/2017-131" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2019-10-11</td>
+<td>SEC 紧急叫停 Telegram 的 Gram 发行</td>
+<td>涉及约 17 亿美元融资；Telegram 后终止原 TON 发行并和解。<a href="https://www.sec.gov/newsroom/press-releases/2019-212" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2020-12-22</td>
+<td>SEC 起诉 Ripple 与两名高管</td>
+<td>2025 年双方撤回上诉；约 1.25 亿美元罚款与禁令保留。<a href="https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26369" target="_blank" rel="noopener noreferrer">SEC 案件页</a></td>
+</tr>
+<tr>
+<td>2022-02-14</td>
+<td>BlockFi 与 SEC/州监管达成一亿美元和解</td>
+<td>首宗针对加密借贷产品的证券执法和解。<a href="https://www.sec.gov/newsroom/press-releases/2022-26" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2023-02-09</td>
+<td>Kraken 关闭美国质押服务并支付三千万美元</td>
+<td>把“质押即服务”直接纳入未注册证券发行争议。<a href="https://www.sec.gov/newsroom/press-releases/2023-25" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2023-02-16</td>
+<td>SEC 起诉 Terraform 与 Do Kwon</td>
+<td>指控数十亿美元加密资产证券欺诈；民事与刑事责任开始并行。<a href="https://www.sec.gov/newsroom/press-releases/2023-32" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2023-06-05</td>
+<td>SEC 对 Binance 与 CZ 提出十三项指控</td>
+<td>2025-05-29 有偏见撤诉；不影响其另案刑事认罪。<a href="https://www.sec.gov/newsroom/press-releases/2023-101-sec-files-13-charges-against-binance-entities-founder-changpeng-zhao" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2023-06-06</td>
+<td>SEC 起诉 Coinbase</td>
+<td>2025-02-27 有偏见撤诉；SEC 明言撤诉基于政策调整，而非对原指控实体判断。<a href="https://www.sec.gov/newsroom/press-releases/2025-47" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2023-08-29</td>
+<td>Grayscale 在现货 BTC ETF 案中胜诉</td>
+<td>联邦上诉法院撤销 SEC 的拒绝命令，为 2024 年批准现货产品清除关键障碍。<a href="https://media.cadc.uscourts.gov/opinions/docs/2023/08/22-1142-2014527.pdf" target="_blank" rel="noopener noreferrer">法院判决</a></td>
+</tr>
+<tr>
+<td>2023-11-20</td>
+<td>SEC 再次起诉 Kraken 交易平台</td>
+<td>2025-03-27 有偏见撤诉。<a href="https://www.sec.gov/newsroom/press-releases/2023-237" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2024-01-10</td>
+<td>SEC 批准美国现货比特币 ETP</td>
+<td>批准仅针对比特币商品型 ETP，并未给其他代币作统一法律定性。<a href="https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023" target="_blank" rel="noopener noreferrer">SEC</a></td>
+</tr>
+<tr>
+<td>2024-06-28</td>
+<td>SEC 起诉 Consensys</td>
+<td>围绕 MetaMask 经纪与质押服务；2025-03-27 有偏见撤诉。<a href="https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26277" target="_blank" rel="noopener noreferrer">SEC 案件页</a></td>
+</tr>
+<tr>
+<td>2025-02 至 05 月</td>
+<td>SEC 陆续撤回七宗旧政府时期 Crypto 案件</td>
+<td>包括 Coinbase、Kraken、Consensys 与 Binance；标志执法政策明显转向。<a href="https://www.sec.gov/newsroom/press-releases/2026-34" target="_blank" rel="noopener noreferrer">SEC 2025 财年结果</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3">3. 关键主张核验</h2>
+<h3 id="btc_1">主张一：平台信用与可提现性，远比司法标题更能解释短期 BTC 冲击</h3>
+<p>验证结果：支持。公开危机/盗窃组的 BTC 1、7、30 日中位数显著低于司法/执法组；最大的 1 日跌幅也由 FTX、Celsius、Mt. Gox、Terra 占据。SBF 后续定罪的官方表述很强烈，但真正的价格断点早在 2022-11-08。</p>
+<blockquote>
+<p>“intentional fraud, plain and simple.” — <a href="https://www.justice.gov/usao-sdny/pr/statement-us-attorney-damian-williams-conviction-samuel-bankman-fried" target="_blank" rel="noopener noreferrer">SBF 定罪后 DOJ 声明</a></p>
+</blockquote>
+<h3 id="_2">主张二：执法已经从抓暗网与盗币者，扩展到企业、高管、混币器和做市商</h3>
+<p>验证结果：支持。BTC-e、BitMEX、Binance、KuCoin、OKX 构成交易所/高管 AML 责任链；Tornado Cash 与 Samourai 将问题推进到隐私基础设施；Operation Token Mirrors 则用传统 wash trading 与 pump-and-dump 法理处理做市商。</p>
+<blockquote>
+<p>“first-ever criminal charges against financial services firms for market manipulation and ‘wash trading’” — <a href="https://www.justice.gov/usao-ma/pr/eighteen-individuals-and-entities-charged-international-operation-targeting-widespread" target="_blank" rel="noopener noreferrer">Operation Token Mirrors</a></p>
+</blockquote>
+<h3 id="_3">主张三：国家支持型盗窃已从特殊案例变成核心风险类别</h3>
+<p>验证结果：支持。Ronin 与 Bybit 都获得美国官方朝鲜归因，且后者规模约 15 亿美元。</p>
+<blockquote>
+<p>“North Korea Responsible for $1.5 Billion Bybit Hack” — <a href="https://www.fbi.gov/investigate/cyber/alerts/2025/north-korea-responsible-for-1-5-billion-bybit-hack" target="_blank" rel="noopener noreferrer">FBI</a></p>
+</blockquote>
+<h3 id="2025-crypto">主张四：2025 年美国执法政策是重排优先级，不是 Crypto 犯罪合法化</h3>
+<p>验证结果：支持。备忘录解散 NCET，同时明确保留对欺诈、黑客、盗窃、恐怖融资、毒品与有组织犯罪的追诉。</p>
+<blockquote>
+<p>“NCET shall be disbanded effective immediately.” — <a href="https://www.justice.gov/dag/media/1395781/dl?inline=" target="_blank" rel="noopener noreferrer">DOJ 备忘录</a></p>
+</blockquote>
+<h3 id="_4">主张五：检方“首例”叙事可能被后续法院裁定改写</h3>
+<p>验证结果：支持。Mango Markets 一审定罪曾被称为首宗开放市场操纵案，2025 年法院却撤销两项定罪并对另一项作无罪判决。</p>
+<blockquote>
+<p>“convictions on Counts One and Two are VACATED” — <a href="https://nysd.uscourts.gov/sites/default/files/2025-05/23cr10%20Opinion%20and%20Order.pdf" target="_blank" rel="noopener noreferrer">法院 Opinion and Order</a></p>
+</blockquote>
+<h3 id="_5">主张六：线下暴力已经从零散绑架演变为可重复的作案模式</h3>
+<p>验证结果：支持趋势判断，但无法计算全球发生率。St Felix 团伙通过邮箱入侵与物理跟踪选定持有人；法国案件连续转向创办人父母、配偶和子女；明尼苏达案件把受害者从住宅押往异地硬件钱包。这些案件共享三项条件：目标身份可识别、资产控制权集中在个人、转账结算不可逆。公开样本存在明显报道偏差，因此报告只写“重复模式”，不写“发生率同比上升多少”。</p>
+<h2 id="4-btc">4. BTC 事件窗口</h2>
+<h3 id="_6">方法</h3>
+<ul>
+<li>BTC：Coin Metrics <code>PriceUSD</code> 日频参考价。<a href="https://docs.coinmetrics.io/api/v4/" target="_blank" rel="noopener noreferrer">API 文档</a>、<a href="https://gitbook-docs.coinmetrics.io/market-data/reference-rates-overview" target="_blank" rel="noopener noreferrer">价格方法说明</a></li>
+<li>基准价：事件日前最后一笔 BTC 日价；<code>+N</code>：事件日后第 N 个日历日的 BTC 日价。</li>
+<li>收益样本：24 个公开市场节点、3 个窗口，共 72 个 BTC 观测。时间轴的 74 个节点用于完整叙事，不全部进入收益统计；12 个新增线下节点全部排除在收益样本之外。</li>
+</ul>
+<h3 id="_7">全样本中位数</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>BTC 事件组</th>
+<th style="text-align: right;">+1 日</th>
+<th style="text-align: right;">+7 日</th>
+<th style="text-align: right;">+30 日</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全部 24 个公开节点</td>
+<td style="text-align: right;">-1.55%</td>
+<td style="text-align: right;">-0.49%</td>
+<td style="text-align: right;">-4.12%</td>
+</tr>
+<tr>
+<td>9 个公开危机/盗窃</td>
+<td style="text-align: right;">-5.96%</td>
+<td style="text-align: right;">-12.24%</td>
+<td style="text-align: right;">-12.84%</td>
+</tr>
+<tr>
+<td>15 个司法/执法节点</td>
+<td style="text-align: right;">-0.50%</td>
+<td style="text-align: right;">+1.21%</td>
+<td style="text-align: right;">+5.06%</td>
+</tr>
+</tbody>
+</table></div>
+<p>分层比全样本平均更有意义：会直接影响提款、偿付或基础设施安全的事件明显更负；单纯司法进展没有稳定的方向性。</p>
+<h3 id="_8">最有解释力的对照</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>事件</th>
+<th style="text-align: right;">BTC +1 日</th>
+<th style="text-align: right;">BTC +7 日</th>
+<th style="text-align: right;">BTC +30 日</th>
+<th>读法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FTX 危机，2022-11-08</td>
+<td style="text-align: right;">-23.4%</td>
+<td style="text-align: right;">-18.1%</td>
+<td style="text-align: right;">-16.2%</td>
+<td>最清楚的信用与提款冲击</td>
+</tr>
+<tr>
+<td>Celsius 暂停提款，2022-06-12</td>
+<td style="text-align: right;">-21.3%</td>
+<td style="text-align: right;">-27.7%</td>
+<td style="text-align: right;">-31.8%</td>
+<td>提款承诺破裂后跌势持续</td>
+</tr>
+<tr>
+<td>Terra 失控脱锚，2022-05-09</td>
+<td style="text-align: right;">-9.0%</td>
+<td style="text-align: right;">-12.2%</td>
+<td style="text-align: right;">-11.2%</td>
+<td>机制失败与连锁去杠杆</td>
+</tr>
+<tr>
+<td>Silk Road 查封，2013-10-02</td>
+<td style="text-align: right;">-7.8%</td>
+<td style="text-align: right;">-1.3%</td>
+<td style="text-align: right;">+59.2%</td>
+<td>初始恐慌强，但没有破坏 Bitcoin 网络本身</td>
+</tr>
+<tr>
+<td>Binance/CZ 认罪，2023-11-21</td>
+<td style="text-align: right;">-0.3%</td>
+<td style="text-align: right;">+0.8%</td>
+<td style="text-align: right;">+16.9%</td>
+<td>协调解决、平台继续运营；司法落地不等于挤兑</td>
+</tr>
+<tr>
+<td>Bybit 被盗，2025-02-21</td>
+<td style="text-align: right;">-1.8%</td>
+<td style="text-align: right;">-14.4%</td>
+<td style="text-align: right;">-12.8%</td>
+<td>1 日反应有限，且与三天后的 OKX 事件窗口重叠</td>
+</tr>
+</tbody>
+</table></div>
+<p>最稳健的结论不是“某新闻导致某个 30 日涨跌”，而是冲击通道的排序：</p>
+<ol>
+<li>提款冻结/资产负债表缺口：最直接，通常也是跌幅最大。</li>
+<li>核心桥、交易所钱包失守：是否由平台兜底、是否引发传染，决定二阶冲击。</li>
+<li>查封、起诉、认罪：若运营连续、罚款可承受、信息已预期，价格反应常很小。</li>
+<li>定罪、量刑、赦免：法律和政治意义可能很大，但通常离原始资金冲击太远，不适合机械交易。</li>
+</ol>
+<h2 id="5">5. 未来监测框架</h2>
+<p>市场监测仍围绕四个实时问题：</p>
+<ul>
+<li>资金还能否退出？是否出现提款冻结、跨链桥暂停、稳定币赎回障碍？</li>
+<li>损失由谁承担？平台资本、保险、追回资产还是客户 haircut？</li>
+<li>是否会传染？同一托管人、借贷对手方、做市商或稳定币是否承接了缺口？</li>
+<li>事件属于哪一阶段？犯罪公开、逮捕、起诉、认罪、定罪、量刑、赦免必须分栏，不能用“出事了”合并。</li>
+</ul>
+<p>实务上，先检查链上净流出、提款状态、稳定币赎回、抵押品折价和主要对手方暴露。司法节点只有在伴随服务查封、资产冻结、管理层突然退出或客户资金受限时，才更可能升级为价格事件。</p>
+<p>个人安全需要另一套清单：公开内容是否泄露真实住址、家属、行程或持仓；是否把单签钱包、助记词或硬件钱包放在一个可被胁迫取得的位置；大额转账是否需要地理分离的多人授权与延时撤销；公司能否在员工或家属被胁迫时迅速冻结运营权限并联系当地执法。这里的核心是降低单点控制与身份暴露，而不是继续增加钱包密码长度。</p>
+<h2 id="6">6. 限制与不确定性</h2>
+<ul>
+<li>事件日并非总是唯一：Mt. Gox 有停止提现、下线、申请破产多个候选日；Terra 是连续脱锚。本报告选择首次显著进入公共市场信息面的日期，并把中等置信度标在底表。</li>
+<li>日线看不见分钟级冲击。SEC X 账号被黑就是典型：盘中先涨后跌，但日终变化可能很小。</li>
+<li>事件彼此会重叠。Bybit（2 月 21 日）与 OKX（2 月 24 日）的 7/30 日窗口无法作独立因果归因。</li>
+<li>样本是按行业影响力挑选，不是随机样本；早期 BTC 价格来源差异、幸存者偏差和美元计价也会影响结果。</li>
+<li>矢量头像是高辨识度的主角/机构徽章，不是官方商标或真人照片；缩写与完整事件标签共同承担识别功能。</li>
+<li>官方新闻稿是高质量事实入口，但起诉仍只是指控。报告对重要案件追到认罪、判决、撤销或赦免；仍在审案件保持无罪推定。</li>
+<li>线下暴力样本只覆盖公开、可核验且具行业代表性的案件。匿名受害者、小额抢劫、没有独立来源的社交传闻和普通意外死亡均被排除，因此不能用 12 个节点估计真实发生率。</li>
+<li>Harry Yeh 案的来源等级为中：现场细节来自二手媒体，社交平台只提供交叉传播，尚无公开的一手执法材料。后续法医或警方结论可能要求修改事件类型。</li>
+</ul>
+<h2 id="7">7. 可复现材料</h2>
+<ul>
+<li><a href="events.csv">完整事件表（49 个节点）</a></li>
+<li><a href="civil_events.csv">重大民事/监管事件表（13 个节点）</a></li>
+<li><a href="physical_events.csv">线下暴力/可疑死亡事件表（12 个节点）</a></li>
+<li><a href="chart_events.csv">图表合并事件表（74 个节点）</a></li>
+<li><a href="market_data.csv">统一行情数据</a></li>
+<li><a href="event_returns.csv">事件收益明细（216 行）</a></li>
+<li><a href="analysis_summary.json">分析摘要</a></li>
+<li><a href="timeline.png">高清静态时间轴（PNG）</a></li>
+</ul></article></main>
+  <script>
+(() => {
+  const root = document.getElementById('btc-legal-explorer-v2');
+  if (!root) return;
+  const events = [{"date":"2013-10-02","label":"Silk Road 查封/逮捕","profile":"ROSS","category":"刑事","phase":"公开执法","summary":"美国执法部门查封网站并逮捕创办人","status":"后续定罪并判终身监禁；2025年获完全无条件赦免","cryptoLink":"","url":"https://www.justice.gov/archive/usao/nys/pressreleases/October13/SilkRoadSeizurePR.php"},{"date":"2014-02-24","label":"Mt. Gox 停止交易","profile":"GOX","category":"刑事","phase":"危机公开","summary":"数日后申请破产并声称约 85 万 BTC 丢失","status":"破产调查延续；Karpelès 并未因盗走 BTC 获罪","cryptoLink":"","url":"https://time.com/10657/mt-gox-bitcoin-bankruptcy/"},{"date":"2016-08-02","label":"Bitfinex 被盗","profile":"BFX","category":"刑事","phase":"犯罪公开","summary":"约 119754 BTC 被盗","status":"2022 年追缴与洗钱案取得重大进展","cryptoLink":"","url":"https://www.justice.gov/usao-dc/2016-bitfinex-hack"},{"date":"2017-07-25","label":"DAO 代币被认定为证券","profile":"SEC","category":"政策/判决","phase":"监管结论","summary":"SEC 认定 DAO 代币属于证券但未提起指控","status":"成为美国将证券法适用于代币发行的起点","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2017-131"},{"date":"2017-07-26","label":"BTC-e / Vinnik 起诉","profile":"BTC-E","category":"刑事","phase":"起诉/逮捕","summary":"交易所累计处理约 90 亿美元并被指帮助清洗 Mt. Gox 被盗币","status":"运营者 2024 年认罪","cryptoLink":"","url":"https://www.justice.gov/usao-ndca/pr/russian-national-and-bitcoin-exchange-charged-21-count-indictment-operating-alleged"},{"date":"2017-12-26","label":"Pavel Lerner 绑架","profile":"PL","category":"线下暴力","phase":"犯罪发生","summary":"EXMO 员工被蒙面人绑架；超过 100 万美元等值 Bitcoin 赎金支付后获释","status":"乌克兰警方启动刑事调查；付款人未公开","cryptoLink":"确认","url":"https://www.theguardian.com/uk-news/2017/dec/29/ukraine-kidnappers-release-hostage-after-1m-bitcoin-ransom-paid"},{"date":"2018-01-26","label":"Coincheck 被盗","profile":"CC","category":"刑事","phase":"犯罪公开","summary":"日本金融厅称约 580 亿日元资产流出","status":"日本监管整顿交易所安全与治理","cryptoLink":"","url":"https://www.fsa.go.jp/en/conference/minister/2018/20180202.html"},{"date":"2019-02-05","label":"Quadriga 申请保护","profile":"QCX","category":"刑事","phase":"危机公开","summary":"欠客户约 2.15 亿加元；OSC 后认定为欺诈与类庞氏运作","status":"创办人已死亡且无刑事审判","cryptoLink":"","url":"https://www.osc.ca/quadrigacxreport/web/files/QuadrigaCX-A-Review-by-Staff-of-the-Ontario-Securities-Commission.pdf"},{"date":"2019-03-06","label":"OneCoin 起诉/逮捕","profile":"1C","category":"刑事","phase":"起诉/逮捕","summary":"全球受害者至少 350 万且涉款逾 40 亿美元","status":"Greenwood 2023 年被判 20 年；Ruja Ignatova 仍在逃","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/manhattan-us-attorney-announces-charges-against-leaders-onecoin-multibillion-dollar"},{"date":"2019-10-11","label":"SEC 叫停 Telegram Gram","profile":"TG","category":"民事","phase":"起诉/禁令","summary":"涉及约17亿美元融资并取得临时限制令","status":"Telegram 后终止 TON 发行并和解","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2019-212"},{"date":"2020-07-31","label":"PlusToken 主犯归案","profile":"PLUS","category":"刑事","phase":"抓捕/侦破","summary":"中国警方称参与者逾 200 万、涉案金额逾 400 亿元人民币","status":"主要组织者后被判刑","cryptoLink":"","url":"https://www.yncaw.gov.cn/html/2020/gczs_0731/65725.html"},{"date":"2020-10-01","label":"BitMEX 高管起诉","profile":"BMX","category":"刑事","phase":"起诉","summary":"被控故意规避美国反洗钱要求","status":"四名高管其后认罪；2025年获完全无条件赦免","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/founders-and-executives-shore-cryptocurrency-derivatives-exchange-charged-violation"},{"date":"2020-12-22","label":"SEC 起诉 Ripple","profile":"XRP","category":"民事","phase":"起诉","summary":"被指通过 XRP 进行逾13亿美元未注册发行","status":"2025年双方撤回上诉；1.25亿美元罚款与禁令保留","cryptoLink":"","url":"https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26369"},{"date":"2022-02-08","label":"Bitfinex 洗钱案追缴","profile":"BFX","category":"刑事","phase":"逮捕/追缴","summary":"司法部宣布查扣逾 36 亿美元等值 BTC","status":"两名被告其后认罪","cryptoLink":"","url":"https://www.justice.gov/archives/opa/pr/two-arrested-alleged-conspiracy-launder-45-billion-stolen-cryptocurrency"},{"date":"2022-02-14","label":"BlockFi 一亿美元和解","profile":"BFI","category":"民事","phase":"和解","summary":"首宗针对加密借贷产品的证券执法和解","status":"BlockFi支付SEC与州监管合计一亿美元","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2022-26"},{"date":"2022-02-25","label":"BitConnect 创办人起诉","profile":"BCC","category":"刑事","phase":"起诉","summary":"被指策划约 24 亿美元全球庞氏骗局","status":"创办人仍被列为逃犯","cryptoLink":"","url":"https://www.justice.gov/archives/opa/pr/bitconnect-founder-indicted-global-24-billion-cryptocurrency-scheme"},{"date":"2022-03-29","label":"Ronin / Lazarus 盗窃","profile":"DPRK","category":"刑事","phase":"犯罪公开","summary":"173600 ETH 与 2550 万 USDC 被盗；FBI/财政部归因朝鲜 Lazarus","status":"追赃与制裁持续","cryptoLink":"","url":"https://home.treasury.gov/news/press-releases/jy0768"},{"date":"2022-05-09","label":"TerraUSD 失控脱锚","profile":"LUNA","category":"刑事","phase":"危机公开","summary":"UST/LUNA 崩盘造成逾 400 亿美元损失","status":"Kwon 2025 年认罪并被判 15 年","cryptoLink":"","url":"https://www.sec.gov/files/terraform-labs-pte-ltd-amended-complaint.pdf"},{"date":"2022-06-12","label":"Celsius 暂停提款","profile":"CEL","category":"刑事","phase":"危机公开","summary":"约 47 亿美元客户资产一度无法提取","status":"Mashinsky 2024 年认罪、2025 年被判 12 年","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/celsius-founder-and-former-chief-revenue-officer-charged-connection-multibillion"},{"date":"2022-11-08","label":"FTX 挤兑爆发","profile":"FTX","category":"刑事","phase":"危机公开","summary":"约 60 亿美元客户提款压力暴露资金缺口","status":"SBF 后被判 25 年并没收 110 亿美元","cryptoLink":"","url":"https://www.investing.com/news/stock-market-news/cryptocurrencies-slide-as-concerns-over-ftx-exchange-rattle-markets-2935612"},{"date":"2022-12-05","label":"Aiden Pleterski 绑架","profile":"AP","category":"线下暴力","phase":"犯罪发生","summary":"被诱入车辆后持枪控制并连续三日遭反复殴打；绑匪索要大额加元","status":"多人被起诉；截至来源日期相关指控尚未获法院证明","cryptoLink":"确认","url":"https://toronto.citynews.ca/2023/07/21/5th-person-charged-in-toronto-kidnapping-of-crypto-king-aiden-pleterski/"},{"date":"2022-12-12","label":"SBF 被捕","profile":"SBF","category":"刑事","phase":"逮捕","summary":"被控将客户资金挪用于 Alameda、投资和政治捐款","status":"2023 年七项罪名成立","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/united-states-attorney-announces-charges-against-ftx-founder-samuel-bankman-fried"},{"date":"2023-01-18","label":"Bitzlato 查封/逮捕","profile":"BZ","category":"刑事","phase":"逮捕/查封","summary":"被指处理逾 7 亿美元与 Hydra 等相关的非法资金","status":"创办人 2023 年认罪","cryptoLink":"","url":"https://www.justice.gov/archives/opa/pr/founder-and-majority-owner-cryptocurrency-exchange-charged-processing-over-700-million"},{"date":"2023-02-09","label":"Kraken 质押案和解","profile":"KRK","category":"民事","phase":"和解","summary":"SEC 指控其未注册质押即服务产品","status":"相关实体同意停止美国质押项目并支付三千万美元","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2023-25"},{"date":"2023-02-16","label":"SEC 起诉 Terraform","profile":"LUNA","category":"民事","phase":"起诉","summary":"指控数十亿美元加密资产证券欺诈","status":"陪审团2024年认定民事责任；刑事案另行推进","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2023-32"},{"date":"2023-05-09","label":"Coinbase 内幕案判刑","profile":"CB","category":"政策/判决","phase":"量刑","summary":"首宗被称为加密资产内幕交易刑事案的量刑","status":"被判两年监禁","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/former-coinbase-insider-sentenced-first-ever-cryptocurrency-insider-trading-case"},{"date":"2023-06-05","label":"SEC 起诉 Binance","profile":"BNB","category":"民事","phase":"起诉","summary":"涉及未注册交易所、证券发行与市场控制等指控","status":"2025-05-29双方有偏见撤诉","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2023-101-sec-files-13-charges-against-binance-entities-founder-changpeng-zhao"},{"date":"2023-06-06","label":"SEC 起诉 Coinbase","profile":"CB","category":"民事","phase":"起诉","summary":"指控未注册交易所、经纪商、清算机构与质押项目","status":"2025-02-27有偏见撤诉且不代表对指控实体判断","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2023-102"},{"date":"2023-07-13","label":"Mashinsky 被捕起诉","profile":"CEL","category":"刑事","phase":"起诉/逮捕","summary":"被控误导客户并操纵 CEL","status":"Mashinsky 2025 年被判 12 年","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/celsius-founder-and-former-chief-revenue-officer-charged-connection-multibillion"},{"date":"2023-08-23","label":"Tornado 创办人起诉","profile":"TC","category":"刑事","phase":"起诉/逮捕","summary":"检方称平台处理逾 10 亿美元洗钱并服务 Lazarus","status":"Storm 2025 年仅在无牌汇款合谋罪上被定罪","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/tornado-cash-founders-charged-money-laundering-and-sanctions-violations"},{"date":"2023-08-29","label":"Grayscale 胜诉 SEC","profile":"GBTC","category":"政策/判决","phase":"法院裁定","summary":"联邦上诉法院撤销SEC拒绝GBTC转ETF的命令","status":"为2024年现货比特币ETF批准清除关键障碍","cryptoLink":"","url":"https://media.cadc.uscourts.gov/opinions/docs/2023/08/22-1142-2014527.pdf"},{"date":"2023-11-02","label":"SBF 七项罪名成立","profile":"SBF","category":"政策/判决","phase":"定罪","summary":"陪审团裁定全部七项指控成立","status":"2024 年被判 25 年","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/statement-us-attorney-damian-williams-conviction-samuel-bankman-fried"},{"date":"2023-11-20","label":"SEC 起诉 Kraken","profile":"KRK","category":"民事","phase":"起诉","summary":"指控未注册交易所、经纪商、交易商和清算机构","status":"2025-03-27有偏见撤诉","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2023-237"},{"date":"2023-11-21","label":"Binance / CZ 认罪","profile":"CZ","category":"刑事","phase":"认罪/和解","summary":"Binance 支付逾 43 亿美元；CZ 承认反洗钱失职","status":"CZ 2024 年服刑四个月、2025 年获总统赦免","cryptoLink":"","url":"https://www.justice.gov/archives/opa/pr/binance-and-ceo-plead-guilty-federal-charges-4b-resolution"},{"date":"2024-01-09","label":"SEC X 账号被黑","profile":"SEC","category":"刑事","phase":"犯罪公开","summary":"假消息令 BTC 短时先涨后跌","status":"被告 2025 年认罪","cryptoLink":"","url":"https://www.justice.gov/usao-dc/pr/fbi-arrests-alabama-man-january-2024-sec-x-hack-spiked-value-bitcoin"},{"date":"2024-01-10","label":"现货 BTC ETF 获批","profile":"ETF","category":"政策/判决","phase":"监管批准","summary":"批准多项交易所规则变更使现货比特币产品上市交易","status":"批准仅针对比特币商品型ETP并非对其他代币定性","cryptoLink":"","url":"https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023"},{"date":"2024-03-26","label":"KuCoin 与创办人起诉","profile":"KUC","category":"刑事","phase":"起诉","summary":"被控在美国运营无牌汇款业务且缺乏 AML/KYC","status":"公司 2025 年认罪并支付约 2.97 亿美元","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/prominent-global-cryptocurrency-exchange-kucoin-and-two-its-founders-criminally"},{"date":"2024-03-28","label":"SBF 判刑 25 年","profile":"SBF","category":"政策/判决","phase":"量刑","summary":"法院判处 25 年并命令没收 110 亿美元","status":"案件进入上诉阶段","cryptoLink":"","url":"https://www.justice.gov/archives/opa/pr/samuel-bankman-fried-sentenced-25-years-his-orchestration-multiple-fraudulent-schemes"},{"date":"2024-04-18","label":"Mango 一审定罪","profile":"MNGO","category":"政策/判决","phase":"定罪","summary":"司法部称为首宗加密开放市场操纵案","status":"2025 年法院撤销定罪；不应视为最终有效先例","cryptoLink":"","url":"https://www.justice.gov/archives/opa/pr/man-convicted-110m-cryptocurrency-scheme"},{"date":"2024-04-24","label":"Samourai 查封/逮捕","profile":"SW","category":"刑事","phase":"起诉/逮捕/查封","summary":"检方指称处理逾 20 亿美元非法交易","status":"两名创办人 2025 年认罪","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/founders-and-ceo-cryptocurrency-mixing-service-arrested-and-charged-money-laundering"},{"date":"2024-04-30","label":"CZ 判刑 4 个月","profile":"CZ","category":"政策/判决","phase":"量刑","summary":"另处 5000 万美元罚款","status":"2025 年获总统赦免","cryptoLink":"","url":"https://www.justice.gov/criminal/case/united-states-v-changpeng-zhao"},{"date":"2024-06-21","label":"Kevin Mirshahi 遇害","profile":"KM","category":"线下暴力","phase":"犯罪发生","summary":"蒙特利尔 Crypto influencer 与三人一同被绑架；其余三人获释、Mirshahi 被害","status":"法院报道指行凶者意图取得手机密码并转走 Crypto；一名涉案者就非法拘禁认罪","cryptoLink":"确认","url":"https://www.tvanouvelles.ca/2026/01/06/meurtre-de-linfluenceur-en-cryptomonnaie-kevin-mirshahi--elle-veut-une-peine-a-la-maison-pour-avoir-prete-son-sous-sol-aux-suspects"},{"date":"2024-06-25","label":"St Felix 入室团伙定罪","profile":"RSF","category":"线下暴力","phase":"定罪","summary":"团伙在 2022-09 至 2023-07 跨美国多州锁定 Crypto 持有人；受害者被绑并被迫清空账户","status":"联邦陪审团九项罪名成立；另有十三名同谋认罪","cryptoLink":"确认","url":"https://www.justice.gov/archives/opa/pr/man-convicted-violent-home-invasion-robberies-steal-cryptocurrency"},{"date":"2024-06-28","label":"SEC 起诉 Consensys","profile":"MM","category":"民事","phase":"起诉","summary":"围绕MetaMask相关经纪与质押服务提起民事诉讼","status":"2025-03-27有偏见撤诉","cryptoLink":"","url":"https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26277"},{"date":"2024-07-28","label":"基辅 3 BTC 绑架杀人","profile":"KYIV","category":"线下暴力","phase":"犯罪发生","summary":"四人被指跟踪受害者、强迫转移 Bitcoin 后勒死并埋尸","status":"四名嫌疑人被羁押并面临谋财杀人、抢劫、非法拘禁等指控","cryptoLink":"确认","url":"https://www.pravda.com.ua/rus/news/2024/07/29/7467895/"},{"date":"2024-10-09","label":"Token Mirrors 行动","profile":"GOT","category":"刑事","phase":"起诉/抓捕/查封","summary":"18 个个人和实体被起诉；逾 2500 万美元加密资产被查扣","status":"多名被告已认罪或同意认罪","cryptoLink":"","url":"https://www.justice.gov/usao-ma/pr/eighteen-individuals-and-entities-charged-international-operation-targeting-widespread"},{"date":"2024-11-06","label":"Dean Skurka 绑架","profile":"DS","category":"线下暴力","phase":"犯罪发生","summary":"警方称受害者被强行拉入车辆并遭索款；CBC 报道支付 100 万加元电子赎金后获释","status":"WonderFi 与 Skurka 确认事件及安全；警方调查继续","cryptoLink":"确认","url":"https://betakit.com/wonderfi-ceo-dean-skurka-kidnapped-released-after-reportedly-paying-1-million-ransom/"},{"date":"2024-12-03","label":"Mashinsky 认罪","profile":"CEL","category":"刑事","phase":"认罪","summary":"承认商品欺诈与操纵 CEL","status":"2025 年被判 12 年","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/founder-celsius-sentenced-12-years-fraud-and-market-manipulation"},{"date":"2025-01-21","label":"David Balland 绑架","profile":"DB","category":"线下暴力","phase":"犯罪发生","summary":"绑匪索要大额 Crypto 赎金并切断 Balland 一根手指；法国 GIGN 解救两人","status":"十人被捕；司法调查涉及有组织绑架、酷刑与持械勒索","cryptoLink":"确认","url":"https://www.lemonde.fr/en/pixels/article/2025/01/24/kidnappers-of-french-crypto-figure-and-his-wife-arrested-after-massive-manhunt_6737379_13.html"},{"date":"2025-01-21","label":"Ulbricht 获赦免","profile":"ROSS","category":"政策/判决","phase":"赦免","summary":"赦免覆盖其Silk Road相关联邦定罪与终身刑","status":"刑罚后果终止；历史定罪事实仍存在","cryptoLink":"","url":"https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present"},{"date":"2025-01-27","label":"KuCoin 认罪","profile":"KUC","category":"刑事","phase":"认罪/和解","summary":"同意支付近 2.97 亿美元并退出美国市场两年","status":"已生效","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/kucoin-pleads-guilty-unlicensed-money-transmission-charge-and-agrees-pay-penalties"},{"date":"2025-02-21","label":"Bybit / DPRK 盗窃","profile":"DPRK","category":"刑事","phase":"犯罪公开","summary":"FBI 归因朝鲜 TraderTraitor 并称其迅速兑换与分散资产","status":"追踪与制裁持续","cryptoLink":"","url":"https://www.fbi.gov/investigate/cyber/alerts/2025/north-korea-responsible-for-1-5-billion-bybit-hack"},{"date":"2025-02-24","label":"OKX 认罪","profile":"OKX","category":"刑事","phase":"认罪/和解","summary":"同意支付逾 5.04 亿美元罚没与处罚","status":"已生效","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/okx-pleads-guilty-violating-us-anti-money-laundering-laws-and-agrees-pay-penalties"},{"date":"2025-02-27","label":"SEC 连续撤回七案","profile":"SEC","category":"政策/判决","phase":"撤诉/政策转折","summary":"自Coinbase案起陆续撤回Coinbase、Kraken、Consensys、Binance等七案","status":"撤诉基于监管政策调整而非对原指控实体判断","cryptoLink":"","url":"https://www.sec.gov/newsroom/press-releases/2026-34"},{"date":"2025-03-27","label":"BitMEX 相关方获赦","profile":"BMX","category":"政策/判决","phase":"赦免","summary":"赦免覆盖Arthur Hayes、Benjamin Delo、Samuel Reed、Gregory Dwyer及HDR Global Trading","status":"刑罚后果终止；历史认罪事实仍存在","cryptoLink":"","url":"https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present"},{"date":"2025-04-07","label":"DOJ 解散 NCET","profile":"DOJ","category":"政策/判决","phase":"政策转折","summary":"缩小数字资产刑事执法重点至投资者受害、恐怖融资、毒品、黑客等行为人","status":"政策已实施；不是一宗刑案","cryptoLink":"","url":"https://www.justice.gov/dag/media/1395781/dl?inline="},{"date":"2025-05-01","label":"Crypto 投资者父亲绑架","profile":"DOM","category":"线下暴力","phase":"犯罪发生","summary":"绑匪索要 800 万欧元 Crypto 赎金并切断受害者一截手指；约 58 小时后获救","status":"多名嫌疑人被捕；警方怀疑与其他 Crypto 绑架共享幕后组织者","cryptoLink":"确认","url":"https://www.lemonde.fr/en/france/article/2025/05/30/how-french-police-tracked-the-kidnappers-of-a-crypto-investor-s-relative_6741826_7.html"},{"date":"2025-05-06","label":"SoHo Bitcoin 酷刑案","profile":"NYC","category":"线下暴力","phase":"犯罪发生","summary":"受害者称被控制 17 日、遭电击殴打并被要求交出 Bitcoin 密码","status":"两名被告被起诉并否认指控；案件仍在审理","cryptoLink":"确认","url":"https://www.investing.com/news/world-news/second-man-charged-in-violent-new-york-kidnapping-crypto-case-appears-in-court-4073396"},{"date":"2025-05-08","label":"Mashinsky 判刑 12 年","profile":"CEL","category":"政策/判决","phase":"量刑","summary":"另被命令没收 4840 万美元","status":"已判刑","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/founder-celsius-sentenced-12-years-fraud-and-market-manipulation"},{"date":"2025-05-13","label":"Paymium 女儿绑架未遂","profile":"PAY","category":"线下暴力","phase":"犯罪发生","summary":"蒙面人当街袭击 Paymium 创办人的女儿及其伴侣；受害者反抗且邻居介入后脱险","status":"警方后续逮捕涉嫌参与该案及其他 Crypto 绑架的人员","cryptoLink":"确认","url":"https://www.lemonde.fr/en/france/article/2025/05/30/how-french-police-tracked-the-kidnappers-of-a-crypto-investor-s-relative_6741826_7.html"},{"date":"2025-07-30","label":"Samourai 创办人认罪","profile":"SW","category":"刑事","phase":"认罪","summary":"承认服务处理逾 2 亿美元犯罪所得并同意没收约 2.378 亿美元","status":"2025年11月分别被判五年和四年","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/founders-samourai-wallet-cryptocurrency-mixing-service-plead-guilty"},{"date":"2025-08-06","label":"Roman Storm 部分定罪","profile":"TC","category":"政策/判决","phase":"定罪","summary":"仅无牌汇款合谋罪成立；其余两项未形成有罪裁决","status":"后续程序持续","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/founder-tornado-cash-crypto-mixing-service-convicted-knowingly-transmitting-criminal"},{"date":"2025-08-12","label":"Do Kwon 认罪","profile":"DK","category":"刑事","phase":"认罪","summary":"承认围绕 Terraform 产品的欺诈计划","status":"2025 年 12 月被判 15 年","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/do-kwon-pleads-guilty-fraud"},{"date":"2025-09-19","label":"明州 800 万美元绑架","profile":"MN8M","category":"线下暴力","phase":"犯罪发生","summary":"一家三口被持枪控制九小时；一名受害者被押往三小时车程外取硬件钱包","status":"两兄弟被州与联邦起诉；其中一人被控后供认，刑事投诉仍属指控","cryptoLink":"确认","url":"https://www.justice.gov/usao-mn/pr/brothers-charged-8-million-armed-crypto-kidnapping-heist-0"},{"date":"2025-10-21","label":"CZ 获赦免","profile":"CZ","category":"政策/判决","phase":"赦免","summary":"赦免覆盖其联邦定罪","status":"刑罚已完成；赦免不等于否认历史事实","cryptoLink":"","url":"https://www.justice.gov/pardon/clemency-grants-president-donald-j-trump-2025-present"},{"date":"2025-11-19","label":"Samourai 创办人判刑","profile":"SW","category":"政策/判决","phase":"量刑","summary":"CEO 与 CTO 分别被判五年和四年并各处罚金25万美元","status":"已判刑","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/founders-samourai-wallet-cryptocurrency-mixing-service-sentenced-five-and-four-years"},{"date":"2025-12-10","label":"Paxful 认罪","profile":"PAX","category":"刑事","phase":"认罪/和解","summary":"司法部称平台处理逾 30 亿美元交易且明知服务犯罪活动","status":"2026 年被判处罚金与没收","cryptoLink":"","url":"https://www.justice.gov/opa/pr/virtual-asset-trading-platform-pleads-guilty-violating-travel-act-and-other-federal-criminal"},{"date":"2025-12-11","label":"Do Kwon 判刑 15 年","profile":"DK","category":"政策/判决","phase":"量刑","summary":"另被命令没收逾 1900 万美元","status":"已判刑","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/crypto-enabled-fraudster-sentenced-orchestrating-40-billion-fraud"},{"date":"2026-02-11","label":"Paxful 判刑","profile":"PAX","category":"政策/判决","phase":"量刑","summary":"罚款 400 万美元并没收约 350 万美元","status":"已判刑","cryptoLink":"","url":"https://www.justice.gov/opa/pr/virtual-asset-trading-platform-sentenced-violating-travel-act-and-other-federal-criminal"},{"date":"2026-03-30","label":"跨国做市操纵案","profile":"MM","category":"刑事","phase":"起诉/逮捕","summary":"涉及 Gotbit、Vortex、Antier 与 Contrarian 的刷量和拉盘计划","status":"部分被告已认罪；其余仅属指控","cryptoLink":"","url":"https://www.justice.gov/usao-ndca/pr/ten-foreign-nationals-charged-international-operation-targeting-cryptocurrency-market"},{"date":"2026-04-29","label":"诈骗园区 276 人被捕","profile":"SCAM","category":"刑事","phase":"抓捕/侦破","summary":"至少九个诈骗中心被打击","status":"案件处于起诉与调查阶段","cryptoLink":"","url":"https://www.justice.gov/opa/pr/coordinated-takedown-scam-centers-leads-at-least-276-arrests-alleged-managers-and-recruiters"},{"date":"2026-05-11","label":"Crypto 绑架抢劫案","profile":"KID","category":"刑事","phase":"起诉","summary":"涉及多州家庭入侵与强迫转币","status":"仅属指控、无罪推定","cryptoLink":"","url":"https://www.justice.gov/usao-ndca/pr/three-tennessee-men-indicted-robbery-kidnapping-and-conspiracy-charges-related-6"},{"date":"2026-06-30","label":"H Coin 诈骗判刑","profile":"HCO","category":"政策/判决","phase":"量刑","summary":"检方称H Coin与H Dollar只是内部表格中的虚假数字且被用于募资骗局","status":"已判刑","cryptoLink":"","url":"https://www.justice.gov/usao-sdny/pr/miles-guo-sentenced-30-years-prison-leading-billion-dollar-fraud"},{"date":"2026-08-07","label":"Harry Yeh 可疑死亡","profile":"HY","category":"线下暴力","phase":"公开调查","summary":"Harry Yeh 被发现裸体死于 Asunción Jade Park 楼外；其 30 层公寓门开着且内部被翻乱","status":"检方下令尸检；意外、自杀与他杀均在调查，尚无证据证明 Crypto 是动机","cryptoLink":"关联待证","url":"https://www.dimsumdaily.hk/chinese-crypto-investor-harry-chun-tak-yeh-found-dead-after-falling-from-thirty-storey-building-in-paraguay/"}];
+  const prices = [["2013-01-01",13.3314],["2013-01-06",13.5045],["2013-01-11",14.2276],["2013-01-16",14.7078],["2013-01-21",16.781],["2013-01-26",17.5536],["2013-01-31",20.5116],["2013-02-05",20.6593],["2013-02-10",23.9003],["2013-02-15",27.1713],["2013-02-20",29.8198],["2013-02-25",30.352],["2013-03-02",34.1435],["2013-03-07",41.9474],["2013-03-12",44.4135],["2013-03-17",47.3335],["2013-03-22",69.8461],["2013-03-27",88.8521],["2013-04-01",103.5803],["2013-04-06",143.0818],["2013-04-11",82.9016],["2013-04-16",68.2831],["2013-04-21",118.4832],["2013-04-26",137.2096],["2013-05-01",116.1138],["2013-05-06",112.1186],["2013-05-11",115.4998],["2013-05-16",112.9179],["2013-05-21",117.252],["2013-05-26",130.1586],["2013-05-31",127.8165],["2013-06-05",120.8699],["2013-06-10",104.3576],["2013-06-15",99.875],["2013-06-20",104.3235],["2013-06-25",97.8328],["2013-06-30",89.4809],["2013-07-05",67.4476],["2013-07-10",85.0137],["2013-07-15",93.7962],["2013-07-20",84.9109],["2013-07-25",90.1661],["2013-07-30",96.6596],["2013-08-04",96.3655],["2013-08-09",92.4728],["2013-08-14",99.1213],["2013-08-19",102.784],["2013-08-24",108.8827],["2013-08-29",118.8356],["2013-09-03",129.1828],["2013-09-08",118.0574],["2013-09-13",127.4077],["2013-09-18",126.9038],["2013-09-23",122.8657],["2013-09-28",126.7966],["2013-10-03",117.5755],["2013-10-08",124.7665],["2013-10-13",132.4157],["2013-10-18",152.7756],["2013-10-23",204.6004],["2013-10-28",196.2747],["2013-11-02",204.7929],["2013-11-07",290.1242],["2013-11-12",354.6455],["2013-11-17",485.3366],["2013-11-22",802.9169],["2013-11-27",962.9106],["2013-12-02",1040.8082],["2013-12-07",703.7484],["2013-12-12",873.3248],["2013-12-17",682.6268],["2013-12-22",615.013],["2013-12-27",722.5706],["2014-01-01",752.4045],["2014-01-06",914.46],["2014-01-11",889.5558],["2014-01-16",815.8548],["2014-01-21",823.818],["2014-01-26",814.4994],["2014-01-31",803.2376],["2014-02-05",784.4737],["2014-02-10",685.4575],["2014-02-15",654.3771],["2014-02-20",563.7686],["2014-02-25",533.7076],["2014-03-02",558.5277],["2014-03-07",631.7703],["2014-03-12",634.6468],["2014-03-17",622.7602],["2014-03-22",564.7],["2014-03-27",483.164],["2014-04-01",479.0085],["2014-04-06",458.6335],["2014-04-11",421.9435],["2014-04-16",531.4818],["2014-04-21",498.0845],["2014-04-26",459.2267],["2014-05-01",460.1947],["2014-05-06",430.1282],["2014-05-11",439.1145],["2014-05-16",448.7422],["2014-05-21",493.9335],["2014-05-26",584.848],["2014-05-31",627.8924],["2014-06-05",661.5036],["2014-06-10",650.9366],["2014-06-15",589.7246],["2014-06-20",591.5315],["2014-06-25",562.2368],["2014-06-30",638.9461],["2014-07-05",630.4683],["2014-07-10",616.5228],["2014-07-15",621.9346],["2014-07-20",625.2487],["2014-07-25",601.5785],["2014-07-30",562.9146],["2014-08-04",587.6083],["2014-08-09",588.9785],["2014-08-14",505.1075],["2014-08-19",486.7944],["2014-08-24",508.4307],["2014-08-29",508.8666],["2014-09-03",473.9592],["2014-09-08",468.9755],["2014-09-13",477.961],["2014-09-18",426.8801],["2014-09-23",438.4918],["2014-09-28",375.55],["2014-10-03",357.6657],["2014-10-08",354.4073],["2014-10-13",391.9942],["2014-10-18",391.2932],["2014-10-23",357.3448],["2014-10-28",354.6538],["2014-11-02",324.2486],["2014-11-07",342.1333],["2014-11-12",422.5914],["2014-11-17",387.501],["2014-11-22",352.4555],["2014-11-27",369.5302],["2014-12-02",382.9468],["2014-12-07",376.6398],["2014-12-12",353.1906],["2014-12-17",320.2976],["2014-12-22",331.8426],["2014-12-27",315.9684],["2015-01-01",314.7765],["2015-01-06",287.5495],["2015-01-11",268.7555],["2015-01-16",207.5952],["2015-01-21",227.9042],["2015-01-26",273.9522],["2015-01-31",217.3322],["2015-02-05",217.0112],["2015-02-10",220.8882],["2015-02-15",234.4458],["2015-02-20",245.5308],["2015-02-25",238.2361],["2015-03-02",276.3226],["2015-03-07",276.4034],["2015-03-12",295.8003],["2015-03-17",285.2484],["2015-03-22",268.8994],["2015-03-27",247.3789],["2015-04-01",247.1858],["2015-04-06",256.3674],["2015-04-11",237.4091],["2015-04-16",228.4938],["2015-04-21",234.9394],["2015-04-26",220.5034],["2015-05-01",232.7466],["2015-05-06",229.4812],["2015-05-11",242.2498],["2015-05-16",235.8121],["2015-05-21",235.5538],["2015-05-26",236.7963],["2015-05-31",229.4505],["2015-06-05",224.7311],["2015-06-10",228.5885],["2015-06-15",236.791],["2015-06-20",245.5825],["2015-06-25",242.3479],["2015-06-30",263.8544],["2015-07-05",271.3025],["2015-07-10",285.5588],["2015-07-15",285.9229],["2015-07-20",279.1144],["2015-07-25",289.5076],["2015-07-30",288.2363],["2015-08-04",285.2866],["2015-08-09",266.342],["2015-08-14",266.3559],["2015-08-19",227.2183],["2015-08-24",211.9559],["2015-08-29",229.8262],["2015-09-03",227.1071],["2015-09-08",244.175],["2015-09-13",230.5488],["2015-09-18",233.1751],["2015-09-23",230.1324],["2015-09-28",240.0173],["2015-10-03",239.7359],["2015-10-08",243.0296],["2015-10-13",250.4713],["2015-10-18",263.4817],["2015-10-23",278.6128],["2015-10-28",304.4421],["2015-11-02",364.6166],["2015-11-07",386.5046],["2015-11-12",337.523],["2015-11-17",335.8498],["2015-11-22",323.717],["2015-11-27",359.2688],["2015-12-02",359.2224],["2015-12-07",395.3466],["2015-12-12",435.8557],["2015-12-17",456.2401],["2015-12-22",435.2684],["2015-12-27",422.7059],["2016-01-01",434.678],["2016-01-06",430.6779],["2016-01-11",449.0331],["2016-01-16",388.0712],["2016-01-21",409.2985],["2016-01-26",391.1429],["2016-01-31",366.3417],["2016-02-05",384.3984],["2016-02-10",379.0826],["2016-02-15",399.2676],["2016-02-20",440.1958],["2016-02-25",424.0909],["2016-03-01",432.8079],["2016-03-06",403.7052],["2016-03-11",419.5119],["2016-03-16",417.0241],["2016-03-21",411.6018],["2016-03-26",416.8231],["2016-03-31",415.9568],["2016-04-05",422.5014],["2016-04-10",421.9545],["2016-04-15",430.7244],["2016-04-20",442.6617],["2016-04-25",465.316],["2016-04-30",449.9005],["2016-05-05",449.3361],["2016-05-10",451.0797],["2016-05-15",460.8577],["2016-05-20",442.3968],["2016-05-25",450.5495],["2016-05-30",533.4931],["2016-06-04",574.2662],["2016-06-09",577.1017],["2016-06-14",684.9483],["2016-06-19",766.7671],["2016-06-24",664.127],["2016-06-29",638.5863],["2016-07-04",679.8425],["2016-07-09",651.9419],["2016-07-14",660.906],["2016-07-19",674.6604],["2016-07-24",661.394],["2016-07-29",657.5576],["2016-08-03",570.347],["2016-08-08",591.6293],["2016-08-13",585.3636],["2016-08-18",573.2632],["2016-08-23",582.6277],["2016-08-28",575.1052],["2016-09-02",576.8468],["2016-09-07",615.6598],["2016-09-12",607.7074],["2016-09-17",607.3814],["2016-09-22",595.5647],["2016-09-27",605.1516],["2016-10-02",611.7486],["2016-10-07",617.9057],["2016-10-12",636.5979],["2016-10-17",639.1375],["2016-10-22",654.5086],["2016-10-27",686.5233],["2016-11-01",730.5785],["2016-11-06",715.8969],["2016-11-11",715.7033],["2016-11-16",742.0501],["2016-11-21",736.507],["2016-11-26",734.6529],["2016-12-01",753.6749],["2016-12-06",759.1173],["2016-12-11",770.4962],["2016-12-16",782.2302],["2016-12-21",828.4837],["2016-12-26",903.2012],["2016-12-31",968.9706],["2017-01-05",1000.4981],["2017-01-10",906.4989],["2017-01-15",824.5471],["2017-01-20",895.1745],["2017-01-25",895.69],["2017-01-30",920.3133],["2017-02-04",1033.786],["2017-02-09",982.7519],["2017-02-14",1012.2135],["2017-02-19",1058.7864],["2017-02-24",1185.4889],["2017-03-01",1228.4597],["2017-03-06",1282.2547],["2017-03-11",1176.8229],["2017-03-16",1178.0208],["2017-03-21",1111.8183],["2017-03-26",962.9581],["2017-03-31",1081.7435],["2017-04-05",1135.8116],["2017-04-10",1211.6499],["2017-04-15",1175.5622],["2017-04-20",1235.8031],["2017-04-25",1279.8647],["2017-04-30",1381.9564],["2017-05-05",1529.8504],["2017-05-10",1782.499],["2017-05-15",1736.8828],["2017-05-20",2048.1177],["2017-05-25",2319.6014],["2017-05-30",2167.2645],["2017-06-04",2524.9938],["2017-06-09",2804.8723],["2017-06-14",2443.8245],["2017-06-19",2589.6422],["2017-06-24",2562.1891],["2017-06-29",2540.443],["2017-07-04",2599.7447],["2017-07-09",2506.1732],["2017-07-14",2214.8252],["2017-07-19",2257.0652],["2017-07-24",2755.1595],["2017-07-29",2706.4508],["2017-08-03",2789.7463],["2017-08-08",3425.6766],["2017-08-13",4063.8011],["2017-08-18",4108.5072],["2017-08-23",4146.9153],["2017-08-28",4379.7639],["2017-09-02",4595.02],["2017-09-07",4635.1119],["2017-09-12",4164.3194],["2017-09-17",3711.8562],["2017-09-22",3619.2137],["2017-09-27",4207.7875],["2017-10-02",4386.8757],["2017-10-07",4438.8559],["2017-10-12",5393.669],["2017-10-17",5590.4163],["2017-10-22",5996.5981],["2017-10-27",5771.945],["2017-11-01",6726.4118],["2017-11-06",6985.2638],["2017-11-11",6346.7214],["2017-11-16",7833.7044],["2017-11-21",8091.9981],["2017-11-26",9319.9033],["2017-12-01",10808.9583],["2017-12-06",13992.1323],["2017-12-11",16873.4978],["2017-12-16",19640.5139],["2017-12-21",15633.8337],["2017-12-26",15727.1455],["2017-12-31",13921.4806],["2018-01-05",16997.2274],["2018-01-10",14669.0883],["2018-01-15",13591.6962],["2018-01-20",12768.4046],["2018-01-25",11130.4649],["2018-01-30",9959.5467],["2018-02-04",8250.5269],["2018-02-09",8660.4535],["2018-02-14",9467.301],["2018-02-19",11139.3557],["2018-02-24",9686.6018],["2018-03-01",10923.6309],["2018-03-06",10677.0352],["2018-03-11",9513.5354],["2018-03-16",8376.9045],["2018-03-21",8879.5943],["2018-03-26",8171.1844],["2018-03-31",6922.2813],["2018-04-05",6798.4226],["2018-04-10",6816.7186],["2018-04-15",8342.2711],["2018-04-20",8839.5011],["2018-04-25",8855.5089],["2018-04-30",9228.7265],["2018-05-05",9795.9258],["2018-05-10",9037.5305],["2018-05-15",8488.4634],["2018-05-20",8511.4488],["2018-05-25",7425.3757],["2018-05-30",7374.669],["2018-06-04",7486.6532],["2018-06-09",7556.1717],["2018-06-14",6629.7701],["2018-06-19",6732.5088],["2018-06-24",6146.4872],["2018-06-29",6220.9137],["2018-07-04",6579.3334],["2018-07-09",6664.0241],["2018-07-14",6255.1125],["2018-07-19",7467.0343],["2018-07-24",8397.6165],["2018-07-29",8229.6058],["2018-08-03",7411.3443],["2018-08-08",6267.3887],["2018-08-13",6265.848],["2018-08-18",6399.2874],["2018-08-23",6516.409],["2018-08-28",7092.9738],["2018-09-02",7286.6678],["2018-09-07",6408.6536],["2018-09-12",6327.5364],["2018-09-17",6258.5949],["2018-09-22",6705.4761],["2018-09-27",6677.9005],["2018-10-02",6508.7209],["2018-10-07",6564.5683],["2018-10-12",6191.6772],["2018-10-17",6442.7307],["2018-10-22",6408.0336],["2018-10-27",6409.4053],["2018-11-01",6342.9775],["2018-11-06",6441.1452],["2018-11-11",6335.4142],["2018-11-16",5496.0162],["2018-11-21",4549.322],["2018-11-26",3700.286],["2018-12-01",4148.0737],["2018-12-06",3511.969],["2018-12-11",3352.5642],["2018-12-16",3195.4146],["2018-12-21",3839.0851],["2018-12-26",3807.6575],["2018-12-31",3687.1999],["2019-01-05",3798.614],["2019-01-10",3627.9035],["2019-01-15",3581.293],["2019-01-20",3538.3137],["2019-01-25",3561.3505],["2019-01-30",3437.8959],["2019-02-04",3411.388],["2019-02-09",3621.2681],["2019-02-14",3561.9164],["2019-02-19",3895.4352],["2019-02-24",3754.1838],["2019-03-01",3810.6327],["2019-03-06",3851.9984],["2019-03-11",3851.5689],["2019-03-16",3989.7961],["2019-03-21",3976.2739],["2019-03-26",3917.7634],["2019-03-31",4094.3178],["2019-04-05",5033.2255],["2019-04-10",5311.7416],["2019-04-15",5042.8977],["2019-04-20",5313.9733],["2019-04-25",5127.6732],["2019-04-30",5266.6182],["2019-05-05",5728.3517],["2019-05-10",6357.4635],["2019-05-15",8215.2068],["2019-05-20",7981.1394],["2019-05-25",8061.5918],["2019-05-30",8271.622],["2019-06-04",7649.9393],["2019-06-09",7634.0658],["2019-06-14",8698.0048],["2019-06-19",9285.0557],["2019-06-24",11004.2069],["2019-06-29",11944.3515],["2019-07-04",11177.0104],["2019-07-09",12579.1076],["2019-07-14",10283.0758],["2019-07-19",10532.2027],["2019-07-24",9792.7875],["2019-07-29",9504.1589],["2019-08-03",10810.4217],["2019-08-08",11938.2346],["2019-08-13",10867.0548],["2019-08-18",10331.31],["2019-08-23",10414.1442],["2019-08-28",9724.8],["2019-09-02",10377.3384],["2019-09-07",10494.507],["2019-09-12",10403.36],["2019-09-17",10195.6112],["2019-09-22",10047.0135],["2019-09-27",8186.7796],["2019-10-02",8362.5307],["2019-10-07",8226.0234],["2019-10-12",8323.7501],["2019-10-17",8072.4894],["2019-10-22",8029.2054],["2019-10-27",9558.156],["2019-11-01",9251.3813],["2019-11-06",9354.9334],["2019-11-11",8713.2079],["2019-11-16",8477.6902],["2019-11-21",7612.2775],["2019-11-26",7165.4377],["2019-12-01",7417.7272],["2019-12-06",7534.2084],["2019-12-11",7200.4644],["2019-12-16",6882.3958],["2019-12-21",7140.298],["2019-12-26",7194.6398],["2019-12-31",7167.3951],["2020-01-05",7345.5307],["2020-01-10",8129.8179],["2020-01-15",8811.4482],["2020-01-20",8636.2588],["2020-01-25",8344.7746],["2020-01-30",9508.921],["2020-02-04",9161.6272],["2020-02-09",10151.0832],["2020-02-14",10361.6157],["2020-02-19",9636.0023],["2020-02-24",9648.0079],["2020-02-29",8582.0903],["2020-03-05",9062.6158],["2020-03-10",7909.9279],["2020-03-15",5358.6107],["2020-03-20",6174.1495],["2020-03-25",6689.969],["2020-03-30",6436.9057],["2020-04-04",6859.9892],["2020-04-09",7299.5792],["2020-04-14",6875.5385],["2020-04-19",7150.2442],["2020-04-24",7506.4433],["2020-04-29",8761.8372],["2020-05-04",8881.9543],["2020-05-09",9577.3389],["2020-05-14",9801.2695],["2020-05-19",9754.2015],["2020-05-24",8806.2307],["2020-05-29",9432.4133],["2020-06-03",9642.2734],["2020-06-08",9769.3424],["2020-06-13",9461.3338],["2020-06-18",9389.9908],["2020-06-23",9611.726],["2020-06-28",9108.0657],["2020-07-03",9066.6907],["2020-07-08",9434.568],["2020-07-13",9236.6225],["2020-07-18",9175.9053],["2020-07-23",9609.1667],["2020-07-28",10944.613],["2020-08-02",11094.0207],["2020-08-07",11598.9691],["2020-08-12",11575.5125],["2020-08-17",12315.7624],["2020-08-22",11682.2892],["2020-08-27",11314.6737],["2020-09-01",11970.3649],["2020-09-06",10253.2999],["2020-09-11",10387.0207],["2020-09-16",10968.3205],["2020-09-21",10455.38],["2020-09-26",10742.0304],["2020-10-01",10606.6173],["2020-10-06",10596.3735],["2020-10-11",11378.2625],["2020-10-16",11338.9872],["2020-10-21",12848.4906],["2020-10-26",13080.6562],["2020-10-31",13807.2336],["2020-11-05",15606.4668],["2020-11-10",15319.2757],["2020-11-15",15986.755],["2020-11-20",18663.7819],["2020-11-25",18748.3937],["2020-11-30",19664.4076],["2020-12-05",19114.6331],["2020-12-10",18294.847],["2020-12-15",19432.5885],["2020-12-20",23528.5506],["2020-12-25",24669.1643],["2020-12-30",28844.6137],["2021-01-04",31802.1467],["2021-01-09",40370.6823],["2021-01-14",39045.5183],["2021-01-19",36250.1462],["2021-01-24",32216.1043],["2021-01-29",34166.1494],["2021-02-03",37578.3732],["2021-02-08",46121.9341],["2021-02-13",47208.625],["2021-02-18",51650.0699],["2021-02-23",48560.489],["2021-02-28",45359.4642],["2021-03-05",48800.8174],["2021-03-10",56116.0409],["2021-03-15",56121.1219],["2021-03-20",58247.8847],["2021-03-25",51547.1249],["2021-03-30",58684.5484],["2021-04-04",58202.1994],["2021-04-09",58051.7626],["2021-04-14",62869.4956],["2021-04-19",55798.1371],["2021-04-24",50279.9484],["2021-04-29",53567.0812],["2021-05-04",53724.1089],["2021-05-09",58288.4256],["2021-05-14",49997.3959],["2021-05-19",37642.52],["2021-05-24",38630.4091],["2021-05-29",34681.8184],["2021-06-03",39160.1504],["2021-06-08",33475.0489],["2021-06-13",38925.4194],["2021-06-18",35714.3121],["2021-06-23",33610.4968],["2021-06-28",34376.1885],["2021-07-03",34588.2243],["2021-07-08",32819.6595],["2021-07-13",32641.976],["2021-07-18",31707.7039],["2021-07-23",33439.5957],["2021-07-28",39939.194],["2021-08-02",39304.1863],["2021-08-07",44484.9006],["2021-08-12",44405.7483],["2021-08-17",44714.0968],["2021-08-22",49363.3161],["2021-08-27",49048.4756],["2021-09-01",48688.5376],["2021-09-06",52640.5884],["2021-09-11",45098.5916],["2021-09-16",47797.3283],["2021-09-21",40526.4894],["2021-09-26",43131.2942],["2021-10-01",48078.1316],["2021-10-06",55419.8004],["2021-10-11",57289.1865],["2021-10-16",60932.0632],["2021-10-21",62373.8856],["2021-10-26",60393.9803],["2021-10-31",61432.9701],["2021-11-05",61005.8408],["2021-11-10",64756.078],["2021-11-15",63753.5032],["2021-11-20",59749.4738],["2021-11-25",59008.6555],["2021-11-30",57097.0128],["2021-12-05",49327.0936],["2021-12-10",47437.229],["2021-12-15",48830.6224],["2021-12-20",46954.7635],["2021-12-25",50590.4509],["2021-12-30",47102.463],["2022-01-04",45905.9611],["2022-01-09",41886.4986],["2022-01-14",43102.6476],["2022-01-19",41787.722],["2022-01-24",36659.7252],["2022-01-29",38088.2912],["2022-02-03",37057.6522],["2022-02-08",44167.4448],["2022-02-13",42195.5947],["2022-02-18",40044.2205],["2022-02-23",37308.2687],["2022-02-28",43179.2545],["2022-03-05",39383.8848],["2022-03-10",39482.2585],["2022-03-15",39356.8139],["2022-03-20",41294.7235],["2022-03-25",44347.0343],["2022-03-30",47123.2971],["2022-04-04",46663.0042],["2022-04-09",42680.9947],["2022-04-14",39916.4964],["2022-04-19",41489.6638],["2022-04-24",39511.6457],["2022-04-29",38609.5059],["2022-05-04",39641.8522],["2022-05-09",30457.9218],["2022-05-14",30051.9358],["2022-05-19",30257.8852],["2022-05-24",29643.6838],["2022-05-29",29430.069],["2022-06-03",29662.671],["2022-06-08",30228.4647],["2022-06-13",22316.257],["2022-06-18",19013.8673],["2022-06-23",21097.1028],["2022-06-28",20263.2196],["2022-07-03",19276.5147],["2022-07-08",21813.7871],["2022-07-13",20155.5278],["2022-07-18",22305.7066],["2022-07-23",22484.4592],["2022-07-28",23838.5569],["2022-08-02",23031.4269],["2022-08-07",23153.6585],["2022-08-12",24396.3088],["2022-08-17",23336.3489],["2022-08-22",21301.0841],["2022-08-27",20043.9909],["2022-09-01",20105.4626],["2022-09-06",18846.1505],["2022-09-11",21732.7706],["2022-09-16",19741.5776],["2022-09-21",18506.7607],["2022-09-26",19201.1317],["2022-10-01",19311.8616],["2022-10-06",19950.5478],["2022-10-11",19039.2821],["2022-10-16",19261.7498],["2022-10-21",19174.8763],["2022-10-26",20797.0308],["2022-10-31",20490.8582],["2022-11-05",21283.4716],["2022-11-10",17541.5603],["2022-11-15",16855.5938],["2022-11-20",16246.8447],["2022-11-25",16522.3888],["2022-11-30",17176.8987],["2022-12-05",16961.3518],["2022-12-10",17124.2147],["2022-12-15",17344.0545],["2022-12-20",16901.8169],["2022-12-25",16824.839],["2022-12-30",16593.6888],["2023-01-04",16848.366],["2023-01-09",17182.3199],["2023-01-14",21010.9227],["2023-01-19",21071.8334],["2023-01-24",22611.1269],["2023-01-29",23774.9964],["2023-02-03",23445.8132],["2023-02-08",22937.5799],["2023-02-13",21798.7157],["2023-02-18",24636.5266],["2023-02-23",23910.0342],["2023-02-28",23145.9491],["2023-03-05",22419.8171],["2023-03-10",20240.4067],["2023-03-15",24409.8018],["2023-03-20",27834.3361],["2023-03-25",27488.9549],["2023-03-30",28021.5583],["2023-04-04",28113.9585],["2023-04-09",28357.8073],["2023-04-14",30458.97],["2023-04-19",28796.7441],["2023-04-24",27520.1997],["2023-04-29",29221.5145],["2023-05-04",28855.8574],["2023-05-09",27642.4281],["2023-05-14",26918.2616],["2023-05-19",26889.5036],["2023-05-24",26341.4306],["2023-05-29",27765.0729],["2023-06-03",27079.4085],["2023-06-08",26521.6936],["2023-06-13",25880.86],["2023-06-18",26353.9627],["2023-06-23",30638.3538],["2023-06-28",30104.0433],["2023-07-03",31135.3576],["2023-07-08",30263.6196],["2023-07-13",31434.7355],["2023-07-18",29835.7474],["2023-07-23",30066.5724],["2023-07-28",29316.3131],["2023-08-02",29143.152],["2023-08-07",29164.3586],["2023-08-12",29415.7339],["2023-08-17",26660.5627],["2023-08-22",25978.2097],["2023-08-27",26086.3613],["2023-09-01",25802.7885],["2023-09-06",25754.7903],["2023-09-11",25135.0394],["2023-09-16",26555.6361],["2023-09-21",26571.5953],["2023-09-26",26194.5379],["2023-10-01",27950.1454],["2023-10-06",27941.9634],["2023-10-11",26828.1726],["2023-10-16",28506.7937],["2023-10-21",29922.5464],["2023-10-26",34181.4923],["2023-10-31",34636.4265],["2023-11-05",35105.042],["2023-11-10",37367.4944],["2023-11-15",37840.5535],["2023-11-20",37516.0504],["2023-11-25",37800.1261],["2023-11-30",37712.7115],["2023-12-05",44067.0055],["2023-12-10",43732.7121],["2023-12-15",41978.097],["2023-12-20",43605.1556],["2023-12-25",43623.7504],["2023-12-30",42204.4918],["2024-01-04",44250.7453],["2024-01-09",46084.0058],["2024-01-14",41888.1513],["2024-01-19",41606.8535],["2024-01-24",40101.8569],["2024-01-29",43218.3471],["2024-02-03",42982.379],["2024-02-08",45332.0916],["2024-02-13",49628.0942],["2024-02-18",52148.0645],["2024-02-23",50789.1432],["2024-02-28",62460.7406],["2024-03-04",68091.8388],["2024-03-09",68502.5053],["2024-03-14",71505.2729],["2024-03-19",61969.3075],["2024-03-24",67289.5658],["2024-03-29",69917.043],["2024-04-03",66130.2162],["2024-04-08",71712.7973],["2024-04-13",64551.6483],["2024-04-18",63510.145],["2024-04-23",66385.3003],["2024-04-28",62978.577],["2024-05-03",62983.6555],["2024-05-08",61079.2744],["2024-05-13",62886.9394],["2024-05-18",66977.6007],["2024-05-23",67758.7307],["2024-05-28",68342.8204],["2024-06-02",67805.4856],["2024-06-07",69338.1573],["2024-06-12",68213.8347],["2024-06-17",66483.8785],["2024-06-22",64258.1355],["2024-06-27",61569.9234],["2024-07-02",62028.617],["2024-07-07",56112.5726],["2024-07-12",57859.1203],["2024-07-17",64201.3708],["2024-07-22",67535.1977],["2024-07-27",68077.3731],["2024-08-01",65178.0555],["2024-08-06",56047.4713],["2024-08-11",58836.1044],["2024-08-16",58927.2765],["2024-08-21",61133.0256],["2024-08-26",62983.4428],["2024-08-31",58959.9263],["2024-09-05",56112.9529],["2024-09-10",57664.4998],["2024-09-15",59129.9198],["2024-09-20",63153.9518],["2024-09-25",63059.6269],["2024-09-30",63260.0425],["2024-10-05",62030.4539],["2024-10-10",60221.1173],["2024-10-15",66933.9748],["2024-10-20",69012.3532],["2024-10-25",66261.5377],["2024-10-30",72450.2844],["2024-11-04",67779.097],["2024-11-09",76799.2527],["2024-11-14",87204.257],["2024-11-19",92254.1386],["2024-11-24",97980.2083],["2024-11-29",97398.9417],["2024-12-04",98920.2528],["2024-12-09",97390.1989],["2024-12-14",101366.8717],["2024-12-19",97697.0458],["2024-12-24",98637.7331],["2024-12-29",93457.5783],["2025-01-03",98120.6847],["2025-01-08",95039.2809],["2025-01-13",94375.7299],["2025-01-18",104398.1563],["2025-01-23",104184.6167],["2025-01-28",101138.1441],["2025-02-02",97424.7809],["2025-02-07",96384.111],["2025-02-12",97756.4977],["2025-02-17",95790.511],["2025-02-22",96605.7091],["2025-02-27",84625.4191],["2025-03-04",87323.6907],["2025-03-09",80647.7964],["2025-03-14",84105.8336],["2025-03-19",86774.2351],["2025-03-24",87322.5719],["2025-03-29",82497.1792],["2025-04-03",82931.6974],["2025-04-08",76351.4295],["2025-04-13",83568.9544],["2025-04-18",84434.7727],["2025-04-23",93695.7405],["2025-04-28",95066.0212],["2025-05-03",95943.6114],["2025-05-08",103069.5393],["2025-05-13",104145.7118],["2025-05-18",106015.6898],["2025-05-23",107291.889],["2025-05-28",107895.4024],["2025-06-02",105899.6969],["2025-06-07",105685.2504],["2025-06-12",105998.9858],["2025-06-17",104628.3965],["2025-06-22",100899.2342],["2025-06-27",107090.9591],["2025-07-02",108927.1345],["2025-07-07",108249.401],["2025-07-12",117382.3725],["2025-07-17",119501.6638],["2025-07-22",120068.0058],["2025-07-27",119438.1642],["2025-08-01",113282.1443],["2025-08-06",115034.6787],["2025-08-11",118742.043],["2025-08-16",117462.4268],["2025-08-21",112347.1023],["2025-08-26",111895.2955],["2025-08-31",108316.4469],["2025-09-05",110711.2295],["2025-09-10",113930.7484],["2025-09-15",115420.9318],["2025-09-20",115753.166],["2025-09-25",109166.348],["2025-09-30",113971.7428],["2025-10-05",123523.7683],["2025-10-10",113754.8523],["2025-10-15",110862.8725],["2025-10-20",110640.2495],["2025-10-25",111614.5359],["2025-10-30",108019.7238],["2025-11-04",101349.7372],["2025-11-09",104685.5454],["2025-11-14",94503.2576],["2025-11-19",91320.4811],["2025-11-24",88377.6024],["2025-11-29",90842.0738],["2025-12-04",92205.593],["2025-12-09",92808.8518],["2025-12-14",88096.3826],["2025-12-19",88168.0738],["2025-12-24",87625.6708],["2025-12-29",87133.5104],["2026-01-03",90598.1302],["2026-01-08",91096.9162],["2026-01-13",95304.4983],["2026-01-18",94261.3294],["2026-01-23",89439.7719],["2026-01-28",89177.7893],["2026-02-02",78716.6018],["2026-02-07",69166.2594],["2026-02-12",66221.5443],["2026-02-17",67471.0508],["2026-02-22",67550.0241],["2026-02-27",65864.1358],["2026-03-04",72667.4631],["2026-03-09",68528.5385],["2026-03-14",71136.2179],["2026-03-19",69948.9048],["2026-03-24",70610.0187],["2026-03-29",65966.7524],["2026-04-03",66891.7422],["2026-04-08",71085.0584],["2026-04-13",74632.7456],["2026-04-18",75792.0638],["2026-04-23",78233.6837],["2026-04-28",76295.5311],["2026-05-03",78649.1733],["2026-05-08",80179.6923],["2026-05-13",79291.911],["2026-05-18",76975.9112],["2026-05-23",76619.8666],["2026-05-28",73500.5305],["2026-06-02",66540.6927],["2026-06-07",63158.254],["2026-06-12",63475.6376],["2026-06-17",64400.7251],["2026-06-22",63923.5749],["2026-06-27",59955.566],["2026-07-02",61438.1894],["2026-07-07",63458.1205],["2026-07-12",63752.2717],["2026-07-17",63915.9181],["2026-07-22",65983.186],["2026-07-27",63718.2437],["2026-08-01",62751.8791],["2026-08-06",64212.2673],["2026-08-09",64864.9273]];
+  const ranges = {
+    all: ['2013-01-01','2026-08-10'],
+    '2013-2018': ['2013-01-01','2018-12-31'],
+    '2019-2021': ['2019-01-01','2021-12-31'],
+    '2022': ['2022-01-01','2022-12-31'],
+    '2023': ['2023-01-01','2023-12-31'],
+    '2024': ['2024-01-01','2024-12-31'],
+    '2025-2026': ['2025-01-01','2026-08-10']
+  };
+  const svg = root.querySelector('.timeline-svg');
+  const plot = root.querySelector('.timeline-plot');
+  const tooltip = root.querySelector('.timeline-tooltip');
+  const detail = root.querySelector('.timeline-detail');
+  let activeRange = 'all';
+  let selectedKey = '';
+  let resizeFrame = 0;
+
+  const day = value => Date.parse(value + 'T00:00:00Z');
+  const esc = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const money = value => value >= 1000 ? '$' + Math.round(value / 1000) + 'k' : '$' + Math.round(value);
+  const shape = (category, x, y, r) => {
+    if (category === '民事') return `<rect class="event-shape" x="${x-r}" y="${y-r}" width="${r*2}" height="${r*2}"/>`;
+    if (category === '政策/判决') return `<path class="event-shape" d="M ${x} ${y-r-1} L ${x+r+1} ${y} L ${x} ${y+r+1} L ${x-r-1} ${y} Z"/>`;
+    if (category === '线下暴力') return `<path class="event-shape" d="M ${x} ${y-r-2} L ${x+r+2} ${y+r+1} L ${x-r-2} ${y+r+1} Z"/>`;
+    return `<circle class="event-shape" cx="${x}" cy="${y}" r="${r}"/>`;
+  };
+
+  function render() {
+    const bounds = ranges[activeRange];
+    const t0 = day(bounds[0]);
+    const t1 = day(bounds[1]);
+    const width = Math.max(320, Math.floor(plot.getBoundingClientRect().width || 1100));
+    const compact = width < 700;
+    const margin = {left: compact ? 48 : 70, right: compact ? 12 : 24};
+    const inner = width - margin.left - margin.right;
+    const filteredEvents = events.filter(e => day(e.date) >= t0 && day(e.date) <= t1);
+    const filteredPrices = prices.filter(p => day(p[0]) >= t0 && day(p[0]) <= t1);
+    const laneCount = activeRange === 'all' ? 12 : (filteredEvents.length > 16 ? 12 : Math.max(6, Math.min(10, filteredEvents.length)));
+    const laneHeight = compact ? 31 : 38;
+    const railTop = compact ? 32 : 38;
+    const railBottom = railTop + laneCount * laneHeight;
+    const priceTop = railBottom + (compact ? 38 : 48);
+    const priceBottom = priceTop + (compact ? 190 : 240);
+    const height = priceBottom + 42;
+    const x = value => margin.left + (day(value) - t0) / (t1 - t0) * inner;
+    const logMin = Math.log10(Math.max(10, Math.min(...filteredPrices.map(p => p[1])) * .72));
+    const logMax = Math.log10(Math.max(...filteredPrices.map(p => p[1])) * 1.32);
+    const y = value => priceBottom - (Math.log10(value) - logMin) / (logMax - logMin) * (priceBottom - priceTop);
+    const yearStart = new Date(t0).getUTCFullYear();
+    const yearEnd = new Date(t1).getUTCFullYear();
+    const showLabels = activeRange !== 'all' && !compact;
+    const markerRadius = activeRange === 'all' ? (compact ? 10.5 : 14) : (compact ? 12 : 15);
+    const laneGap = activeRange === 'all' ? markerRadius * 2.25 : (showLabels ? 132 : markerRadius * 2.4);
+    const lastX = Array(laneCount).fill(-1e9);
+    const laneItems = filteredEvents.map(event => {
+      const eventX = x(event.date);
+      let lane = lastX.findIndex(value => eventX - value >= laneGap);
+      if (lane < 0) lane = lastX.indexOf(Math.min(...lastX));
+      lastX[lane] = eventX;
+      return {...event, x:eventX, lane, y:railTop + lane * laneHeight + markerRadius};
+    });
+
+    const parts = [`<title id="btc-timeline-title">BTC 价格与重大 Crypto 法律事件时间轴</title>`,
+      `<desc id="btc-timeline-desc">当前范围 ${bounds[0]} 至 ${bounds[1]}，显示 ${filteredEvents.length} 个事件。圆形为刑事，方形为民事，菱形为政策或判决，三角形为线下暴力或涉 Crypto 可疑死亡。</desc>`];
+    for (let year = yearStart; year <= yearEnd + 1; year++) {
+      const stamp = day(`${year}-01-01`);
+      if (stamp < t0 || stamp > t1) continue;
+      const gx = x(`${year}-01-01`);
+      parts.push(`<line class="timeline-grid" x1="${gx}" y1="18" x2="${gx}" y2="${priceBottom}"/>`);
+      parts.push(`<text class="axis-label" x="${gx + 4}" y="18" font-size="${compact ? 10 : 12}">${year}</text>`);
+    }
+    parts.push(`<line class="timeline-rule" x1="${margin.left}" y1="${priceTop}" x2="${width-margin.right}" y2="${priceTop}"/>`);
+
+    const visibleTicks = [10,100,1000,10000,100000,1000000].filter(v => Math.log10(v) >= logMin && Math.log10(v) <= logMax);
+    visibleTicks.forEach(tick => {
+      const gy = y(tick);
+      parts.push(`<line class="timeline-grid" x1="${margin.left}" y1="${gy}" x2="${width-margin.right}" y2="${gy}"/>`);
+      parts.push(`<text class="axis-label" x="${margin.left-8}" y="${gy+4}" text-anchor="end" font-size="${compact ? 10 : 12}">${money(tick)}</text>`);
+    });
+
+    const pricePath = filteredPrices.map((point, index) => `${index ? 'L' : 'M'} ${x(point[0]).toFixed(1)} ${y(point[1]).toFixed(1)}`).join(' ');
+    parts.push(`<path class="price-line" d="${pricePath}"/>`);
+    const lastPrice = filteredPrices[filteredPrices.length - 1];
+    if (lastPrice) {
+      const lx = x(lastPrice[0]);
+      const ly = y(lastPrice[1]);
+      parts.push(`<circle class="price-end" cx="${lx}" cy="${ly}" r="4"/>`);
+      parts.push(`<text class="price-label" x="${Math.min(lx+8,width-62)}" y="${ly-8}" font-size="${compact ? 11 : 13}" font-weight="500">${money(lastPrice[1])}</text>`);
+    }
+
+    laneItems.forEach(event => {
+      const key = event.date + '|' + event.profile;
+      const selected = key === selectedKey ? ' is-selected' : '';
+      const profileSize = event.profile.length >= 5 ? (compact ? 6.5 : 8) : (compact ? 8 : 10);
+      const labelAnchor = event.x > width - 190 ? 'end' : 'start';
+      const labelX = event.x + (labelAnchor === 'end' ? -markerRadius - 7 : markerRadius + 7);
+      const shortDate = event.date.slice(5);
+      parts.push(`<a class="event-link${selected}" href="${esc(event.url)}" target="_blank" rel="noopener noreferrer" data-key="${esc(key)}" data-x="${event.x}" data-y="${event.y}" aria-label="${esc(event.date + ' ' + event.label + ' ' + event.category)}">`);
+      parts.push(`<title>${esc(event.date + ' · ' + event.label + ' · ' + event.category)}</title>`);
+      parts.push(`<line class="event-connector" x1="${event.x}" y1="${event.y+markerRadius+2}" x2="${event.x}" y2="${priceTop}"/>`);
+      parts.push(shape(event.category,event.x,event.y,markerRadius));
+      parts.push(`<text class="avatar-text" x="${event.x}" y="${event.y+profileSize*.34}" text-anchor="middle" font-size="${profileSize}">${esc(event.profile)}</text>`);
+      if (showLabels) {
+        parts.push(`<text class="event-label" x="${labelX}" y="${event.y-2}" text-anchor="${labelAnchor}" font-size="12">`);
+        parts.push(`<tspan x="${labelX}" dy="0">${esc(shortDate)}</tspan><tspan x="${labelX}" dy="14">${esc(event.label.length > 15 ? event.label.slice(0,15)+'…' : event.label)}</tspan></text>`);
+      }
+      parts.push(`</a>`);
+    });
+
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.innerHTML = parts.join('');
+    bindEvents();
+  }
+
+  function showTooltip(link) {
+    const event = events.find(item => item.date + '|' + item.profile === link.dataset.key);
+    if (!event) return;
+    tooltip.hidden = false;
+    tooltip.textContent = `${event.date} · ${event.label} · ${event.category}`;
+    const width = plot.getBoundingClientRect().width;
+    const left = Math.max(90, Math.min(width - 90, Number(link.dataset.x)));
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = Number(link.dataset.y) + 'px';
+  }
+
+  function hideTooltip() { tooltip.hidden = true; }
+
+  function selectEvent(link) {
+    const event = events.find(item => item.date + '|' + item.profile === link.dataset.key);
+    if (!event) return;
+    selectedKey = link.dataset.key;
+    const linkNote = event.cryptoLink ? ` · Crypto 关联：${esc(event.cryptoLink)}` : '';
+    detail.innerHTML = `<div><strong>${esc(event.date)} · ${esc(event.label)}</strong><div class="text-muted">${esc(event.category)} / ${esc(event.phase)}${linkNote}</div><div>${esc(event.summary)}${event.status ? '；' + esc(event.status) : ''}</div></div><a href="${esc(event.url)}" target="_blank" rel="noopener noreferrer">查看来源 ↗</a>`;
+    render();
+  }
+
+  function bindEvents() {
+    svg.querySelectorAll('.event-link').forEach(link => {
+      link.addEventListener('pointerenter', () => showTooltip(link));
+      link.addEventListener('pointerleave', hideTooltip);
+      link.addEventListener('focus', () => showTooltip(link));
+      link.addEventListener('blur', hideTooltip);
+      link.addEventListener('click', event => { event.preventDefault(); selectEvent(link); });
+    });
+  }
+
+  root.querySelectorAll('.timeline-range').forEach(button => {
+    button.addEventListener('click', () => {
+      activeRange = button.dataset.range;
+      selectedKey = '';
+      root.querySelectorAll('.timeline-range').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      detail.innerHTML = `<span class="text-muted">当前显示 ${events.filter(e => day(e.date) >= day(ranges[activeRange][0]) && day(e.date) <= day(ranges[activeRange][1])).length} 个节点；点击头像查看事件与来源。</span>`;
+      render();
+    });
+  });
+
+  const observer = new ResizeObserver(() => {
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(render);
+  });
+  observer.observe(plot);
+  render();
+})();
+</script>
+</body>
+</html>
