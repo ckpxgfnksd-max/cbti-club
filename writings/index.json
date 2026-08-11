@@ -6,7 +6,13 @@
       "id": "crypto-crime-and-enforcement",
       "publishedAt": "2026-08-10",
       "primaryLang": "zh",
-      "tags": ["crypto", "deep-research", "crime", "enforcement", "bitcoin"],
+      "tags": [
+        "crypto",
+        "deep-research",
+        "crime",
+        "enforcement",
+        "bitcoin"
+      ],
       "title": {
         "zh": "Crypto 重大刑事、民事事件与 BTC（2013–2026）"
       },
@@ -38,7 +44,12 @@
       "id": "three-body-problem-of-crypto-dominance",
       "publishedAt": "2026-04-21",
       "primaryLang": "en",
-      "tags": ["macro", "industry-structure", "public-goods", "tokenization"],
+      "tags": [
+        "macro",
+        "industry-structure",
+        "public-goods",
+        "tokenization"
+      ],
       "title": {
         "en": "The Three-Body Problem of Crypto Dominance",
         "zh": "加密行业霸权的三体问题"
@@ -74,7 +85,12 @@
       "id": "from-tragedy-of-commons-to-compute-dollar",
       "publishedAt": "2026-03-22",
       "primaryLang": "zh",
-      "tags": ["macro", "stablecoin", "ai", "rwa"],
+      "tags": [
+        "macro",
+        "stablecoin",
+        "ai",
+        "rwa"
+      ],
       "title": {
         "zh": "从公地悲剧到算力美元：币圈的救赎之路？"
       },
@@ -100,7 +116,11 @@
       "id": "fallacy-of-composition",
       "publishedAt": "2026-03-15",
       "primaryLang": "en",
-      "tags": ["crypto", "tokenomics", "macro"],
+      "tags": [
+        "crypto",
+        "tokenomics",
+        "macro"
+      ],
       "title": {
         "en": "Everyone Is Doing the Right Thing. But The Industry Is Dying.",
         "zh": "每个人都在做正确的事，但行业在死去"
@@ -128,6 +148,35 @@
           "lang": "zh",
           "platform": "x",
           "url": "https://x.com/ChaseWang/status/2033309796141551870",
+          "label": "在 X 上阅读"
+        }
+      ]
+    },
+    {
+      "id": "ai-btc",
+      "publishedAt": "2026-08-09",
+      "primaryLang": "zh",
+      "tags": [
+        "deep-research",
+        "x-article"
+      ],
+      "title": {
+        "zh": "AI 泡沫焦虑，可能走向 BTC 的流动性交易"
+      },
+      "excerpt": {
+        "zh": "AI bubble 以前，市场更多是在问 equity 问题：AI 股票贵不贵，earnings 能不能追上，capex 会不会压低利润率。Hayes 在 Situationship 里换了一个角度。他没有沿着普通的 2000-style earnings story 往下讲，而是把注意力放到 credit-financed infrastructure cycle 上，甚至推到 2008-style credit story，并给出 BTC 到 $1 million 的预测。"
+      },
+      "channels": [
+        {
+          "lang": "zh",
+          "platform": "longform",
+          "url": "https://cbti.club/writings/ai-btc/",
+          "label": "在 cbti.club 阅读"
+        },
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2086302763164516555",
           "label": "在 X 上阅读"
         }
       ]
