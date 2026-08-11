@@ -3,6 +3,38 @@
   "version": 1,
   "items": [
     {
+      "id": "crypto-crime-and-enforcement",
+      "publishedAt": "2026-08-10",
+      "primaryLang": "zh",
+      "tags": ["crypto", "deep-research", "crime", "enforcement", "bitcoin"],
+      "title": {
+        "zh": "Crypto 重大刑事、民事事件与 BTC（2013–2026）"
+      },
+      "subtitle": {
+        "zh": "74 个案件、判决与线下暴力节点，拆开价格冲击、制度边界和个人安全"
+      },
+      "pullQuote": {
+        "zh": "犯罪公开与平台危机主要作用于价格，起诉与判决主要作用于制度边界，线下暴力主要作用于个人安全。"
+      },
+      "excerpt": {
+        "zh": "一份有来源、可复现的 Crypto 风险时间轴：49 个刑事与司法节点、13 个民事与监管节点、12 个线下暴力或可疑死亡节点，并用 BTC 的 1、7、30 日事件窗口区分真正的提款与信用冲击。结论不是“执法等于利空”，而是可提现性、资产负债表和核心基础设施是否突然失效。"
+      },
+      "channels": [
+        {
+          "lang": "zh",
+          "platform": "longform",
+          "url": "https://cbti.club/research/crypto-crime-timeline/",
+          "label": "在 cbti.club 阅读"
+        },
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2086757945337901517",
+          "label": "在 X 上阅读"
+        }
+      ]
+    },
+    {
       "id": "three-body-problem-of-crypto-dominance",
       "publishedAt": "2026-04-21",
       "primaryLang": "en",
