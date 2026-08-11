@@ -180,6 +180,35 @@
           "label": "在 X 上阅读"
         }
       ]
+    },
+    {
+      "id": "crypto-k",
+      "publishedAt": "2026-08-10",
+      "primaryLang": "zh",
+      "tags": [
+        "deep-research",
+        "x-article"
+      ],
+      "title": {
+        "zh": "Crypto 的刑事风险，已经从 K 线走到家门口"
+      },
+      "excerpt": {
+        "zh": "我把 2013 至 2026 年 74 个重大 Crypto 刑事、民事、政策和线下暴力节点放进一张 BTC 时间轴。第一眼最反直觉：执法消息通常没把 BTC 砸下去，真正的大跌几乎都发生在提款、资产负债表或核心基础设施突然失效的时候。"
+      },
+      "channels": [
+        {
+          "lang": "zh",
+          "platform": "longform",
+          "url": "https://cbti.club/writings/crypto-k/",
+          "label": "在 cbti.club 阅读"
+        },
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2086757945337901517",
+          "label": "在 X 上阅读"
+        }
+      ]
     }
   ]
 }
