@@ -50,6 +50,8 @@ function showScreen(id) {
   });
   preserved.push('screen-' + id);
   document.body.className = preserved.join(' ');
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.setAttribute('content', id === 'chase' ? '#e9ebe5' : '#050506');
   // Pause the bg video on screens where it adds nothing (saves battery + removes distraction).
   if (typeof BgVideo !== 'undefined') {
     var quiet = id === 'result' || id === 'chase' || id === 'paper' || id === 'essay-three-body' || id === 'node';

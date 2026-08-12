@@ -24,10 +24,19 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=31">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=33">
 </head>
 <body>
+
+  <!--
+    THESIS: Chase's public work is one connected system: behavior becomes markets, code becomes institutions, and workflows compound. Refuses the generic dark-editorial portfolio.
+    OWN-WORLD: cool daylight canvas, drafting-blue fields, verification-lime marks, square rules, and a linked three-node field map.
+    STORY: identify Chase, see the connective thesis, inspect the writing and tools, then follow or return to CBTI.
+    FIRST VIEWPORT: oversized name and three-line thesis on the left; an interactive field map on the right; work and social actions remain visible without scrolling.
+    FORM: public research instrument; code-led; seed key CBTI-CHASE-2026-08.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
+  -->
 
   <!-- ═══ Background video (landing + quiz only; hidden on result) ═══
        bg.mp4 is pre-baked as forward+reverse concatenated, so native `loop`
@@ -186,20 +195,71 @@
 
       <!-- Hero -->
       <header class="chase-hero">
-        <span class="landing-eyebrow">crypto · defi · token design</span>
-        <h1 class="chase-title">
-          <span class="blur-in">Chase</span> <span class="blur-in"><em>Wang</em></span>
-        </h1>
-        <p class="chase-tagline">
-          Ex-Binance listing. Writing on tokenomics, DeFi, and why blockchain ledgers are institutions, not databases.
-        </p>
+        <nav class="chase-nav" aria-label="Chase profile sections">
+          <a class="chase-nav-mark" href="#landing">CBTI / CHASE</a>
+          <div class="chase-nav-links">
+            <a href="#chase-writing">Writing</a>
+            <a href="#chase-tools">Tools</a>
+            <a href="#chase-systems">Systems</a>
+          </div>
+        </nav>
+
+        <div class="chase-hero-layout">
+          <div class="chase-hero-copy">
+            <p class="chase-status"><span aria-hidden="true"></span>Independent research &amp; open systems</p>
+            <h1 class="chase-title" aria-label="Chase Wang">
+              <span>Chase</span>
+              <span aria-hidden="true">Wang</span>
+            </h1>
+            <p class="chase-thesis">
+              <span>Behavior becomes markets.</span>
+              <span>Code becomes institutions.</span>
+              <span>Workflows compound.</span>
+            </p>
+            <p class="chase-tagline">
+              Ex-Binance listing. I write and build across token design, DeFi infrastructure, and AI workflows.
+            </p>
+            <div class="chase-hero-actions">
+              <a class="chase-primary-action" href="#chase-writing">
+                <span>Explore selected work</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a class="chase-inline-action" href="https://x.com/ChaseWang" target="_blank" rel="noopener">Follow on X <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+            </div>
+          </div>
+
+          <div class="chase-system-map" role="img" aria-label="A linked field map connecting CBTI behavior research, Crypto-Body institutional research, and the AI workflow field map.">
+            <div class="chase-map-meta"><span>FIELD / 001</span><span>3 SIGNALS · 1 SYSTEM</span></div>
+            <svg class="chase-map-lines" viewBox="0 0 520 520" aria-hidden="true">
+              <path class="map-orbit" d="M77 329C36 204 135 74 270 70c132-4 233 106 210 239-22 129-151 206-272 159C145 443 98 395 77 329Z"/>
+              <path class="map-link" d="M122 174 261 262 397 144M261 262l91 154M261 262 122 174M261 262 397 144"/>
+              <circle class="map-pulse" cx="261" cy="262" r="72"/>
+              <circle cx="261" cy="262" r="5"/>
+            </svg>
+            <a class="chase-map-node chase-map-node-behavior" href="#landing">
+              <span>BEHAVIOR</span><strong>CBTI</strong><small>24 personas</small>
+            </a>
+            <a class="chase-map-node chase-map-node-code" href="#paper">
+              <span>CODE</span><strong>Crypto-Body</strong><small>ledger → institution</small>
+            </a>
+            <a class="chase-map-node chase-map-node-agents" href="/landscape">
+              <span>WORKFLOWS</span><strong>Field Map</strong><small>practice → system</small>
+            </a>
+            <div class="chase-map-core" aria-hidden="true"><span>JUDGMENT</span><strong>×</strong></div>
+          </div>
+        </div>
+
+        <div class="chase-evidence-strip" aria-label="Areas of work">
+          <div><span>Practice</span><strong>Token design &amp; DeFi</strong></div>
+          <div><span>Research</span><strong>Ledgers as institutions</strong></div>
+          <div><span>Systems</span><strong>AI workflows that compound</strong></div>
+        </div>
       </header>
 
       <!-- ─── § Socials ─── -->
-      <section class="chase-section chase-socials-section">
+      <section class="chase-section chase-socials-section" id="chase-socials">
         <header class="chase-section-header">
-          <span class="section-eyebrow">§ 01 · Socials</span>
-          <h2 class="section-title">Where to find me</h2>
+          <h2 class="section-title">Follow the work</h2>
         </header>
         <div class="socials-grid">
           <a class="social-card" href="https://x.com/ChaseWang" target="_blank" rel="noopener">
@@ -246,15 +306,14 @@
       </section>
 
       <!-- ─── § Articles & Papers ─── -->
-      <section class="chase-section chase-paper-section">
+      <section class="chase-section chase-paper-section" id="chase-writing">
         <header class="chase-section-header">
-          <span class="section-eyebrow">§ 02 · Articles &amp; Papers</span>
-          <h2 class="section-title">Selected writing</h2>
+          <h2 class="section-title">Ideas, in public</h2>
         </header>
         <span class="subsection-eyebrow">Academic paper · 2025</span>
-        <div class="paper-card">
+        <div class="paper-card paper-card-feature">
           <div class="paper-authors">Mun How Mong · Shuyang Shi · Chase Wang</div>
-          <h2 class="paper-title">What Is a Crypto-Body? <span class="paper-title-sub">Rethinking the Role of the Blockchain Ledger</span></h2>
+          <h3 class="paper-title">What Is a Crypto&#8209;Body? <span class="paper-title-sub">Rethinking the Role of the Blockchain Ledger</span></h3>
           <p class="paper-abstract">
             Cryptocurrencies are often portrayed as volatile, lightly regulated, or tools for illicit activity. This view overlooks a deeper innovation: the <em>Crypto-Body</em> — a self-sustaining digital ledger system that operates as a programmable institutional substrate. The paper proposes five criteria for when a blockchain qualifies as a Crypto-Body, and argues that Ethereum, post-merge, is the most complete specimen.
           </p>
@@ -289,9 +348,9 @@
         </div>
 
         <span class="subsection-eyebrow">Field map · 2026</span>
-        <div class="paper-card">
+        <div class="paper-card paper-card-field-map">
           <div class="paper-authors">Chase Wang · 2026-05</div>
-          <h2 class="paper-title">AI Workflow <span class="paper-title-sub">Practitioner's Field Map</span></h2>
+          <h3 class="paper-title">AI Workflow <span class="paper-title-sub">Practitioner's Field Map</span></h3>
           <p class="paper-abstract">
             36 entries across 6 clusters, 6 active debates, plus a <em>Voices</em> pull-quote gallery. Every <em>[FACT]</em> cites ≥1 month of real workflow use; every <em>[OPINION]</em> is named as such. Modeled on <a href="https://grapeot.github.io/ai-self-evolution-landscape/" target="_blank" rel="noopener">grapeot's frontier landscape</a> — that one maps what's possible at the edge; this one maps what survives daily use.
           </p>
@@ -318,7 +377,7 @@
            Renders directly from writings/index.json. No external widgets.
            Future publishing agent writes to that file; this markup stays as-is.
            Schema + agent contract: writings/README.md -->
-      <section class="chase-section chase-writing-section">
+      <section class="chase-section chase-writing-section" id="chase-essays">
         <span class="subsection-eyebrow">Essays</span>
 
         <div id="writing-grid" class="writing-grid" data-state="loading">
@@ -341,10 +400,9 @@
       </section>
 
       <!-- ─── § Skills for Agents ─── -->
-      <section class="chase-section chase-skills-section">
+      <section class="chase-section chase-skills-section" id="chase-tools">
         <header class="chase-section-header">
-          <span class="section-eyebrow">§ 03 · Skills for Agents</span>
-          <h2 class="section-title">Open-source skills for Claude Code &amp; OpenClaw</h2>
+          <h2 class="section-title">Tools that think with you</h2>
         </header>
         <div class="skills-grid">
           <article class="skill-card" data-id="tls">
@@ -458,10 +516,9 @@
       </section>
 
       <!-- ─── § Others ─── -->
-      <section class="chase-section chase-others-section">
+      <section class="chase-section chase-others-section" id="chase-systems">
         <header class="chase-section-header">
-          <span class="section-eyebrow">§ 04 · Others · 其他项目</span>
-          <h2 class="section-title">Side projects · 副项目</h2>
+          <h2 class="section-title">Proof of work, running</h2>
         </header>
         <div class="others-grid">
           <a class="other-card" href="#landing">
@@ -942,7 +999,7 @@
     </div>
   </div>
 
-  <script src="data.js?v=31"></script>
-  <script src="app.js?v=31"></script>
+  <script src="data.js?v=33"></script>
+  <script src="app.js?v=33"></script>
 </body>
 </html>
