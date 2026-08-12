@@ -20,12 +20,13 @@
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icon/favicon-192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon/apple-touch-icon.png">
   <link rel="shortcut icon" href="assets/icon/favicon.ico">
-  <meta name="theme-color" content="#050506">
+  <meta name="theme-color" content="#f2f0e8">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=34">
+  <link rel="stylesheet" href="style.css?v=35">
+  <link rel="stylesheet" href="redesign.css?v=1">
 </head>
 <body>
 
@@ -48,71 +49,122 @@
     <div class="bg-video-overlay"></div>
   </div>
 
+  <a class="site-skip" href="#site-main">Skip to content</a>
+  <header class="site-header">
+    <a class="site-brand" href="#landing" aria-label="CBTI home">
+      <strong>CBTI</strong>
+      <span>Crypto Behavioral Type Indicator</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#landing" data-route="test">Test</a>
+      <a href="#chase" data-route="chase">Chase</a>
+      <a href="#paper" data-route="research">Read</a>
+      <a href="#node" data-route="node">Node</a>
+    </nav>
+  </header>
+
+  <main id="site-main">
+
   <!-- ═══ Landing ═══ -->
   <div id="landing" class="screen active">
-    <!-- Persona sphere — 24 result cards orbiting around the hero. Decorative
-         but interactive (drag to spin, hover to highlight, click to start).
-         All positioning + animation lives in PersonaSphere (app.js). -->
     <div id="persona-sphere" class="persona-sphere" aria-hidden="true"></div>
 
-    <div class="landing-card">
-      <span class="landing-eyebrow">CBTI · 2026</span>
-      <h1 class="landing-title">
-        <span class="blur-in">C</span><span class="blur-in">B</span><span class="blur-in">T</span><span class="blur-in">I</span>
-      </h1>
-      <p class="landing-fullname"><em>Crypto · Behavioral · Type · Indicator</em></p>
-      <p class="landing-fullname-zh">加密 · 行为 · 类型 · 指标</p>
+    <section class="landing-shell" aria-labelledby="landing-title">
+      <div class="landing-copy">
+        <p class="landing-kicker"><span aria-hidden="true"></span>Behavioral instrument · 行为测量</p>
+        <div class="landing-mark" aria-hidden="true">CBTI</div>
+        <h1 id="landing-title">Map your crypto reflexes.</h1>
+        <p class="landing-lede">30 道题，定位你在风险偏好、信念强度和市场行为上的真实位置。结果对应 24 种加密人格，不评判好坏，只显示你在压力下会怎么做。</p>
+        <p class="landing-lede-en">Thirty questions map how you act under risk, conviction, and market pressure. Your result lands on one of 24 crypto personas.</p>
 
-      <button class="btn-start" onclick="startTest()">
-        <span>开始测试 · Start</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-      </button>
+        <div class="landing-actions">
+          <button class="btn-start" onclick="startTest()">
+            <span>开始测试 · Start</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <a class="btn-meet" href="#chase">Why CBTI exists <span aria-hidden="true">↗</span></a>
+        </div>
 
-      <p class="landing-tease">
-        <span>24 种加密人格在你周围旋转 — 拖动看看你属于哪一种气场。</span>
-        <span class="landing-tease-en">24 personas orbit you. Drag the sphere — find your gravity.</span>
-      </p>
+        <dl class="landing-facts" aria-label="Test facts">
+          <div><dt>30</dt><dd>questions</dd></div>
+          <div><dt>15</dt><dd>dimensions</dd></div>
+          <div><dt>24</dt><dd>personas</dd></div>
+          <div><dt>4</dt><dd>quadrants</dd></div>
+        </dl>
+      </div>
 
-      <a class="btn-meet" href="#chase">
-        <span>About @ChaseWang</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
+      <div class="landing-atlas-wrap">
+        <header class="atlas-head">
+          <div><span>TYPE FIELD / 24</span><strong>Risk × Conviction</strong></div>
+          <span>live index</span>
+        </header>
+        <div id="persona-atlas" class="persona-atlas" aria-label="The 24 CBTI personas arranged by behavioral quadrant"></div>
+        <div class="atlas-axis atlas-axis-x">risk preference →</div>
+        <div class="atlas-axis atlas-axis-y">conviction →</div>
+        <div class="atlas-legend" aria-label="Behavioral quadrants">
+          <span class="q-smart-money">Smart Money</span>
+          <span class="q-diamond-degen">Diamond Degen</span>
+          <span class="q-rotating-andy">Rotating Andy</span>
+          <span class="q-gambler">Absolute Gambler</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="landing-method">
+      <p><strong>What it measures</strong><span>investment mindset · emotional control · market worldview · trading style · social behavior</span></p>
+      <a href="#paper">Read the research layer <span aria-hidden="true">→</span></a>
     </div>
   </div>
 
   <!-- ═══ Quiz ═══ -->
   <div id="quiz" class="screen">
-    <div class="quiz-container">
-      <div class="quiz-header-bar">
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-track">
-            <div class="progress-bar-fill"></div>
+    <div class="quiz-shell">
+      <aside class="quiz-aside">
+        <a class="quiz-exit" href="#landing">CBTI / Exit test</a>
+        <div>
+          <p class="quiz-aside-label">Behavioral scan</p>
+          <h1>Answer for the trade you would actually make.</h1>
+          <p>选你真实会做的动作，不选你认为“更聪明”的答案。每页完成后会自动前进。</p>
+        </div>
+        <p class="quiz-privacy">No account. No wallet. Answers stay in this browser session.</p>
+      </aside>
+      <div class="quiz-container quiz-stage">
+        <div class="quiz-header-bar">
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill"></div>
+            </div>
+          </div>
+          <div class="quiz-meta">
+            <span class="progress-text">0 / 30</span>
+            <span class="page-indicator"></span>
           </div>
         </div>
-        <div class="quiz-meta">
-          <span class="progress-text">0 / 30</span>
-          <span class="page-indicator"></span>
+
+        <div id="questions-list"></div>
+
+        <div class="quiz-nav">
+          <button class="btn-nav btn-prev" onclick="prevPage()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
+            <span>Back</span>
+          </button>
+          <button class="btn-nav btn-next" onclick="nextPage()">
+            <span>Next</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>
+          </button>
         </div>
-      </div>
-
-      <div id="questions-list"></div>
-
-      <div class="quiz-nav">
-        <button class="btn-nav btn-prev" onclick="prevPage()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
-          <span>Back</span>
-        </button>
-        <button class="btn-nav btn-next" onclick="nextPage()">
-          <span>Next</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>
-        </button>
       </div>
     </div>
   </div>
 
   <!-- ═══ Result ═══ -->
   <div id="result" class="screen">
-    <div class="result-container">
+    <div class="result-container" aria-live="polite">
+      <header class="result-header">
+        <p>CBTI result dossier</p>
+        <h1>Your behavior has coordinates.</h1>
+        <span>Persona identity, quadrant position, and the fifteen dimensions behind it.</span>
+      </header>
 
       <!-- Section 1: Persona Hero (the reveal) -->
       <div class="result-persona-card" id="persona-card">
@@ -121,7 +173,7 @@
           <span id="persona-quadrant" class="persona-quadrant"></span>
         </div>
         <div class="persona-hero">
-          <img id="persona-meme" class="persona-meme" src="" alt="" />
+          <img id="persona-meme" class="persona-meme" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" />
           <div class="persona-identity">
             <div id="persona-code" class="persona-code"></div>
             <div id="persona-cn" class="persona-cn"></div>
@@ -242,7 +294,7 @@
             <a class="chase-map-node chase-map-node-code" href="#paper">
               <span>CODE</span><strong>Crypto-Body</strong><small>ledger → institution</small>
             </a>
-            <a class="chase-map-node chase-map-node-agents" href="/landscape">
+            <a class="chase-map-node chase-map-node-agents" href="/landscape.html">
               <span>WORKFLOWS</span><strong>Field Map</strong><small>practice → system</small>
             </a>
             <div class="chase-map-core" aria-hidden="true"><span>JUDGMENT</span><strong>×</strong></div>
@@ -361,7 +413,7 @@
           </div>
 
           <div class="paper-actions">
-            <a class="paper-action paper-action-primary" href="/landscape">
+            <a class="paper-action paper-action-primary" href="/landscape.html">
               <span>Read the landscape</span>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
@@ -999,7 +1051,9 @@
     </div>
   </div>
 
-  <script src="data.js?v=34"></script>
-  <script src="app.js?v=34"></script>
+  </main>
+
+  <script src="data.js?v=35"></script>
+  <script src="app.js?v=35"></script>
 </body>
 </html>

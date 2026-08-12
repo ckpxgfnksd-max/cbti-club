@@ -51,14 +51,27 @@ function showScreen(id) {
   preserved.push('screen-' + id);
   document.body.className = preserved.join(' ');
   var themeMeta = document.querySelector('meta[name="theme-color"]');
-  if (themeMeta) themeMeta.setAttribute('content', id === 'chase' ? '#e9ebe5' : '#050506');
-  // Pause the bg video on screens where it adds nothing (saves battery + removes distraction).
+  if (themeMeta) themeMeta.setAttribute('content', '#f2f0e8');
+
+  // Keep the global site navigation synchronized with the SPA screen.
+  var routeKey = id === 'chase' ? 'chase'
+    : (id === 'paper' || id === 'essay-three-body') ? 'research'
+    : id === 'node' ? 'node'
+    : 'test';
+  document.querySelectorAll('.site-nav [data-route]').forEach(function(link) {
+    if (link.getAttribute('data-route') === routeKey) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+
+  // The redesigned site uses the behavioral field as its visual signature.
+  // The legacy background video stays in the repo for rollback, but never burns CPU here.
   if (typeof BgVideo !== 'undefined') {
-    var quiet = id === 'result' || id === 'chase' || id === 'paper' || id === 'essay-three-body' || id === 'node';
-    if (quiet) BgVideo.pause();
-    else BgVideo.resume();
+    BgVideo.pause();
   }
+  // Run once now and once on the next frame. The second pass wins over the
+  // browser's native deep-link scroll on direct /#route loads.
   window.scrollTo(0, 0);
+  requestAnimationFrame(function () { window.scrollTo(0, 0); });
 
   // Render the writing manifest the first time #chase is shown. Cached after.
   if (id === 'chase') loadWritings();
@@ -69,10 +82,10 @@ function showScreen(id) {
     else NodeStatus.stop();
   }
 
-  // Persona sphere: only spin while the landing is visible (saves CPU + battery).
+  // The former 3D sphere is retained as rollback code, but the new atlas is static
+  // by design and keeps motion, power use, and cognitive load bounded.
   if (typeof PersonaSphere !== 'undefined') {
-    if (id === 'landing') PersonaSphere.start();
-    else PersonaSphere.stop();
+    PersonaSphere.stop();
   }
 }
 
@@ -233,8 +246,12 @@ function updateNav() {
 
   if (allAnswered) {
     nextBtn.classList.remove('disabled');
+    nextBtn.disabled = false;
+    nextBtn.setAttribute('aria-disabled', 'false');
   } else {
     nextBtn.classList.add('disabled');
+    nextBtn.disabled = true;
+    nextBtn.setAttribute('aria-disabled', 'true');
   }
 }
 
@@ -430,11 +447,6 @@ function renderDimensions() {
     groups[meta.model].push({ dim, ...meta });
   }
 
-  // All bars use white — editorial/monochrome. The persona quadrant color is already
-  // established in the stamp + meme card + scatter glow. Keep the dims section as
-  // a clean data readout.
-  const barColor = '#ffffff';
-
   for (const [model, dims] of Object.entries(groups)) {
     const group = document.createElement('div');
     group.className = 'dim-group';
@@ -451,7 +463,7 @@ function renderDimensions() {
       row.innerHTML = `
         <span class="dim-label">${d.en}</span>
         <div class="dim-bar-track">
-          <div class="dim-bar-fill" style="width: ${pct}%; background: ${barColor}"></div>
+          <div class="dim-bar-fill" style="width: ${pct}%"></div>
         </div>
         <span class="dim-level ${level}">${level}</span>
       `;
@@ -480,9 +492,9 @@ function renderScatter() {
     dd:   '#B24BF3',  // Diamond Degen
     ra:   '#FFB800',  // Rotating Andy
     ag:   '#FF2E4C',  // Absolute Gambler
-    grid: 'rgba(255,255,255,0.08)',
-    axis: 'rgba(255,255,255,0.35)',
-    label: 'rgba(255,255,255,0.45)'
+    grid: 'rgba(17,19,26,0.14)',
+    axis: 'rgba(17,19,26,0.42)',
+    label: 'rgba(17,19,26,0.62)'
   };
 
   // Single pad value — leaves room above for top quadrant labels and below for bottom labels + axis.
@@ -583,7 +595,7 @@ function renderScatter() {
 
   // Core dot
   ctx.fillStyle = userColor;
-  ctx.strokeStyle = '#000';
+  ctx.strokeStyle = '#f2f0e8';
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.arc(ux, uy, 6, 0, Math.PI * 2);
@@ -591,7 +603,7 @@ function renderScatter() {
   ctx.stroke();
 
   // Label with mono font — position below dot if too close to top edge to avoid clashing with quadrant title
-  ctx.fillStyle = '#fff';
+  ctx.fillStyle = '#11131a';
   ctx.font = 'bold 11px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
   var labelAbove = (uy - pad) > 40;
@@ -688,6 +700,7 @@ const NodeStatus = (function () {
   var _vis = null;
   var _last = null;       // last successful payload
   var _lastFetched = null; // ms epoch of last successful fetch
+  var _hasAttempted = false;
   var _running = false;
 
   function fmt(n) {
@@ -708,6 +721,7 @@ const NodeStatus = (function () {
   }
 
   function render(payload) {
+    _hasAttempted = true;
     if (payload && payload.ok) {
       _last = payload;
       _lastFetched = Date.now();
@@ -738,7 +752,9 @@ const NodeStatus = (function () {
     var meta = document.getElementById('node-meta');
     if (!meta) return;
     if (!_lastFetched) {
-      meta.textContent = 'awaiting first read · auto-refresh 30s';
+      meta.textContent = _hasAttempted
+        ? 'offline · no live read available · auto-refresh 30s'
+        : 'awaiting first read · auto-refresh 30s';
       return;
     }
     var ago = Math.max(0, Math.round((Date.now() - _lastFetched) / 1000));
@@ -790,6 +806,8 @@ const NodeStatus = (function () {
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
+  PersonaAtlas.build();
+
   // Start wherever the URL hash points (deep links to #chase / #paper), else landing.
   var hash = (location.hash || '').replace('#', '');
   if (ROUTED_SCREENS.indexOf(hash) !== -1) showScreen(hash);
@@ -927,6 +945,50 @@ function esc(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
+
+// ── Persona atlas ─────────────────────────────────────────────────────────
+// A stable, readable field of all 24 result types. Quadrant placement uses the
+// same canonical risk/conviction coordinates as the result scatter plot.
+var PersonaAtlas = (function () {
+  var order = ['smart-money', 'diamond-degen', 'rotating-andy', 'gambler'];
+  var labels = {
+    'smart-money': 'Smart Money',
+    'diamond-degen': 'Diamond Degen',
+    'rotating-andy': 'Rotating Andy',
+    'gambler': 'Absolute Gambler'
+  };
+
+  function quadrant(p) {
+    var risk = p && p.scatter ? p.scatter.risk : 50;
+    var conviction = p && p.scatter ? p.scatter.conviction : 50;
+    if (risk < 50 && conviction >= 50) return 'smart-money';
+    if (risk >= 50 && conviction >= 50) return 'diamond-degen';
+    if (risk < 50 && conviction < 50) return 'rotating-andy';
+    return 'gambler';
+  }
+
+  function build() {
+    var root = document.getElementById('persona-atlas');
+    if (!root || typeof personas === 'undefined') return;
+    var groups = {};
+    order.forEach(function(key) { groups[key] = []; });
+    Object.keys(personas).sort().forEach(function(key) {
+      var p = personas[key];
+      groups[quadrant(p)].push(p);
+    });
+    root.innerHTML = order.map(function(key) {
+      var nodes = groups[key].map(function(p) {
+        return '<span class="atlas-node" title="' + esc(p.cn + ' / ' + p.en) + '">' + esc(p.code) + '</span>';
+      }).join('');
+      return '<section class="atlas-quadrant q-' + key + '" aria-label="' + labels[key] + '">' +
+        '<header><span>' + labels[key] + '</span><strong>' + groups[key].length + '</strong></header>' +
+        '<div>' + nodes + '</div>' +
+      '</section>';
+    }).join('');
+  }
+
+  return { build: build };
+})();
 
 // ── Persona sphere ────────────────────────────────────────────────────────
 // Decorative 3D arrangement of all 24 personas around the landing hero.

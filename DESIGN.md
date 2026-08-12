@@ -1,71 +1,78 @@
 # CBTI Design System
 
-CBTI contains two intentionally different visual surfaces:
+CBTI is one behavioral instrument with several modes: test, result dossier, public research, long-form reading, and live infrastructure. Every route belongs to the same world.
 
-- The quiz, result, paper reader, and ETH node screens retain the original dark cinematic system.
-- `#chase` is a daylight public-research instrument. Its job is to connect Chase's writing, tools, and running systems without looking like a generic dark portfolio.
+The center of gravity is the risk × conviction field. The homepage exposes all 24 personas on that field; the quiz measures behavior; the result places the user back on the same map. Chase, papers, tools, and Node are evidence that the instrument is part of a larger practice, not unrelated microsites.
 
-Do not make one surface inherit the other's visual language. Shared routing, content, and accessibility behavior remain global; visual tokens for the profile stay scoped under `#chase`.
+## Product modes
 
-## Chase profile direction
+- **Experience:** landing, quiz, and result. Task completion and state are primary.
+- **Read:** Chase, papers, essays, landscape, articles, and research. Argument and evidence are primary.
+- **Operate:** Node. Freshness, status, and failure honesty are primary.
 
-The page owns one idea: behavior becomes markets, code becomes institutions, and workflows compound. The first viewport proves that relationship with a linked field map rather than repeating the thesis as decorative copy.
+The modes change density and composition, not brand language.
 
-The visual world uses a cool drafting surface, decisive blue fields, lime verification marks, square rules, and dense evidence. It deliberately avoids the prior combination of black background, neon glow, glass cards, italic display serif, tracked section numbers, and card grids.
+## Visual signature
 
-## Tokens
+The site uses warm daylight canvas, drafting blue fields, lime verification marks, carbon operational fields, square rules, and measurable data. Avoid glass, ambient blur, decorative glow, pill-heavy controls, faux dashboards, and dark-cinematic section resets.
 
-| Role | Token | Value | Use |
-|---|---|---:|---|
-| Canvas | `--chase-canvas` | `#e9ebe5` | Page and quiet reading regions |
-| Paper | `--chase-paper` | `#f8f9f4` | Document and neutral project surfaces |
-| Ink | `--chase-ink` | `#15171b` | Primary text and controls |
-| Drafting blue | `--chase-blue` | `#143fe5` | Linked ideas, primary fields, focus |
-| Deep blue | `--chase-blue-deep` | `#0d2aa8` | Blue text on light surfaces |
-| Verification lime | `--chase-lime` | `#dfff3f` | Confirmation, active contrast, authored highlights |
-| Carbon | `--chase-carbon` | `#171a22` | Running systems and closing fields |
-| Rule | `--chase-line` | `rgba(21,23,27,.22)` | Section and list boundaries |
+Quadrant colors are semantic and appear only for classification:
+
+| Quadrant | Color | Token |
+|---|---:|---|
+| Smart Money | `#008c58` | `--site-smart` |
+| Diamond Degen | `#7f3eb5` | `--site-diamond` |
+| Rotating Andy | `#a06b00` | `--site-rotating` |
+| Gambler | `#c72d49` | `--site-gambler` |
+
+## Core tokens
+
+| Role | Value | Token |
+|---|---:|---|
+| Canvas | `#f2f0e8` | `--site-canvas` |
+| Paper | `#fbfaf5` | `--site-paper` |
+| Ink | `#11131a` | `--site-ink` |
+| Drafting blue | `#2347ff` | `--site-blue` |
+| Deep blue | `#1732bb` | `--site-blue-deep` |
+| Verification lime | `#dfff42` | `--site-lime` |
+| Carbon | `#171922` | `--site-carbon` |
 
 Typography:
 
-- `Archivo Black` is reserved for identity, section statements, and project names; a 900-weight system fallback preserves hierarchy when the font CDN is unavailable.
-- `Barlow` carries body copy and controls.
-- `JetBrains Mono` is limited to metadata, measurements, repository paths, and field-map notation.
-- Chinese copy uses the existing Noto Sans/Serif SC fallbacks according to reading context.
+- `Archivo Black` carries identity, section statements, and large numeric signals.
+- `Barlow` carries interface copy and controls.
+- `Noto Serif SC` / `Instrument Serif` carry sustained reading.
+- `JetBrains Mono` is reserved for measurements, type codes, dates, and system status.
 
-## Layout and surfaces
+System fallbacks preserve hierarchy when the font CDN is unavailable.
 
-- The profile uses square fields and rules. Do not introduce glass, soft shadows, decorative blur, or rounded content cards.
-- Section spacing follows a 4px base rhythm, with tighter spacing inside a content group and materially larger spacing between sections.
-- Writing renders as proof: the paper preview sits beside its argument on wide screens and disappears on narrow mobile screens where inline PDF rendering is unreliable.
-- Essays are an asymmetric index, not an equal-card grid.
-- Tool projects use full-width case-study fields. Running projects use two decisive color fields.
+## Layout and controls
 
-## Interaction states
-
-- Every standalone control is at least 44px tall.
-- Keyboard focus uses a 3px drafting-blue outline with a 4px offset.
-- Light controls invert to blue or lime on hover; controls on blue/carbon surfaces preserve AA contrast.
-- Inline text links use underline or rule changes and are not styled as pills.
-- The three field-map nodes are real links, not decorative labels.
+- A persistent global header makes Test, Chase, Read, and Node one product.
+- Fields use square corners or a restrained 2–4px radius. Shadows are unnecessary when rules and color fields establish hierarchy.
+- Standalone controls are at least 44px tall. Primary actions use blue; verified or highlighted actions use lime.
+- Focus uses a 3px blue outline with visible offset.
+- Inline links remain text links; navigation and decisions may use framed controls.
+- Long-form pages target roughly 65–75 characters per line and allow tables or figures to widen beyond the reading column.
 
 ## Motion
 
-The field map owns the page's only authored motion: one finite scan and one finite core reveal. Content is visible before motion. `prefers-reduced-motion` removes both animations without removing hierarchy or state.
+Motion explains state only. Screen transitions are short and finite; progress and selection changes are direct. `prefers-reduced-motion` removes authored animation and smooth scrolling without hiding information.
 
 ## Responsive contract
 
-- Desktop: identity and field map share the first viewport; evidence remains directly below.
-- Tablet: the hero stacks and the map becomes a full-width demonstration.
-- Mobile: name, thesis, positioning, and both actions remain visible before the map; no content relies on hover; all long strings wrap without horizontal scroll.
+- Desktop: the landing proposition and 24-type atlas share the first screen; Chase pairs identity with its linked field map.
+- Tablet: complex two-column experiences stack while keeping the task or argument first.
+- Mobile: navigation stays reachable, tap targets remain at least 44px, quiz choices become one column, result evidence stacks, and long strings wrap without horizontal page scroll.
+- Inline PDF preview is omitted on narrow screens where browser rendering is unreliable; HTML and download actions remain.
 
 ## Verification
 
-Before shipping changes to `#chase`:
+Before shipping:
 
-1. Capture desktop and 390px mobile screenshots of the hero, writing, tools, and systems sections.
-2. Confirm the name and positioning are visible on a direct `/#chase` load.
-3. Check zero horizontal overflow and no console errors.
-4. Walk the page with keyboard focus and verify 44px standalone targets.
-5. Check `prefers-reduced-motion`, article manifest loading, internal hash routes, and the theme-color switch.
-6. Scan changed files for glass/blur decoration, card grids, section numbers, emoji icons, hard-coded colors outside the scoped token system, and `outline: none`.
+1. Run `audit_web.py` against the project and resolve every error.
+2. Test landing → all 30 questions → result, including disabled and selected states.
+3. Open Chase, Paper, Essay, Node, Landscape, both writing routes, and the research timeline directly.
+4. Capture desktop 1440×900 and mobile 390×844 whole-page screenshots.
+5. Confirm no page-level horizontal overflow, broken assets, or unexpected console errors.
+6. Test keyboard focus, `prefers-reduced-motion`, article-manifest loading, and Node's honest offline state.
