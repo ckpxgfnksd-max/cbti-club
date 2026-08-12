@@ -2968,7 +2968,7 @@ body.screen-chase::after {
   --chase-blue-deep: #0d2aa8;
   --chase-lime: #dfff3f;
   --chase-carbon: #171a22;
-  --chase-display: 'Archivo Black', 'Noto Sans SC', sans-serif;
+  --chase-display: 'Archivo Black', 'Arial Black', 'Helvetica Neue', system-ui, 'Noto Sans SC', sans-serif;
   --chase-gutter: clamp(20px, 5vw, 72px);
 
   --fg: var(--chase-ink);
@@ -3116,7 +3116,7 @@ body.screen-chase::after {
   margin: 0 0 30px;
   font-family: var(--chase-display);
   font-size: clamp(4.7rem, 8vw, 6rem);
-  font-weight: 400;
+  font-weight: 900;
   line-height: 0.84;
   letter-spacing: -0.035em;
   color: var(--chase-ink);
@@ -3434,7 +3434,7 @@ body.screen-chase::after {
   margin: 0;
   font-family: var(--chase-display);
   font-size: clamp(2.8rem, 6vw, 5.7rem);
-  font-weight: 400;
+  font-weight: 900;
   line-height: 1;
   letter-spacing: -0.035em;
   color: var(--chase-ink);
@@ -3565,7 +3565,7 @@ body.screen-chase::after {
   margin: 4px 0 24px;
   font-family: var(--chase-display);
   font-size: clamp(2.5rem, 4.8vw, 4.8rem);
-  font-weight: 400;
+  font-weight: 900;
   line-height: 1;
   letter-spacing: -0.035em;
   color: var(--chase-ink);
@@ -3841,6 +3841,7 @@ body.screen-chase::after {
 #chase .substack-feature-name {
   font-family: var(--chase-display);
   font-size: clamp(1.7rem, 3vw, 3rem);
+  font-weight: 900;
   line-height: 1;
   letter-spacing: -0.04em;
   color: #fff;
@@ -3888,7 +3889,7 @@ body.screen-chase::after {
   margin-top: 6px;
   font-family: var(--chase-display);
   font-size: clamp(2.7rem, 5vw, 5.5rem);
-  font-weight: 400;
+  font-weight: 900;
   line-height: 0.96;
   letter-spacing: -0.035em;
   color: currentColor;
@@ -3973,7 +3974,7 @@ body.screen-chase::after {
   margin-bottom: 16px;
   font-family: var(--chase-display);
   font-size: clamp(2.4rem, 4vw, 4.5rem);
-  font-weight: 400;
+  font-weight: 900;
   line-height: 1;
   letter-spacing: -0.035em;
   color: #fff;
@@ -3999,6 +4000,7 @@ body.screen-chase::after {
   padding-bottom: clamp(72px, 9vw, 130px);
   font-family: var(--chase-display);
   font-size: clamp(2.3rem, 6vw, 5.5rem);
+  font-weight: 900;
   line-height: 1.06;
   letter-spacing: -0.035em;
   text-align: left;

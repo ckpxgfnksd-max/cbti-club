@@ -28,7 +28,7 @@ The visual world uses a cool drafting surface, decisive blue fields, lime verifi
 
 Typography:
 
-- `Archivo Black` is reserved for identity, section statements, and project names.
+- `Archivo Black` is reserved for identity, section statements, and project names; a 900-weight system fallback preserves hierarchy when the font CDN is unavailable.
 - `Barlow` carries body copy and controls.
 - `JetBrains Mono` is limited to metadata, measurements, repository paths, and field-map notation.
 - Chinese copy uses the existing Noto Sans/Serif SC fallbacks according to reading context.
@@ -69,4 +69,3 @@ Before shipping changes to `#chase`:
 4. Walk the page with keyboard focus and verify 44px standalone targets.
 5. Check `prefers-reduced-motion`, article manifest loading, internal hash routes, and the theme-color switch.
 6. Scan changed files for glass/blur decoration, card grids, section numbers, emoji icons, hard-coded colors outside the scoped token system, and `outline: none`.
-
