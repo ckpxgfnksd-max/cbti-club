@@ -1,15 +1,13 @@
 # CBTI Design System
 
-CBTI is one behavioral instrument with several modes: test, result dossier, public research, long-form reading, and live infrastructure. Every route belongs to the same world.
+CBTI is one behavioral instrument with several modes: test, result dossier, public research, and long-form reading. Every route belongs to the same world.
 
-The center of gravity is the risk × conviction field. The homepage exposes all 24 personas on that field; the quiz measures behavior; the result places the user back on the same map. Chase, papers, tools, and Node are evidence that the instrument is part of a larger practice, not unrelated microsites.
+The center of gravity is the risk × conviction field. The homepage exposes all 24 personas on that field; the quiz measures behavior; the result places the user back on the same map. Chase, papers, and tools are evidence that the instrument is part of a larger practice, not unrelated microsites.
 
 ## Product modes
 
 - **Experience:** landing, quiz, and result. Task completion and state are primary.
 - **Read:** Chase, papers, essays, landscape, articles, and research. Argument and evidence are primary.
-- **Operate:** Node. Freshness, status, and failure honesty are primary.
-
 The modes change density and composition, not brand language.
 
 ## Visual signature
@@ -48,7 +46,7 @@ System fallbacks preserve hierarchy when the font CDN is unavailable.
 
 ## Layout and controls
 
-- A persistent global header makes Test, Chase, Read, and Node one product.
+- A persistent global header makes CBTI, Chase, and Read one product.
 - Fields use square corners or a restrained 2–4px radius. Shadows are unnecessary when rules and color fields establish hierarchy.
 - Standalone controls are at least 44px tall. Primary actions use blue; verified or highlighted actions use lime.
 - Focus uses a 3px blue outline with visible offset.
@@ -72,7 +70,7 @@ Before shipping:
 
 1. Run `audit_web.py` against the project and resolve every error.
 2. Test landing → all 30 questions → result, including disabled and selected states.
-3. Open Chase, Paper, Essay, Node, Landscape, both writing routes, and the research timeline directly.
+3. Open Chase, Paper, Essay, Landscape, both writing routes, and the research timeline directly.
 4. Capture desktop 1440×900 and mobile 390×844 whole-page screenshots.
 5. Confirm no page-level horizontal overflow, broken assets, or unexpected console errors.
-6. Test keyboard focus, `prefers-reduced-motion`, article-manifest loading, and Node's honest offline state.
+6. Test keyboard focus, `prefers-reduced-motion`, and article-manifest loading.

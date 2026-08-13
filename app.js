@@ -56,8 +56,7 @@ function showScreen(id) {
   // Keep the global site navigation synchronized with the SPA screen.
   var routeKey = id === 'chase' ? 'chase'
     : (id === 'paper' || id === 'essay-three-body') ? 'research'
-    : id === 'node' ? 'node'
-    : 'test';
+    : 'cbti';
   document.querySelectorAll('.site-nav [data-route]').forEach(function(link) {
     if (link.getAttribute('data-route') === routeKey) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
@@ -76,12 +75,6 @@ function showScreen(id) {
   // Render the writing manifest the first time #chase is shown. Cached after.
   if (id === 'chase') loadWritings();
 
-  // Live ETH node status: poll only while the screen is visible.
-  if (typeof NodeStatus !== 'undefined') {
-    if (id === 'node') NodeStatus.start();
-    else NodeStatus.stop();
-  }
-
   // The former 3D sphere is retained as rollback code, but the new atlas is static
   // by design and keeps motion, power use, and cognitive load bounded.
   if (typeof PersonaSphere !== 'undefined') {
@@ -91,12 +84,13 @@ function showScreen(id) {
 
 // ── Hash-based router: supports /#chase and /#paper deep links + browser back/forward.
 // Screens handled by the router (others like #quiz are driven by startTest()).
-var ROUTED_SCREENS = ['landing', 'chase', 'paper', 'essay-three-body', 'node'];
+var ROUTED_SCREENS = ['landing', 'chase', 'paper', 'essay-three-body'];
 function routeFromHash() {
   var hash = (location.hash || '').replace('#', '');
   if (ROUTED_SCREENS.indexOf(hash) !== -1) {
     showScreen(hash);
-  } else if (!hash) {
+  } else if (!hash || hash === 'node') {
+    if (hash === 'node') history.replaceState(null, '', '#landing');
     showScreen('landing');
   }
   // else: leave current screen alone (e.g. during quiz)
@@ -690,128 +684,11 @@ const BgVideo = {
   },
 };
 
-// ── ETH node status: polls /api/eth-status (Pages Function) every 30s while #node is visible.
-// Field allow-list is enforced at the function. Browser only ever sees the sanitized envelope.
-const NodeStatus = (function () {
-  var POLL_MS = 30000;
-  var TICK_MS = 1000;
-  var _poll = null;
-  var _tick = null;
-  var _vis = null;
-  var _last = null;       // last successful payload
-  var _lastFetched = null; // ms epoch of last successful fetch
-  var _hasAttempted = false;
-  var _running = false;
-
-  function fmt(n) {
-    if (n == null || !isFinite(n)) return '—';
-    return n.toLocaleString('en-US');
-  }
-
-  function setDot(elId, kind) {
-    var el = document.getElementById(elId);
-    if (!el) return;
-    el.classList.remove('is-synced', 'is-syncing', 'is-offline', 'is-unknown');
-    el.classList.add(kind);
-  }
-
-  function setText(id, text) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = text;
-  }
-
-  function render(payload) {
-    _hasAttempted = true;
-    if (payload && payload.ok) {
-      _last = payload;
-      _lastFetched = Date.now();
-
-      setText('node-block-num', fmt(payload.block));
-      setText('node-erigon-peers', fmt(payload.peers));
-      setText('node-lighthouse-slot', fmt(payload.slot));
-
-      var erigonSyncing = payload.erigonSyncing === true;
-      var lighthouseSyncing = payload.lighthouseSyncing === true;
-
-      setText('node-erigon-status', erigonSyncing ? 'syncing' : 'synced');
-      setText('node-lighthouse-status', lighthouseSyncing ? 'syncing' : 'synced');
-
-      setDot('node-erigon-dot', erigonSyncing ? 'is-syncing' : 'is-synced');
-      setDot('node-lighthouse-dot', lighthouseSyncing ? 'is-syncing' : 'is-synced');
-    } else {
-      // origin unreachable / not configured — keep last good numbers but flag offline
-      setDot('node-erigon-dot', 'is-offline');
-      setDot('node-lighthouse-dot', 'is-offline');
-      setText('node-erigon-status', 'offline');
-      setText('node-lighthouse-status', 'offline');
-    }
-    updateMeta();
-  }
-
-  function updateMeta() {
-    var meta = document.getElementById('node-meta');
-    if (!meta) return;
-    if (!_lastFetched) {
-      meta.textContent = _hasAttempted
-        ? 'offline · no live read available · auto-refresh 30s'
-        : 'awaiting first read · auto-refresh 30s';
-      return;
-    }
-    var ago = Math.max(0, Math.round((Date.now() - _lastFetched) / 1000));
-    var label = ago < 5 ? 'just now' : ago + 's ago';
-    var chain = (_last && _last.chain === 'mainnet') ? 'mainnet' : '';
-    var parts = ['updated ' + label];
-    if (chain) parts.push(chain);
-    parts.push('auto-refresh 30s');
-    meta.textContent = parts.join(' · ');
-  }
-
-  function fetchOnce() {
-    fetch('/api/eth-status', { cache: 'no-store' })
-      .then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
-      .then(function (payload) { render(payload); })
-      .catch(function () { render({ ok: false, reason: 'network' }); });
-  }
-
-  function onVisibility() {
-    if (!_running) return;
-    if (document.hidden) {
-      if (_poll) { clearInterval(_poll); _poll = null; }
-    } else {
-      fetchOnce();
-      if (!_poll) _poll = setInterval(fetchOnce, POLL_MS);
-    }
-  }
-
-  return {
-    start: function () {
-      if (_running) return;
-      _running = true;
-      fetchOnce();
-      _poll = setInterval(fetchOnce, POLL_MS);
-      _tick = setInterval(updateMeta, TICK_MS);
-      _vis = onVisibility;
-      document.addEventListener('visibilitychange', _vis);
-    },
-    stop: function () {
-      _running = false;
-      if (_poll) { clearInterval(_poll); _poll = null; }
-      if (_tick) { clearInterval(_tick); _tick = null; }
-      if (_vis) { document.removeEventListener('visibilitychange', _vis); _vis = null; }
-    },
-  };
-})();
-
 document.addEventListener('DOMContentLoaded', () => {
   PersonaAtlas.build();
 
   // Start wherever the URL hash points (deep links to #chase / #paper), else landing.
-  var hash = (location.hash || '').replace('#', '');
-  if (ROUTED_SCREENS.indexOf(hash) !== -1) showScreen(hash);
-  else showScreen('landing');
+  routeFromHash();
 
   // After the longest landing reveal animation finishes (.landing-personas at
   // 1.5s delay + 0.9s duration ≈ 2.4s), mark the body as anim-done. CSS uses
