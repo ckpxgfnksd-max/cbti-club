@@ -3,6 +3,83 @@
   "version": 1,
   "items": [
     {
+      "id": "what-is-a-crypto-body",
+      "publishedAt": "2025-01-01",
+      "datePrecision": "year",
+      "primaryLang": "en",
+      "kind": "Academic paper",
+      "tags": [
+        "paper",
+        "institutions",
+        "ethereum",
+        "governance"
+      ],
+      "title": {
+        "en": "What Is a Crypto-Body?"
+      },
+      "subtitle": {
+        "en": "Rethinking the Role of the Blockchain Ledger"
+      },
+      "excerpt": {
+        "en": "A blockchain can be more than a payment rail. This paper proposes five criteria for when a ledger becomes a programmable institutional substrate, then examines Ethereum as the most complete current specimen."
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "longform",
+          "url": "#paper",
+          "label": "Read on cbti.club"
+        },
+        {
+          "lang": "en",
+          "platform": "other",
+          "url": "https://www.academia.edu/143701755/What_Is_a_Crypto_Body_Rethinking_the_Role_of_the_Blockchain_Ledger",
+          "label": "View on Academia.edu"
+        },
+        {
+          "lang": "en",
+          "platform": "paper",
+          "url": "https://cbti.club/assets/paper/crypto-body.pdf",
+          "label": "Download PDF"
+        }
+      ]
+    },
+    {
+      "id": "ai-workflow-field-map",
+      "publishedAt": "2026-05-23",
+      "primaryLang": "en",
+      "kind": "Field map",
+      "tags": [
+        "research",
+        "ai-workflow",
+        "agents",
+        "context-infrastructure"
+      ],
+      "title": {
+        "en": "AI Workflow: Practitioner's Field Map"
+      },
+      "subtitle": {
+        "en": "What survives daily use"
+      },
+      "excerpt": {
+        "en": "Thirty-six entries across six clusters, six active debates, and a source-backed map of the practices that turn one-off AI sessions into systems that compound."
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "longform",
+          "url": "https://cbti.club/landscape.html",
+          "label": "Read on cbti.club"
+        },
+        {
+          "lang": "en",
+          "platform": "other",
+          "url": "https://github.com/ckpxgfnksd-max/landscape-ai-workflow",
+          "label": "View on GitHub"
+        }
+      ]
+    },
+    {
       "id": "crypto-crime-and-enforcement",
       "publishedAt": "2026-08-10",
       "primaryLang": "zh",

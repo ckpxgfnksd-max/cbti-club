@@ -55,7 +55,7 @@ function showScreen(id) {
 
   // Keep the global site navigation synchronized with the SPA screen.
   var routeKey = id === 'chase' ? 'chase'
-    : (id === 'paper' || id === 'essay-three-body') ? 'research'
+    : (id === 'read' || id === 'paper' || id === 'essay-three-body') ? 'read'
     : 'cbti';
   document.querySelectorAll('.site-nav [data-route]').forEach(function(link) {
     if (link.getAttribute('data-route') === routeKey) link.setAttribute('aria-current', 'page');
@@ -72,8 +72,8 @@ function showScreen(id) {
   window.scrollTo(0, 0);
   requestAnimationFrame(function () { window.scrollTo(0, 0); });
 
-  // Render the writing manifest the first time #chase is shown. Cached after.
-  if (id === 'chase') loadWritings();
+  // The complete archive and the short Chase preview share one cached manifest.
+  if (id === 'read' || id === 'chase') loadWritings();
 
   // The former 3D sphere is retained as rollback code, but the new atlas is static
   // by design and keeps motion, power use, and cognitive load bounded.
@@ -84,7 +84,7 @@ function showScreen(id) {
 
 // ── Hash-based router: supports /#chase and /#paper deep links + browser back/forward.
 // Screens handled by the router (others like #quiz are driven by startTest()).
-var ROUTED_SCREENS = ['landing', 'chase', 'paper', 'essay-three-body'];
+var ROUTED_SCREENS = ['landing', 'read', 'chase', 'paper', 'essay-three-body'];
 function routeFromHash() {
   var hash = (location.hash || '').replace('#', '');
   if (ROUTED_SCREENS.indexOf(hash) !== -1) {
@@ -703,33 +703,170 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('hashchange', routeFromHash);
 
-// ── Writing manifest: render Chase's published essays from writings/index.json.
+// ── Writing manifest: render the complete archive and Chase's short preview.
 // No third-party widgets — works in mainland China, behind ad-blockers, etc.
 // Schema + agent contract: writings/README.md
 var writingsLoaded = false;
+var writingsCache = [];
+var activeReadFilter = 'all';
 function loadWritings() {
-  if (writingsLoaded) return;
+  if (writingsLoaded) {
+    if (writingsCache.length) renderWritingSurfaces(writingsCache);
+    return;
+  }
   writingsLoaded = true;
-  var grid = document.getElementById('writing-grid');
-  if (!grid) return;
   fetch('writings/index.json', { cache: 'no-cache' })
     .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(function (manifest) { renderWritings(grid, manifest); })
+    .then(function (manifest) { renderWritings(manifest); })
     .catch(function (err) {
       console.warn('[writings] load failed:', err);
-      renderWritingsFallback(grid);
+      renderWritingsFallback();
     });
 }
 
-function renderWritings(grid, manifest) {
+function renderWritings(manifest) {
   var items = (manifest && Array.isArray(manifest.items)) ? manifest.items : [];
   items = items.filter(isValidWriting);
-  if (items.length === 0) { renderWritingsFallback(grid); return; }
+  if (items.length === 0) { renderWritingsFallback(); return; }
   items.sort(function (a, b) {
     return (b.publishedAt || '').localeCompare(a.publishedAt || '');
   });
-  grid.setAttribute('data-state', 'ready');
-  grid.innerHTML = items.map(writingCardHTML).join('');
+  writingsCache = items;
+  renderWritingSurfaces(items);
+}
+
+function renderWritingSurfaces(items) {
+  renderReadIndex(items);
+  renderChaseReadingPreview(items.slice(0, 3));
+  bindReadFilters();
+}
+
+function renderReadIndex(items) {
+  var index = document.getElementById('read-index');
+  if (!index) return;
+  index.setAttribute('data-state', 'ready');
+  index.innerHTML = items.map(readRowHTML).join('');
+  applyReadFilter(activeReadFilter);
+}
+
+function readRowHTML(it, index) {
+  var lang = it.primaryLang;
+  var title = pickLang(it.title, lang);
+  var subtitle = pickLang(it.subtitle, lang);
+  var excerpt = pickLang(it.excerpt, lang);
+  var primary = primaryWritingChannel(it);
+  var href = normalizeWritingUrl(primary.url);
+  var attrs = writingLinkAttributes(href);
+  var kind = writingKind(it);
+  var tags = (it.tags || []).slice(0, 3);
+  var filterTags = (it.tags || []).concat([kind.toLowerCase()]).join(' ');
+  var secondary = it.channels.filter(function (channel) {
+    return channel !== primary;
+  }).map(function (channel) {
+    var channelHref = normalizeWritingUrl(channel.url);
+    return '<a href="' + esc(channelHref) + '"' + writingLinkAttributes(channelHref) + '>' +
+      esc(shortChannelLabel(channel)) + '<span aria-hidden="true">↗</span></a>';
+  }).join('');
+
+  return '<article class="read-row" data-lang="' + esc(lang) + '" data-tags="' + esc(filterTags) + '">' +
+    '<a class="read-row-primary" href="' + esc(href) + '"' + attrs + '>' +
+      '<span class="read-row-number">' + String(index + 1).padStart(2, '0') + '</span>' +
+      '<div class="read-row-copy">' +
+        '<div class="read-row-meta"><span>' + esc(kind) + '</span><span>' + esc(formatWritingDate(it.publishedAt, lang, it.datePrecision)) + '</span><span>' + (lang === 'zh' ? '中文' : 'English') + '</span></div>' +
+        '<h2>' + esc(title) + '</h2>' +
+        (subtitle ? '<p class="read-row-subtitle">' + esc(subtitle) + '</p>' : '') +
+        '<p class="read-row-excerpt">' + esc(excerpt) + '</p>' +
+        (tags.length ? '<div class="read-row-tags">' + tags.map(function (tag) { return '<span>' + esc(tag) + '</span>'; }).join('') + '</div>' : '') +
+      '</div>' +
+      '<span class="read-row-open"><span>Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>' +
+    '</a>' +
+    (secondary ? '<div class="read-row-channels" aria-label="Other versions">' + secondary + '</div>' : '') +
+  '</article>';
+}
+
+function renderChaseReadingPreview(items) {
+  var list = document.getElementById('chase-reading-list');
+  if (!list) return;
+  list.setAttribute('data-state', 'ready');
+  list.innerHTML = items.map(function (it, index) {
+    var lang = it.primaryLang;
+    var primary = primaryWritingChannel(it);
+    var href = normalizeWritingUrl(primary.url);
+    return '<a class="chase-reading-item" data-lang="' + esc(lang) + '" href="' + esc(href) + '"' + writingLinkAttributes(href) + '>' +
+      '<span class="chase-reading-number">0' + (index + 1) + '</span>' +
+      '<div><p>' + esc(writingKind(it)) + ' · ' + esc(formatWritingDate(it.publishedAt, lang, it.datePrecision)) + '</p>' +
+      '<h3>' + esc(pickLang(it.title, lang)) + '</h3></div>' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+    '</a>';
+  }).join('');
+}
+
+function bindReadFilters() {
+  document.querySelectorAll('[data-read-filter]').forEach(function (button) {
+    if (button.dataset.bound === 'true') return;
+    button.dataset.bound = 'true';
+    button.addEventListener('click', function () {
+      applyReadFilter(button.getAttribute('data-read-filter') || 'all');
+    });
+  });
+}
+
+function applyReadFilter(filter) {
+  activeReadFilter = filter || 'all';
+  var shown = 0;
+  document.querySelectorAll('#read-index .read-row').forEach(function (row) {
+    var matches = activeReadFilter === 'all'
+      || row.getAttribute('data-lang') === activeReadFilter
+      || (activeReadFilter === 'research' && /research|paper|field map/.test(row.getAttribute('data-tags') || ''));
+    row.hidden = !matches;
+    if (matches) shown += 1;
+  });
+  document.querySelectorAll('[data-read-filter]').forEach(function (button) {
+    var selected = button.getAttribute('data-read-filter') === activeReadFilter;
+    button.classList.toggle('is-active', selected);
+    button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+  });
+  var count = document.getElementById('read-count');
+  if (count) count.textContent = shown + (shown === 1 ? ' piece' : ' pieces');
+}
+
+function primaryWritingChannel(it) {
+  return it.channels.find(function (channel) {
+    return isOwnedWritingUrl(channel.url);
+  }) || it.channels.find(function (channel) {
+    return channel.platform === 'substack' || channel.platform === 'longform';
+  }) || it.channels[0];
+}
+
+function isOwnedWritingUrl(url) {
+  return /^#/.test(url || '') || /^\/(?!\/)/.test(url || '') || /^https:\/\/(www\.)?cbti\.club\//.test(url || '');
+}
+
+function normalizeWritingUrl(url) {
+  return String(url || '').replace(/^https:\/\/(www\.)?cbti\.club/, '') || '/';
+}
+
+function writingLinkAttributes(url) {
+  return /^#/.test(url || '') || /^\/(?!\/)/.test(url || '')
+    ? ''
+    : ' target="_blank" rel="noopener"';
+}
+
+function writingKind(it) {
+  if (it.kind) return it.kind;
+  var tags = it.tags || [];
+  if (tags.indexOf('deep-research') !== -1) return 'Research';
+  if (tags.indexOf('ai-workflow') !== -1) return 'Field map';
+  if (tags.indexOf('paper') !== -1) return 'Paper';
+  return 'Essay';
+}
+
+function shortChannelLabel(channel) {
+  if (channel.platform === 'x') return 'X';
+  if (channel.platform === 'substack') return 'Substack';
+  if (channel.platform === 'paper') return 'PDF';
+  if (isOwnedWritingUrl(channel.url)) return 'CBTI';
+  return channel.label || 'Source';
 }
 
 function isValidWriting(it) {
@@ -782,14 +919,25 @@ function writingCardHTML(it) {
          '</article>';
 }
 
-function renderWritingsFallback(grid) {
-  grid.setAttribute('data-state', 'fallback');
-  grid.innerHTML =
-    '<a class="writing-card writing-card-fallback" href="https://x.com/ChaseWang" target="_blank" rel="noopener">' +
-      '<span class="writing-card-eyebrow">Writing</span>' +
-      '<span class="writing-card-fallback-text">Follow @ChaseWang on X for the latest essays.</span>' +
-      '<span class="writing-card-fallback-arrow">↗</span>' +
-    '</a>';
+function renderWritingsFallback() {
+  var index = document.getElementById('read-index');
+  if (index) {
+    index.setAttribute('data-state', 'fallback');
+    index.innerHTML = '<div class="read-empty"><p>The archive could not load.</p><button type="button" onclick="retryWritings()">Try again</button></div>';
+  }
+  var preview = document.getElementById('chase-reading-list');
+  if (preview) {
+    preview.setAttribute('data-state', 'fallback');
+    preview.innerHTML = '<a class="chase-reading-item" href="https://x.com/ChaseWang" target="_blank" rel="noopener"><span class="chase-reading-number">↗</span><div><p>Writing</p><h3>Follow @ChaseWang on X</h3></div></a>';
+  }
+  var count = document.getElementById('read-count');
+  if (count) count.textContent = 'Archive unavailable';
+}
+
+function retryWritings() {
+  writingsLoaded = false;
+  writingsCache = [];
+  loadWritings();
 }
 
 function pickLang(map, lang) {
@@ -807,13 +955,15 @@ function channelDefaultLabel(ch) {
   return 'Open';
 }
 
-function formatWritingDate(iso, lang) {
+function formatWritingDate(iso, lang, precision) {
   // ISO YYYY-MM-DD → "Mar 22, 2026" / "2026 年 3 月 22 日"
   var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
   if (!m) return iso || '';
   var y = m[1], mm = parseInt(m[2], 10), d = parseInt(m[3], 10);
-  if (lang === 'zh') return y + ' 年 ' + mm + ' 月 ' + d + ' 日';
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if (precision === 'year') return y;
+  if (precision === 'month') return lang === 'zh' ? y + ' 年 ' + mm + ' 月' : months[mm - 1] + ' ' + y;
+  if (lang === 'zh') return y + ' 年 ' + mm + ' 月 ' + d + ' 日';
   return months[mm - 1] + ' ' + d + ', ' + y;
 }
 

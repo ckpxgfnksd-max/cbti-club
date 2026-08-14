@@ -7,7 +7,7 @@ The center of gravity is the risk × conviction field. The homepage exposes all 
 ## Product modes
 
 - **Experience:** landing, quiz, and result. Task completion and state are primary.
-- **Read:** Chase, papers, essays, landscape, articles, and research. Argument and evidence are primary.
+- **Read:** the complete archive, papers, essays, landscape, articles, and research. Retrieval and argument are primary.
 The modes change density and composition, not brand language.
 
 ## Visual signature
@@ -46,7 +46,9 @@ System fallbacks preserve hierarchy when the font CDN is unavailable.
 
 ## Layout and controls
 
-- A persistent global header makes CBTI, Chase, and Read one product.
+- A persistent global header makes CBTI, Read, and Chase one product. `Read` always opens the complete archive; it never drops a visitor into an arbitrary single article.
+- The archive is a flat editorial index rather than a grid of competing cards. Every row has one primary reading route, optional alternate channels, a visible content type, language, date, and tags.
+- Chase contains a three-item latest-writing preview. The old duplicate paper cards, embedded PDF, and essay grid stay outside the rendered experience.
 - Fields use square corners or a restrained 2–4px radius. Shadows are unnecessary when rules and color fields establish hierarchy.
 - Standalone controls are at least 44px tall. Primary actions use blue; verified or highlighted actions use lime.
 - Focus uses a 3px blue outline with visible offset.
@@ -61,8 +63,8 @@ Motion explains state only. Screen transitions are short and finite; progress an
 
 - Desktop: the landing proposition and 24-type atlas share the first screen; Chase pairs identity with its linked field map.
 - Tablet: complex two-column experiences stack while keeping the task or argument first.
-- Mobile: navigation stays reachable, tap targets remain at least 44px, quiz choices become one column, result evidence stacks, and long strings wrap without horizontal page scroll.
-- Inline PDF preview is omitted on narrow screens where browser rendering is unreliable; HTML and download actions remain.
+- Mobile: navigation stays reachable, tap targets remain at least 44px, archive filters become a two-by-two control, reading rows recompose into one scanning column, and long strings wrap without horizontal page scroll.
+- The paper remains available as HTML and PDF from the archive. An embedded PDF is intentionally absent from the main discovery path.
 
 ## Verification
 
@@ -70,7 +72,7 @@ Before shipping:
 
 1. Run `audit_web.py` against the project and resolve every error.
 2. Test landing → all 30 questions → result, including disabled and selected states.
-3. Open Chase, Paper, Essay, Landscape, both writing routes, and the research timeline directly.
+3. Open Read, exercise every filter, follow an owned article route, open an internal paper, and return to the complete archive.
 4. Capture desktop 1440×900 and mobile 390×844 whole-page screenshots.
 5. Confirm no page-level horizontal overflow, broken assets, or unexpected console errors.
 6. Test keyboard focus, `prefers-reduced-motion`, and article-manifest loading.

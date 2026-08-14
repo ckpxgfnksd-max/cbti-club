@@ -1,7 +1,7 @@
 # writings/ — single source of truth for Chase's published essays
 
 This folder is the manifest layer for Chase's writing across X, Substack, and
-cbti.club. The `#chase` page on cbti.club renders cards directly from
+cbti.club. The `#read` archive and compact `#chase` preview render directly from
 `index.json` — **no external widgets, no third-party JS**. Works in mainland
 China, behind ad-blockers, and inside browsers that block X embeds.
 
@@ -20,7 +20,9 @@ agent's only contract is to keep `index.json` valid.
     {
       "id": "kebab-case-slug",          // REQUIRED — stable, used as DOM key
       "publishedAt": "YYYY-MM-DD",      // REQUIRED — ISO date, used for sort
+      "datePrecision": "year" | "month", // optional — use when only year/month is verified
       "primaryLang": "en" | "zh",       // REQUIRED — which lang renders on the card
+      "kind": "Essay",                  // optional — visible content-type label
 
       "tags": ["macro", "stablecoin"],  // optional, for future filtering
 
