@@ -286,6 +286,35 @@
           "label": "在 X 上阅读"
         }
       ]
+    },
+    {
+      "id": "agent",
+      "publishedAt": "2026-08-20",
+      "primaryLang": "zh",
+      "tags": [
+        "deep-research",
+        "x-article"
+      ],
+      "title": {
+        "zh": "如果 Agent 可以花钱，真正难的可能是谁允许它花"
+      },
+      "excerpt": {
+        "zh": "Brian Armstrong 在 AiFi 相关帖文 里主张：agent 需要可编程、全球、即时、低费用的钱，并把 crypto 框成 AiFi，也就是 agentic finance 的货币。我把这句话和 Coinbase x402、Google AP2、Visa 以及几篇独立分析放在一起看后，更愿意把结论先收窄：公开材料支持的不是“crypto 已经证明自己会成为 AiFi 的钱”，而是 crypto 可能成为 agentic finance 的结算层，尤其适合机器可读、低风险、即时交付的数字资源。一旦 agent 真的能花钱，后面更难的产品面大概率会落到授权、限额、身份、审计、撤销、退款、争议与责任归属。"
+      },
+      "channels": [
+        {
+          "lang": "zh",
+          "platform": "longform",
+          "url": "https://cbti.club/writings/agent/",
+          "label": "在 cbti.club 阅读"
+        },
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2090273928060998060",
+          "label": "在 X 上阅读"
+        }
+      ]
     }
   ]
 }
