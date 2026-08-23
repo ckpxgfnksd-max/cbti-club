@@ -315,6 +315,35 @@
           "label": "在 X 上阅读"
         }
       ]
+    },
+    {
+      "id": "arc",
+      "publishedAt": "2026-08-23",
+      "primaryLang": "zh",
+      "tags": [
+        "deep-research",
+        "x-article"
+      ],
+      "title": {
+        "zh": "Arc 这次更像一张待验货的三层分工图"
+      },
+      "excerpt": {
+        "zh": "Circle 把 Arc public mainnet 的时间点指向 September 16, 2026，并把 BlackRock、Visa、Mastercard、DTCC、ICE 等名字放进 founding validators。同一条披露里，Aave、Morpho、Uniswap 也容易被读成同一张名单。我现在更愿意先把它当成一张还没完成验货的机构结算分工图：有些名字对应网络验证，有些对应资产与清算接口，有些只是应用和流动性出口。这个边界来自 Circle 的公告、外部报道和技术文档；它能支持 pre-launch 的结构判断，还不能支持 launch-day live status 或每个 partner 已经执行完成的结论。"
+      },
+      "channels": [
+        {
+          "lang": "zh",
+          "platform": "longform",
+          "url": "https://cbti.club/writings/arc/",
+          "label": "在 cbti.club 阅读"
+        },
+        {
+          "lang": "zh",
+          "platform": "x",
+          "url": "https://x.com/ChaseWang/status/2091360293163016402",
+          "label": "在 X 上阅读"
+        }
+      ]
     }
   ]
 }
