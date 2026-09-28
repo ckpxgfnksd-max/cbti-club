@@ -102,7 +102,9 @@ here, and the chasewang.me build.
 Both sites classify every item the same way, so adapter entries never need a
 field they would lose on replay:
 
-1. `format` field, when present (only hand-maintained entries carry one);
+1. `format` field, when present (only hand-maintained entries carry one):
+   `research`, `analysis` or `essay` (the plurals `analyses` / `essays` are
+   accepted too);
 2. else tag `x-article` → **analysis** (every adapter entry);
 3. else `kind` is Academic paper / Field map / Data study, or a tag contains
    `research` → **research**;
@@ -121,9 +123,12 @@ site into `_site/` and runs `scripts/lib/normalize.mjs` on the **copy** of every
   Chase Wang reading template (cw-system), with the body carried over
   byte-for-byte;
 - canonical and og tags are kept; `lang="zh"` becomes `zh-Hans`; the meta
-  description is cleaned (whitespace, length); Google Fonts are dropped; the
-  `/#chase` links become `https://chasewang.me/writing`; Article JSON-LD is added
-  with the author `https://chasewang.me/#person`;
+  description is cleaned (whitespace, length) and also shown as the article's
+  dek under the title; Google Fonts are dropped; the `/#chase` links become
+  `https://chasewang.me/writing`; Article JSON-LD is added with the author
+  `https://chasewang.me/#person`;
+- a page is recognised as already normalized only by the marker on its own
+  `<html>` tag (`data-cw-normalized="1"`), so normalizing twice equals once;
 - a page whose structure is not recognised is published unchanged, the build
   prints a warning and still deploys.
 

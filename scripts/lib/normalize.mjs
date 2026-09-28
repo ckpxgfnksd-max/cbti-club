@@ -17,6 +17,12 @@ import { AUTHOR_REF, FORMAT, HOME, PERSON_ID, UI, classify, esc, htmlLang, kindL
 
 export const MARK = 'data-cw-normalized';
 
+/** True when the document's own <html> start tag carries the marker (text elsewhere does not count). */
+export function isNormalized(html) {
+  const tag = String(html).match(/<html\b[^>]*>/i);
+  return !!tag && new RegExp(`\\s${MARK}="1"`).test(tag[0]);
+}
+
 export function parseAdapterPage(html) {
   const problems = [];
   const get = (re, from = html) => {
@@ -72,7 +78,7 @@ export function cleanDescription(text, lang, limit = 160) {
  *   item: the manifest entry for this page when there is one (format, kind and a clean excerpt).
  */
 export function normalizeWritingPage(html, { item = null } = {}) {
-  if (html.includes(`${MARK}="1"`)) return { html, status: 'already', warnings: [] };
+  if (isNormalized(html)) return { html, status: 'already', warnings: [] };
   const p = parseAdapterPage(html);
   if (!p.ok) return { html, status: 'unrecognized', warnings: p.problems };
 
@@ -93,7 +99,7 @@ export function normalizeWritingPage(html, { item = null } = {}) {
   <header class="cw-container cw-article-head">
     <p class="cw-kicker"><a href="${HOME}/writing#${format.key}">${format[lang]}</a> · ${esc(kind[lang])} · <time datetime="${date}">${date}</time></p>
     <h1 class="cw-article-title" lang="${L}">${p.headline}</h1>
-    <p class="cw-byline" lang="en">Chase Wang</p>
+    ${description ? `<p class="cw-article-dek" lang="${L}">${esc(description)}</p>\n    ` : ''}<p class="cw-byline" lang="en">Chase Wang</p>
   </header>
   <div class="cw-container">
     <div class="cw-article-layout">

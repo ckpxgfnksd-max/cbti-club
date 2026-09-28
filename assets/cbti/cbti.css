@@ -30,9 +30,9 @@
   background: var(--q, var(--text));
 }
 
-/* Workaround for a cw-system gap (reported): on this zh page the base :where(:lang(zh)) font rule
-   also matches <time>, <a> and <span> inside mono metadata. Keep mono metadata mono. */
-:where(.cw-row-date, .cw-kicker, .cw-section-aside, .cw-footer-base, .cw-footer-label, .cbti-q-meta, .cbti-quiz-counts, .cbti-map-meta) :where(time, span, a) { font-family: inherit; }
+/* Product mono containers pass mono down to children that carry their own lang (cw-system v5 rule
+   for containers outside its list). */
+.cbti-q-meta [lang] { font-family: inherit; }
 
 /* ── Screens: one document, three states ── */
 .screen { display: none; }

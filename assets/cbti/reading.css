@@ -1,7 +1,0 @@
-/* cbti.club author pages (writings, field map, report): loaded after cw.css + cw-reading.css.
-   Workaround for a cw-system gap, reported to the cw-system owner: on zh pages the base rule
-   :where(:lang(zh)) { font-family: var(--font-sans-zh) } matches <time>, <a> and <span> inside mono
-   metadata (kicker, details rail, chips), so dates switch to the sans face. Keep metadata mono.
-   Safe to delete once cw.css scopes that rule to elements carrying their own lang attribute. */
-:where(.cw-kicker, .cw-kv dt, .cw-chan, .cw-footer-base, .cw-footer-label) :where(time, span, a) { font-family: inherit; }
-:where(.cw-kv dd) time { font-family: var(--font-mono); font-size: var(--fs-meta); }

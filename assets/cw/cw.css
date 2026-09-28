@@ -13,7 +13,7 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
     U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-/* Same file. Leaves ‘ ’ “ ” — … to the Chinese system font inside :lang(zh) text. */
+/* Same file. Leaves ‘ ’ “ ” — … to the Chinese system font inside [lang|=zh] text. */
 @font-face {
   font-family: "Inter Han-safe";
   src: url("/assets/fonts/inter-latin-wght.v5.woff2") format("woff2");
@@ -188,7 +188,6 @@
 *::after { box-sizing: border-box; }
 
 html {
-  font-family: var(--font-sans);
   font-size: 100%;
   line-height: var(--lh-body);
   color: var(--text);
@@ -243,12 +242,18 @@ a:hover { color: var(--accent); text-decoration-color: currentColor; }
 }
 :where(a, button, summary):focus:not(:focus-visible) { outline: none; }
 
-/* Chinese: system CJK fonts, 400/600 only, no letter-spacing, no faux italics (R-deep T2 D4–D7). */
-:where(:lang(zh)) {
+/* Font stacks switch only at explicit lang boundaries (the lang attribute) and are inherited from there,
+   so a Chinese page cannot push its stack onto English content or onto mono metadata below it.
+   Chinese: system CJK fonts, 400/600 only, no letter-spacing, no faux italics (R-deep T2 D4–D7). */
+:where(html, [lang|="en"]) { font-family: var(--font-sans); }
+:where([lang|="zh"]) {
   font-family: var(--font-sans-zh);
   letter-spacing: 0;
   text-autospace: normal;
 }
+/* Mono metadata stays mono all the way down, including interface strings that carry their own lang. */
+:where(.cw-mono, .cw-kicker, .cw-seg button, .cw-section-aside, .cw-subhead, .cw-row-date, .cw-row-tags,
+  .cw-row-chans, .cw-badge, .cw-chan, .cw-kv dt, .cw-footer-label, .cw-footer-base) [lang] { font-family: inherit; }
 :where(p, li, dd, blockquote, figcaption, td, th):lang(zh) { line-height: var(--lh-zh); }
 :where(em, i, cite, blockquote, dfn):lang(zh) { font-style: normal; }
 :is(h1, h2, h3, h4, .cw-display, .cw-title, .cw-row-title, .cw-article-title):lang(zh) { letter-spacing: 0; }

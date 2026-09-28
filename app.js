@@ -48,6 +48,7 @@ function prefersReducedMotion() {
 }
 
 function showScreen(id, anchor) {
+  clearAutoAdvance();
   var el = document.getElementById(id);
   if (!el || !el.classList.contains('screen')) { el = document.getElementById('landing'); id = 'landing'; }
   document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
@@ -116,6 +117,7 @@ function routeSameHashClick(event) {
 // ── Quiz rendering ──
 
 function startTest() {
+  clearAutoAdvance();
   state.answers = {};
   state.shuffledQs = shuffle(questions);
   state.currentPage = 0;
@@ -209,16 +211,32 @@ function renderPage(pageIndex) {
   else main.scrollIntoView({ behavior: behavior, block: 'start' });
 }
 
+// Auto-advance: at most one pending timer, cancelled by any navigation, so Back pressed within the
+// 400 ms window wins over a stale advance (review r1). Navigation only; scoring is untouched.
+var autoAdvanceTimer = null;
+function clearAutoAdvance() {
+  if (autoAdvanceTimer !== null) {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+  }
+}
+
 function checkAutoAdvance() {
   if (state.currentPage >= state.totalPages - 1) return; // don't auto on last page
   var pageQs = getPageQuestions(state.currentPage);
   var allAnswered = pageQs.every(function(q) { return state.answers[q.id] !== undefined; });
   if (allAnswered) {
-    setTimeout(function() { nextPage(); }, 400);
+    clearAutoAdvance();
+    var fromPage = state.currentPage;
+    autoAdvanceTimer = setTimeout(function() {
+      autoAdvanceTimer = null;
+      if (state.currentPage === fromPage) nextPage();
+    }, 400);
   }
 }
 
 function nextPage() {
+  clearAutoAdvance();
   // On last page, submit if all 30 answered
   if (state.currentPage >= state.totalPages - 1) {
     if (Object.keys(state.answers).length >= state.shuffledQs.length) {
@@ -235,6 +253,7 @@ function nextPage() {
 }
 
 function prevPage() {
+  clearAutoAdvance();
   if (state.currentPage <= 0) return;
   renderPage(state.currentPage - 1);
 }
@@ -717,11 +736,22 @@ function announce(message) {
   setTimeout(function () { status.textContent = message; }, 30);
 }
 
+// Clipboard writes can be unavailable (insecure context, old browser) or refused (permissions):
+// both paths end in visible and announced feedback instead of an uncaught error.
+function writeClipboard(text) {
+  try {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      return navigator.clipboard.writeText(text);
+    }
+  } catch (e) { /* fall through to the rejection below */ }
+  return Promise.reject(new Error('clipboard unavailable'));
+}
+
 function copyShareText() {
   const text = getShareText();
   const btn = document.querySelector('.btn-copy');
   const orig = btn.textContent;
-  navigator.clipboard.writeText(text).then(() => {
+  writeClipboard(text).then(() => {
     btn.textContent = 'Copied! 已复制';
     announce('分享文案已复制');
     setTimeout(() => btn.textContent = orig, 2000);
@@ -738,10 +768,14 @@ function retryTest() {
 
 function copyAddress(el) {
   const addr = el.querySelector('code').textContent;
-  navigator.clipboard.writeText(addr).then(() => {
-    const copyEl = el.querySelector('.tips-copy');
+  const copyEl = el.querySelector('.tips-copy');
+  writeClipboard(addr).then(() => {
     copyEl.textContent = 'copied!';
     announce('地址已复制');
+    setTimeout(() => { copyEl.textContent = 'copy'; }, 2000);
+  }, () => {
+    copyEl.textContent = 'copy failed';
+    announce('复制失败');
     setTimeout(() => { copyEl.textContent = 'copy'; }, 2000);
   });
 }

@@ -36,7 +36,11 @@ jobs:
       - name: Build _site
         run: node scripts/build.mjs
 
+      # Production deploys come from main only (a manual run on another branch still tests and builds).
+      # The commit message is not interpolated into the command: wrangler reads it from the checked-out
+      # commit itself (git show -s --format=%B, no shell), so commit text never reaches a command line.
       - name: Deploy to Cloudflare Pages
+        if: github.ref == 'refs/heads/main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -46,4 +50,3 @@ jobs:
             --project-name=cbti-club
             --branch=main
             --commit-hash=${{ github.sha }}
-            --commit-message=${{ github.event.head_commit.message && toJSON(github.event.head_commit.message) || '"workflow_dispatch"' }}

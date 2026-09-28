@@ -122,3 +122,22 @@ Why not 5 everywhere (known limits, not fixed in this unit):
 | Absolute Gambler `#c72d49` / paper | 5.15 | marks only |
 | Smart Money / raised | 3.76 | lowest quadrant pair, still ≥ 3:1 |
 | BTC line `#e0561f` / paper | 3.64 | report chart line (was `#ff6b35`, 2.71) |
+
+## Fix round after review r1 (lead FIX_LIST B-1…B-8)
+
+Evidence: `workers/B2/checks/fix-r1/` and `workers/B2/shots/fix-r1/` in the run directory.
+
+| Item | Change | Proof |
+|---|---|---|
+| B-1 classify | `format` is looked up in an explicit alias table (research, analysis/analyses, essay/essays); nothing strips a trailing "s" any more | new tests: `analysis`, `Analysis`, `analyses` → analysis, and an explicit analysis item reaches the kicker as 分析; reverting to the old code fails 4 checks |
+| B-2 dek | normalized articles show the cleaned manifest excerpt (escaped, ≤160 characters, cut at a sentence end) as `.cw-article-dek` under the title; the crime report shows its own og:description the same way | test asserts the dek inside the article head on fixtures and the 4 real pages; removing it fails 10 checks; screenshots `shots/fix-r1/writing-*`. The adapter's excerpt is the article's first paragraph, so the dek repeats the opening sentence of the body |
+| B-3 auto-advance | one pending timer, kept in `autoAdvanceTimer`, cleared by `nextPage`, `prevPage`, `startTest` and `showScreen`; the timer also checks it is still on the page it was set for | `backcheck.py`: answer the last question, press Back 4 ms later, wait 900 ms → still page 1/8, answers kept (desktop + mobile PASS). The same check on a seeded pre-fix build ends on 2/8 (FAIL). Golden harness still MATCH |
+| B-4 build URLs | malformed percent-encoding in an href or url() is a warning, not a crash; a manifest channel whose URL does not parse is dropped from the row with a warning | seeded `/a%zz` link and an `https://exa mple.com` channel: build exit 0 with two warnings |
+| B-5 clipboard | one `writeClipboard()` for both copy buttons; missing API and refusal both show "复制失败" on the button and in the status region | Playwright with `navigator.clipboard` removed and with `writeText` rejecting: feedback shown, 0 page errors |
+| B-6 marker | `isNormalized()` reads the marker only from the document's own `<html>` start tag | test: marker text inside the body no longer skips normalization; reverting fails the test |
+| B-7 deploy | the commit message is no longer interpolated into the wrangler command (wrangler reads it from the checked-out commit with `git show`, no shell); the deploy step runs only on `refs/heads/main` | YAML parses; wrangler 4.98 source checked for the git fallback |
+| B-8 cw-system v5 | shared files re-copied (`cw.css` changed); the local zh-mono workarounds are gone, `assets/cbti/reading.css` deleted; one rule stays for a product container: `.cbti-q-meta [lang] { font-family: inherit; }` | computed font-family with the workarounds removed: kicker `time`/`a`, rail `dt`, footer base, landing row dates and quiz meta all JetBrains Mono on zh pages; `check-shared --frozen` identical |
+
+Also in this round (same risk class as the chasewang.me items C5–C7, cheap): `--out` may not be the repository or above it (the directory is deleted first), a symlink under a published path fails the build, and the author-strip sort compares code points instead of `localeCompare`.
+
+Gates after the fix round: golden MATCH (byte-identical); test-normalize 255/255 (159/159 fixtures-only); two builds identical (81 files, `diff -r` clean); audit_web 0/0/0 on `_site`; URL inventory 0 non-asset misses (the same 4 deliberately removed assets); 15 hash routes as before; quiz click-through WAGMI and PAPER on desktop and mobile, share text equal to the pre-redesign run; block-cn 0 requests, no overflow, no console errors except the 404 page's own status; contrast unchanged (lowest text pair 4.54, lowest mark 3.64); placeholder grep 0.

@@ -32,6 +32,9 @@ const log = (...m) => { if (!QUIET) console.log('[build]', ...m); };
 const warn = (...m) => console.warn('[build] WARN:', ...m);
 const fail = (msg) => { console.error(`[build] FAIL: ${msg}`); process.exit(1); };
 
+// The output directory is deleted first: never let it be the repository or anything above it.
+if (OUT === ROOT || ROOT.startsWith(OUT + path.sep) || OUT === path.parse(OUT).root) fail(`refusing --out ${OUT}: it contains the repository`);
+
 // ── Allowlist ──
 const FILES = ['index.html', '404.html', 'app.js', 'data.js', '.well-known/security.txt'];
 const DIRS = [
@@ -72,6 +75,7 @@ async function walk(dir) {
   try { entries = await readdir(dir, { withFileTypes: true }); } catch { return out; }
   for (const e of entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))) {
     const p = path.join(dir, e.name);
+    if (e.isSymbolicLink()) fail(`symlink in a published path: ${rel(p, ROOT)} (copy the file instead)`);
     if (e.isDirectory()) out.push(...await walk(p));
     else if (e.isFile()) out.push(p);
   }
@@ -181,7 +185,7 @@ for (const id of writingDirs) {
   const html = await readFile(indexPath, 'utf8');
   const a = html.indexOf(START), b = html.indexOf(END);
   if (a < 0 || b < a) fail('index.html: author-writing markers missing');
-  const rows = [...items].sort(byDateDesc).slice(0, 3).map(writingRow).join('\n');
+  const rows = [...items].sort(byDateDesc).slice(0, 3).map((item) => writingRow(item, warn)).filter(Boolean).join('\n');
   await writeFile(indexPath, html.slice(0, a + START.length) + '\n' + rows + '\n' + html.slice(b));
   log(`landing: latest writing ${[...items].sort(byDateDesc).slice(0, 3).map((i) => i.id).join(', ')}`);
 }
@@ -205,8 +209,11 @@ const set = new Set(rels);
 const html = new Map();
 for (const r of rels.filter((x) => x.endsWith('.html'))) html.set(r, await readFile(path.join(OUT, r), 'utf8'));
 const ids = new Map([...html].map(([r, s]) => [r, new Set([...s.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))]));
+// Returns the output file a site path serves, null when nothing serves it, or undefined when the path
+// has malformed percent-encoding (reported as a warning: browsers still request such URLs as-is).
 const resolve = (p) => {
-  const clean = decodeURIComponent(p).replace(/^\//, '');
+  let clean;
+  try { clean = decodeURIComponent(p).replace(/^\//, ''); } catch { return undefined; }
   if (clean === '') return 'index.html';
   if (set.has(clean) && !clean.endsWith('.html')) return clean;
   if (set.has(`${clean}.html`)) return `${clean}.html`;
@@ -224,7 +231,9 @@ for (const r of rels.filter((x) => /\.(html|css|js|xml|txt)$/.test(x) || x === '
       if (m[1].startsWith('data:')) continue;
       if (/^(https?:|\/\/)/.test(m[1])) { report(`external url() ${m[1]}`); continue; }
       const target = m[1].startsWith('/') ? m[1] : '/' + path.posix.join(path.posix.dirname(r), m[1]);
-      if (!resolve(target)) report(`broken url() ${m[1]}`);
+      const found = resolve(target);
+      if (found === undefined) warn(`${r}: malformed url() ${m[1]} (not checked)`);
+      else if (!found) report(`broken url() ${m[1]}`);
     }
   }
   if (!r.endsWith('.html')) continue;
@@ -243,7 +252,10 @@ for (const r of rels.filter((x) => /\.(html|css|js|xml|txt)$/.test(x) || x === '
     const [pathPart, hash] = v.split('#');
     if (!pathPart) { if (hash && !ids.get(r).has(hash)) report(`missing anchor #${hash}`); continue; }
     if (!pathPart.startsWith('/') && r === '404.html') { report(`relative URL ${v} (404 is served at any path)`); continue; }
-    const target = resolve(new URL(pathPart, pageUrl).pathname.split('?')[0]);
+    let sitePath;
+    try { sitePath = new URL(pathPart, pageUrl).pathname.split('?')[0]; } catch { warn(`${r}: malformed URL ${v} (not checked)`); continue; }
+    const target = resolve(sitePath);
+    if (target === undefined) { warn(`${r}: malformed URL ${v} (not checked)`); continue; }
     if (!target) { report(`broken link ${v}`); continue; }
     if (hash && target.endsWith('.html') && !ids.get(target)?.has(hash)) report(`missing anchor ${v}`);
   }

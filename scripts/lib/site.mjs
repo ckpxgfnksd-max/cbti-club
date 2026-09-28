@@ -120,7 +120,6 @@ export function renderAuthorPage(page) {
     '<link rel="preload" href="/assets/fonts/inter-latin-wght.v5.woff2" as="font" type="font/woff2" crossorigin>',
     '<link rel="stylesheet" href="/assets/cw/cw.css">',
     '<link rel="stylesheet" href="/assets/cw/cw-reading.css">',
-    '<link rel="stylesheet" href="/assets/cbti/reading.css">',
     ...(page.css || []).map((href) => `<link rel="stylesheet" href="${esc(href)}">`),
     page.jsonld ? jsonLd(page.jsonld) : '',
   ].filter(Boolean);
@@ -190,10 +189,14 @@ const KIND = {
   essay: { zh: '文章', en: 'Essay' },
 };
 
+// Accepted `format` values. Plural aliases are listed explicitly: stripping a trailing "s" would turn
+// "analysis" into "analysi" and silently misfile it (review r1 F1).
+const FORMAT_ALIASES = { research: 'research', analysis: 'analysis', analyses: 'analysis', essay: 'essay', essays: 'essay' };
+
 /** Brief §3.1: format field → x-article tag → research kind/tag → essay. */
 export function classify(item) {
-  const f = String(item?.format || '').toLowerCase().replace(/s$/, '');
-  if (FORMAT[f]) return f;
+  const f = FORMAT_ALIASES[String(item?.format || '').trim().toLowerCase()];
+  if (f) return f;
   const tags = (item?.tags || []).map((x) => String(x).toLowerCase());
   if (tags.includes('x-article')) return 'analysis';
   const kind = String(item?.kind || '').toLowerCase();
@@ -234,15 +237,23 @@ export function dateLabel(item) {
   if (item.datePrecision === 'month') return item.publishedAt.slice(0, 7);
   return item.publishedAt;
 }
-export const byDateDesc = (a, b) => b.publishedAt.localeCompare(a.publishedAt) || a._order - b._order;
+// Code-point comparison (not localeCompare): output bytes must not depend on the build machine's locale.
+export const byDateDesc = (a, b) => (a.publishedAt < b.publishedAt ? 1 : a.publishedAt > b.publishedAt ? -1 : a._order - b._order);
 
-/** One index row (cw-index) for the landing's "作者的写作" strip. Interface copy in Chinese. */
-export function writingRow(item) {
+/** One index row (cw-index) for the landing's "作者的写作" strip. Interface copy in Chinese.
+ *  A channel whose URL does not parse is dropped (warned by the caller's log), never fatal. */
+export function writingRow(item, log = () => {}) {
   const lang = item.primaryLang;
-  const channels = item.channels.map((c) => {
-    const url = mapUrl(c.url);
-    return { url, lang: c.lang, external: /^https?:\/\//.test(url), name: channelName(url) };
+  const channels = item.channels.flatMap((c) => {
+    try {
+      const url = mapUrl(c.url);
+      return [{ url, lang: c.lang, external: /^https?:\/\//.test(url), name: channelName(url) }];
+    } catch {
+      log(`writings: ${item.id}: skipped channel with an invalid URL (${c.url})`);
+      return [];
+    }
   });
+  if (channels.length === 0) return '';
   const primary = channels.find((c) => !c.external && c.lang === lang) || channels.find((c) => !c.external)
     || channels.find((c) => c.lang === lang) || channels[0];
   const format = FORMAT[classify(item)];

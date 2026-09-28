@@ -13,8 +13,8 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { MARK, cleanDescription, normalizeWritingPage, parseAdapterPage } from './lib/normalize.mjs';
-import { parseManifest, unesc } from './lib/site.mjs';
+import { MARK, cleanDescription, isNormalized, normalizeWritingPage, parseAdapterPage } from './lib/normalize.mjs';
+import { classify, esc, parseManifest, unesc } from './lib/site.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURES = path.join(ROOT, 'scripts', 'fixtures');
@@ -56,6 +56,8 @@ function assertNormalized(name, html, item) {
     check(`${name}: og:${k} kept`, v !== null && unesc(v) === unesc(p.og[k]), `${v} vs ${p.og[k]}`);
   }
   const desc = attr(/<meta name="description" content="([^"]*)">/);
+  const head = out.slice(out.indexOf('<header class="cw-container cw-article-head">'), out.indexOf('</header>', out.indexOf('cw-article-head')));
+  check(`${name}: visible dek in the article head`, !!desc && head.includes(`<p class="cw-article-dek" lang="${L}">${esc(unesc(desc))}</p>`), head.slice(0, 200));
   const descText = unesc(desc || '');
   check(`${name}: meta description cleaned`, !!desc && !/\s{2,}|\n/.test(descText) && descText.length <= 161 && descText === descText.trim()
     && !/&(amp|quot|lt|gt|#x27);/.test(descText) && !/\s[,.;:，。；：]/.test(descText), descText);
@@ -101,6 +103,30 @@ for (const lang of ['zh', 'en']) {
   }
 }
 
+// classify(): an explicit format wins; only listed plural aliases map (review r1 F1: "analysis" once
+// lost its trailing "s" and fell back to essay).
+for (const [format, want] of [['analysis', 'analysis'], ['Analysis', 'analysis'], ['analyses', 'analysis'], ['research', 'research'],
+  ['essay', 'essay'], ['essays', 'essay']]) {
+  check(`classify format "${format}" → ${want}`, classify({ format, tags: [] }) === want, classify({ format, tags: [] }));
+}
+check('classify unknown format falls back to tags', classify({ format: 'bogus', tags: ['x-article'] }) === 'analysis');
+check('classify no format, research kind', classify({ kind: 'Field map', tags: [] }) === 'research');
+check('classify no format, plain item', classify({ tags: ['macro'] }) === 'essay');
+{
+  const html = await readFile(path.join(FIXTURES, 'adapter-zh.html'), 'utf8');
+  const r = normalizeWritingPage(html, { item: { id: 'fixture-zh', primaryLang: 'zh', format: 'analysis', tags: [], excerpt: { zh: excerpts['fixture-zh'] } } });
+  check('explicit format "analysis" reaches the kicker', r.html.includes('<a href="https://chasewang.me/writing#analysis">分析</a>'));
+}
+
+// The idempotency marker only counts on the <html> start tag (review r1: a marker string inside the body
+// must not make the normalizer skip a page).
+{
+  const html = await readFile(path.join(FIXTURES, 'adapter-zh.html'), 'utf8');
+  const withText = html.replace('<p>最后一段。</p>', `<p title='${MARK}="1"'>最后一段。</p>`);
+  check('marker text inside the body does not count', !isNormalized(withText) && normalizeWritingPage(withText, {}).status === 'normalized');
+  check('marker on the html tag counts', isNormalized(normalizeWritingPage(html, {}).html));
+}
+
 // cleanDescription: whitespace collapsed, clipped at a sentence end near the limit.
 check('cleanDescription collapses whitespace', cleanDescription('  a \n\n b  ', 'en') === 'a b');
 {
@@ -120,7 +146,7 @@ if (!fixturesOnly) {
   for (const id of dirs) {
     let html;
     try { html = await readFile(path.join(ROOT, 'writings', id, 'index.html'), 'utf8'); } catch { continue; }
-    check(`writings/${id}: repository copy not normalized`, !html.includes(MARK));
+    check(`writings/${id}: repository copy not normalized`, !isNormalized(html));
     assertNormalized(`writings/${id}`, html, byId.get(id) || null);
   }
 }
