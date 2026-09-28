@@ -37,7 +37,7 @@ export function parseAdapterPage(html) {
   const description = get(/<meta\s+name="description"\s+content="([^"]*)"/i);
   const canonical = get(/<link\s+rel="canonical"\s+href="([^"]+)"/i);
   if (!canonical || !/^https:\/\//.test(canonical)) problems.push('canonical');
-  const og = {};
+  const og = Object.create(null); // keyed by names read from the page: no inherited keys
   for (const m of html.matchAll(/<meta\s+property="og:([a-z_:]+)"\s+content="([^"]*)"/gi)) og[m[1]] = m[2];
 
   const mainAt = html.search(/<main\b/i);

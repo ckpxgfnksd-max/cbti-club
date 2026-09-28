@@ -8,6 +8,9 @@ export const HOME = 'https://chasewang.me';
 export const PERSON_ID = `${HOME}/#person`;
 export const AUTHOR_REF = { '@type': 'Person', '@id': PERSON_ID, name: 'Chase Wang', url: `${HOME}/` };
 
+/** Own-property lookup for tables keyed by manifest or page strings: "constructor" or "__proto__" is an unknown
+ *  key, never a value inherited from Object.prototype. Non-objects have no keys. */
+export const own = (table, key) => (table !== null && typeof table === 'object' && Object.hasOwn(table, key) ? table[key] : undefined);
 export const esc = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 export const unesc = (v) => String(v ?? '')
   .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&#39;/g, "'").replace(/&amp;/g, '&');
@@ -50,7 +53,7 @@ const ELSEWHERE = [
 
 /** Header for author pages: the Chase Wang brand and nav, pointing at chasewang.me. */
 export function readingHeader(lang, current = 'writing') {
-  const ui = UI[lang] || UI.en;
+  const ui = own(UI, lang) || UI.en;
   const items = ui.nav.map(([label, href]) => {
     const cur = href === `/${current}` ? ' aria-current="true"' : '';
     return `<li><a href="${HOME}${href}"${cur}>${label}</a></li>`;
@@ -67,7 +70,7 @@ export function readingHeader(lang, current = 'writing') {
 
 /** Footer for author pages (same structure as chasewang.me; absolute links). */
 export function readingFooter(lang) {
-  const ui = UI[lang] || UI.en;
+  const ui = own(UI, lang) || UI.en;
   const nav = ui.nav.map(([label, href]) => `<li><a href="${HOME}${href}">${label}</a></li>`).join('');
   const ext = ELSEWHERE.map(([name, href]) => `<li><a href="${esc(href)}" rel="noopener">${name}${arrow(true)}</a></li>`).join('')
     + `<li><a href="${HOME}/feed.xml">${ui.feed}</a></li>`;
@@ -154,11 +157,12 @@ export function validItem(item, seen = new Set()) {
   if (seen.has(item.id)) problems.push('duplicate id');
   if (typeof item.publishedAt !== 'string' || !DATE_RE.test(item.publishedAt)) problems.push('publishedAt');
   if (item.primaryLang !== 'en' && item.primaryLang !== 'zh') problems.push('primaryLang');
-  if (!item.title?.[item.primaryLang] || !item.excerpt?.[item.primaryLang]) problems.push('title/excerpt in primaryLang');
-  if (!Array.isArray(item.channels) || item.channels.length === 0) problems.push('channels');
-  for (const c of item.channels || []) {
+  if (!own(item.title, item.primaryLang) || !own(item.excerpt, item.primaryLang)) problems.push('title/excerpt in primaryLang');
+  const channels = Array.isArray(item.channels) ? item.channels : [];
+  if (channels.length === 0) problems.push('channels');
+  for (const c of channels) {
     if (!c || typeof c.url !== 'string' || !(c.url.startsWith('https://') || c.url.startsWith('#'))) problems.push(`channel url ${c?.url}`);
-    if (!c || !item.title?.[c.lang]) problems.push(`channel lang ${c?.lang}`);
+    if (!c || !own(item.title, c.lang)) problems.push(`channel lang ${c?.lang}`);
   }
   return problems;
 }
@@ -193,27 +197,49 @@ const KIND = {
 // "analysis" into "analysi" and silently misfile it (review r1 F1).
 const FORMAT_ALIASES = { research: 'research', analysis: 'analysis', analyses: 'analysis', essay: 'essay', essays: 'essay' };
 
+const tagsOf = (item) => (Array.isArray(item?.tags) ? item.tags : []);
+
 /** Brief §3.1: format field → x-article tag → research kind/tag → essay. */
 export function classify(item) {
-  const f = FORMAT_ALIASES[String(item?.format || '').trim().toLowerCase()];
+  const f = own(FORMAT_ALIASES, String(item?.format || '').trim().toLowerCase());
   if (f) return f;
-  const tags = (item?.tags || []).map((x) => String(x).toLowerCase());
+  const tags = tagsOf(item).map((x) => String(x).toLowerCase());
   if (tags.includes('x-article')) return 'analysis';
   const kind = String(item?.kind || '').toLowerCase();
   if (['academic paper', 'field map', 'data study'].includes(kind) || tags.some((x) => x.includes('research'))) return 'research';
   return 'essay';
 }
 export function kindLabel(item) {
-  if (item?.kind) return KIND[String(item.kind).toLowerCase()] || { zh: item.kind, en: item.kind };
-  if ((item?.tags || []).includes('x-article')) return { zh: 'X 长文', en: 'X Article' };
+  if (item?.kind) return own(KIND, String(item.kind).toLowerCase()) || { zh: item.kind, en: item.kind };
+  if (tagsOf(item).includes('x-article')) return { zh: 'X 长文', en: 'X Article' };
   return null;
 }
 
-/** Hash routes cannot be linked across sites; own cbti.club pages become same-origin paths. */
+/** The old cbti.club hash routes that moved to chasewang.me, with the target app.js sends each one to. Same table
+ *  as window.CBTI_LEGACY in index.html; test-normalize.mjs checks that the two agree. */
+export const LEGACY_HASH_ROUTES = Object.freeze({
+  read: `${HOME}/writing`,
+  chase: `${HOME}/about`,
+  paper: `${HOME}/paper`,
+  'essay-three-body': `${HOME}/essay-three-body`,
+  'chase-socials': `${HOME}/about`,
+  'chase-writing': `${HOME}/writing`,
+  'chase-essays': `${HOME}/writing`,
+  'chase-reading-preview': `${HOME}/writing`,
+  'chase-tools': `${HOME}/work`,
+  'chase-systems': `${HOME}/work`,
+});
+
+/** A channel URL as this site links it. A legacy hash route goes where app.js redirects it; any other hash throws
+ *  (the caller drops the channel with a warning). cbti.club URLs become same-origin clean paths. */
 export function mapUrl(u) {
-  if (u === '#paper') return `${HOME}/paper`;
-  if (u === '#essay-three-body') return `${HOME}/essay-three-body`;
-  if (u.startsWith('#')) return `/${u}`;
+  if (u.startsWith('#')) {
+    let route = null;
+    try { route = decodeURIComponent(u.slice(1)); } catch { /* malformed escape: not a known route */ }
+    const target = own(LEGACY_HASH_ROUTES, route);
+    if (target) return target;
+    throw new Error('unknown hash route');
+  }
   const url = new URL(u);
   if (url.hostname === 'cbti.club' || url.hostname === 'www.cbti.club') {
     const p = url.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
@@ -241,15 +267,15 @@ export function dateLabel(item) {
 export const byDateDesc = (a, b) => (a.publishedAt < b.publishedAt ? 1 : a.publishedAt > b.publishedAt ? -1 : a._order - b._order);
 
 /** One index row (cw-index) for the landing's "作者的写作" strip. Interface copy in Chinese.
- *  A channel whose URL does not parse is dropped (warned by the caller's log), never fatal. */
+ *  A channel whose URL does not parse, or an unknown hash route, is dropped (warned by the caller's log), never fatal. */
 export function writingRow(item, log = () => {}) {
   const lang = item.primaryLang;
   const channels = item.channels.flatMap((c) => {
     try {
       const url = mapUrl(c.url);
       return [{ url, lang: c.lang, external: /^https?:\/\//.test(url), name: channelName(url) }];
-    } catch {
-      log(`writings: ${item.id}: skipped channel with an invalid URL (${c.url})`);
+    } catch (e) {
+      log(`writings: ${item.id}: skipped channel ${JSON.stringify(c.url)} (${e.message})`);
       return [];
     }
   });
@@ -274,7 +300,7 @@ export function writingRow(item, log = () => {}) {
     <h3 class="cw-row-title"><a href="${esc(primary.url)}"${primary.external ? ' rel="noopener"' : ''}>${esc(item.title[lang])}</a>${sub}</h3>
     <p class="cw-row-dek cw-clamp-2">${esc(item.excerpt[lang])}</p>
   </div>
-  <p class="cw-row-tags">${tags.join('')}${langs.map((l) => badge[l]).join('')}</p>
+  <p class="cw-row-tags">${tags.join('')}${langs.map((l) => own(badge, l) || '').join('')}</p>
   <p class="cw-row-chans">${chans}</p>
 </li>`;
 }

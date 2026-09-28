@@ -47,7 +47,8 @@ scripts/serve.mjs       # local Pages-like server (clean URLs, _headers, 404)
 `#method`, `#writing`. Old routes (`#read`, `#chase`, `#paper`, `#essay-three-body`, `#chase-*`)
 redirect to chasewang.me with `location.replace`; the table is `window.CBTI_LEGACY` in
 `index.html` (runs before first paint). `#node` still falls back to the landing. Quiz and result
-have no URL.
+have no URL. The build links a manifest `#` channel with the same table (`LEGACY_HASH_ROUTES` in
+`scripts/lib/site.mjs`; `test-normalize.mjs` fails if the two differ) and drops any other hash with a warning.
 
 ---
 

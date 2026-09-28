@@ -14,7 +14,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MARK, cleanDescription, isNormalized, normalizeWritingPage, parseAdapterPage } from './lib/normalize.mjs';
-import { classify, esc, parseManifest, unesc } from './lib/site.mjs';
+import { LEGACY_HASH_ROUTES, classify, esc, kindLabel, mapUrl, parseManifest, unesc, validItem, writingRow } from './lib/site.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURES = path.join(ROOT, 'scripts', 'fixtures');
@@ -116,6 +116,63 @@ check('classify no format, plain item', classify({ tags: ['macro'] }) === 'essay
   const html = await readFile(path.join(FIXTURES, 'adapter-zh.html'), 'utf8');
   const r = normalizeWritingPage(html, { item: { id: 'fixture-zh', primaryLang: 'zh', format: 'analysis', tags: [], excerpt: { zh: excerpts['fixture-zh'] } } });
   check('explicit format "analysis" reaches the kicker', r.html.includes('<a href="https://chasewang.me/writing#analysis">分析</a>'));
+}
+
+// Own-property lookups (B3 F-2): a manifest string that names an Object.prototype member is an unknown key,
+// never an inherited value (before: format "constructor" classified as a function, kind "__proto__" as an object).
+for (const name of ['constructor', '__proto__', 'toString', 'hasOwnProperty', 'valueOf']) {
+  check(`classify format "${name}" is unknown, tags decide`, classify({ format: name, tags: ['x-article'] }) === 'analysis' && classify({ format: name, tags: [] }) === 'essay');
+  const k = kindLabel({ kind: name });
+  check(`kindLabel kind "${name}" is shown as written`, k?.zh === name && k?.en === name, JSON.stringify(k));
+}
+check('kindLabel known kind keeps its label', kindLabel({ kind: 'Field map' })?.zh === '领域地图' && kindLabel({ kind: 'Data study' })?.en === 'Data study');
+check('classify and kindLabel ignore tags that are not a list', classify({ tags: 'x-article' }) === 'essay' && kindLabel({ tags: 'x-article' }) === null);
+{
+  const item = (extra) => ({ id: 'v', publishedAt: '2026-01-01', primaryLang: 'en', title: { en: 'T' }, excerpt: { en: 'E' }, ...extra });
+  check('validItem accepts a plain valid item', validItem(item({ channels: [{ lang: 'en', url: 'https://x.com/a' }] })).length === 0);
+  check('validItem: a channel lang needs its own title key', validItem(item({ channels: [{ lang: 'constructor', url: 'https://x.com/a' }] })).includes('channel lang constructor'));
+  check('validItem: channels that are not a list are a problem, not a crash', validItem(item({ channels: { lang: 'en' } })).includes('channels') && validItem(item({ channels: 5 })).includes('channels'));
+  const warned = [];
+  const items = parseManifest(JSON.stringify({ version: 1, items: [
+    item({ id: 'ok', channels: [{ lang: 'en', url: 'https://x.com/a' }] }),
+    item({ id: 'obj', channels: { lang: 'en' } }),
+    item({ id: 'proto', channels: [{ lang: 'constructor', url: 'https://x.com/a' }] }),
+  ] }), (m) => warned.push(m));
+  check('parseManifest skips malformed items and keeps going', items.length === 1 && items[0].id === 'ok' && warned.length === 2, warned.join(' | '));
+  const row = writingRow(item({ title: { en: 'T', toString: 'x' }, channels: [{ lang: 'en', url: 'https://x.com/a' }, { lang: 'toString', url: 'https://example.com/a' }] }));
+  check('writingRow: no inherited value reaches the language badges', !/function|native code|undefined/.test(row), row);
+}
+
+// Legacy hash channels (B3 F-3): the same targets app.js redirects to (window.CBTI_LEGACY in index.html);
+// any other hash is dropped from the row with a warning, never a build failure.
+{
+  const indexHtml = await readFile(path.join(ROOT, 'index.html'), 'utf8');
+  const m = indexHtml.match(/window\.CBTI_LEGACY = (\{[\s\S]*?\});/);
+  let legacy = null;
+  try { legacy = JSON.parse(m?.[1]); } catch { /* reported below */ }
+  check('index.html: window.CBTI_LEGACY table found', !!legacy && typeof legacy === 'object');
+  if (legacy) {
+    check('LEGACY_HASH_ROUTES lists exactly the routes of window.CBTI_LEGACY',
+      JSON.stringify(Object.keys(LEGACY_HASH_ROUTES).sort()) === JSON.stringify(Object.keys(legacy).sort()), Object.keys(legacy).join(' '));
+    for (const [route, target] of Object.entries(legacy)) {
+      let got; try { got = mapUrl(`#${route}`); } catch (e) { got = e.message; }
+      check(`mapUrl #${route} → ${target}, as app.js`, got === target, got);
+    }
+  }
+  check('mapUrl decodes the hash as app.js does', mapUrl('#chase%2Dtools') === 'https://chasewang.me/work');
+  for (const u of ['#nope', '#chase-nope', '#node', '#landing', '#constructor', '#__proto__', '#', '#%E0%A4%A']) {
+    let threw = false;
+    try { mapUrl(u); } catch { threw = true; }
+    check(`mapUrl ${u}: unknown hash route`, threw);
+  }
+  const zh = { id: 'h', publishedAt: '2026-01-01', primaryLang: 'zh', title: { zh: '标题' }, excerpt: { zh: '摘要' } };
+  const logs = [];
+  const row = writingRow({ ...zh, channels: [{ lang: 'zh', url: '#nope' }, { lang: 'zh', url: 'https://x.com/ChaseWang/status/1' }] }, (msg) => logs.push(msg));
+  check('writingRow drops an unknown hash channel, warns, keeps the rest',
+    row.includes('href="https://x.com/ChaseWang/status/1"') && !row.includes('#nope') && logs.some((l) => l.includes('"#nope"') && l.includes('unknown hash route')), logs.join(' | '));
+  check('writingRow renders nothing when no channel is usable', writingRow({ ...zh, channels: [{ lang: 'zh', url: '#nope' }] }) === '');
+  check('writingRow links a legacy #read channel to chasewang.me/writing',
+    writingRow({ ...zh, channels: [{ lang: 'zh', url: '#read' }] }).includes('href="https://chasewang.me/writing"'));
 }
 
 // The idempotency marker only counts on the <html> start tag (review r1: a marker string inside the body

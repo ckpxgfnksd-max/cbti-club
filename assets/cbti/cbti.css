@@ -90,6 +90,8 @@
 }
 .cbti-facts dt { font-size: var(--fs-small); line-height: 1.35; color: var(--text-2); }
 .cbti-facts dt [lang="en"] { display: block; font-size: var(--fs-micro); color: var(--text-muted); }
+/* Caption of the facts row: what the dimension count does and does not decide. */
+.cbti-facts-note { margin-top: var(--sp-3); font-size: var(--fs-meta); line-height: 1.6; color: var(--text-2); }
 
 .cbti-note {
   margin-top: var(--sp-5);
