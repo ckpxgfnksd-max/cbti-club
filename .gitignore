@@ -2,3 +2,5 @@
 .DS_Store
 .gstack/
 .dev.vars
+# Build output (scripts/build.mjs); deployed by CI, never committed.
+_site/

@@ -1,0 +1,235 @@
+/* AI Workflow · Practitioner's Field Map — the page markup is kept exactly as published;
+   this file maps its classes onto cw-system tokens and the index-row pattern. */
+
+.landscape {
+  --fact-accent: var(--text);
+  --opinion-accent: var(--accent);
+}
+.landscape .paper-page {
+  width: 100%;
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Head */
+.landscape .paper-page > header {
+  padding-top: clamp(2.5rem, 1.6rem + 4vw, 5.5rem);
+  padding-bottom: var(--sp-6);
+}
+.landscape .paper-page > header > * + * { margin-top: var(--sp-4); }
+.landscape .paper-article-eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+.landscape .paper-article-title {
+  max-width: 18em;
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: var(--tr-heading);
+  text-wrap: balance;
+}
+.landscape .paper-article-title em { font-style: normal; font-weight: 400; color: var(--text-2); }
+.landscape .paper-article-subtitle {
+  max-width: 40em;
+  font-size: var(--fs-lede);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--text-2);
+}
+.landscape .paper-article-authors { font-size: var(--fs-small); font-weight: 500; }
+.landscape .paper-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-6);
+  margin-top: var(--sp-6);
+  padding-block: var(--sp-4);
+  border-top: var(--bw) solid var(--line-strong);
+  border-bottom: var(--bw) solid var(--line);
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.landscape .meta-label {
+  margin-right: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--text-muted);
+}
+.landscape .lede { margin-top: var(--sp-6); }
+.landscape .lede p { max-width: 36em; font-size: var(--fs-lede); line-height: 1.4; letter-spacing: -0.01em; }
+
+/* Links inside the map read as links */
+.landscape .paper-page a { color: var(--accent); text-decoration-color: currentColor; }
+.landscape .paper-page a:hover { color: var(--text); }
+.landscape code {
+  padding: 0.05em 0.3em;
+  background: var(--surface-raised);
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  overflow-wrap: anywhere;
+}
+
+/* Toolbar */
+.landscape .toolbar { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: var(--sp-6); }
+.landscape .toolbar button {
+  min-height: 2.75rem;
+  padding: 0 var(--sp-5);
+  border: var(--bw) solid var(--text);
+  background: transparent;
+  color: var(--text);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  transition: background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.landscape .toolbar button:hover { background: var(--text); color: var(--surface); }
+
+/* Section heads: strong rule, like cw-section-head */
+.landscape .paper-page section { margin-top: var(--section-gap); }
+.landscape .paper-page section > h2 {
+  padding-top: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-top: var(--bw) solid var(--line-strong);
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: var(--tr-heading);
+}
+.landscape .reading-paths { margin-top: var(--sp-6) !important; }
+.landscape .reading-paths p { max-width: var(--measure); color: var(--text-2); }
+.landscape .reading-paths p + p { margin-top: var(--sp-3); }
+.landscape .reading-paths strong { color: var(--text); font-weight: 600; }
+.landscape .cluster-intro p,
+.landscape .voices-intro {
+  max-width: var(--measure);
+  padding-bottom: var(--sp-5);
+  color: var(--text-2);
+}
+
+/* Voices: three quotes per row, hairlines between */
+.landscape .voices-subhead {
+  display: block;
+  margin-top: var(--sp-5);
+  padding-block: var(--sp-3);
+  border-top: var(--bw) solid var(--line);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+.landscape .quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+}
+.landscape .pull-quote { padding-block: var(--sp-4) var(--sp-5); }
+.landscape .pull-quote-text { font-size: var(--fs-h3); font-weight: 500; line-height: 1.4; letter-spacing: -0.01em; color: var(--text); }
+.landscape .pull-quote-text:lang(zh), .landscape .pull-quote-text { text-wrap: pretty; }
+.landscape .pull-quote-attrib { margin-top: var(--sp-3); font-family: var(--font-mono); font-size: var(--fs-meta); color: var(--text); }
+.landscape .pull-quote-source { margin-top: var(--sp-2); font-size: var(--fs-small); line-height: 1.5; color: var(--text-2); }
+
+/* Entries and debates: index rows that open */
+.landscape details { border-top: var(--bw) solid var(--line); }
+.landscape details:last-of-type { border-bottom: var(--bw) solid var(--line); }
+.landscape summary {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  align-items: baseline;
+  padding-block: var(--sp-4);
+  cursor: pointer;
+  list-style: none;
+}
+.landscape summary::-webkit-details-marker { display: none; }
+.landscape summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: var(--sp-4);
+  width: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  line-height: 1.4;
+  text-align: center;
+  color: var(--text-muted);
+}
+.landscape details[open] > summary::after { content: "−"; color: var(--text); }
+.landscape summary:hover .entry-title,
+.landscape summary:hover { color: var(--accent); }
+.landscape .entry-num {
+  grid-column: 1 / span 2;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+.landscape .entry-title {
+  grid-column: 3 / span 8;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+}
+.landscape .cn-title { font-weight: 400; color: var(--text-2); }
+.landscape .tag {
+  grid-column: 11 / span 2;
+  justify-self: end;
+  margin-right: 2rem;
+  padding: 0 0.45em;
+  border: var(--bw) solid var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  line-height: 1.6;
+}
+.landscape .tag.fact { background: var(--text); color: var(--surface); }
+.landscape .tag.opinion { border-color: var(--accent); color: var(--accent); background: transparent; }
+.landscape .body {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  padding-bottom: var(--sp-6);
+}
+.landscape .body > * { grid-column: 3 / span 8; max-width: var(--measure); color: var(--text-2); }
+.landscape .body > * + * { margin-top: var(--sp-3); }
+.landscape .body strong { color: var(--text); font-weight: 600; }
+.landscape .source { font-size: var(--fs-small); color: var(--text-2); }
+.landscape .source strong { font-family: var(--font-mono); font-size: var(--fs-micro); font-weight: 400; color: var(--text-muted); margin-right: var(--sp-2); }
+
+.landscape .debate > summary { display: block; padding-right: 2rem; font-size: var(--fs-body); font-weight: 600; line-height: 1.4; }
+.landscape .positions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  padding-bottom: var(--sp-6);
+}
+.landscape .position { padding-top: var(--sp-3); border-top: var(--bw) solid var(--line); }
+.landscape .position h4 { font-size: var(--fs-small); font-weight: 600; line-height: 1.4; }
+.landscape .position p { margin-top: var(--sp-2); font-size: var(--fs-small); line-height: 1.6; color: var(--text-2); }
+
+/* Closing notes */
+.landscape .paper-page > footer {
+  margin-top: var(--section-gap);
+  padding-top: var(--sp-4);
+  border-top: var(--bw) solid var(--line-strong);
+}
+.landscape .paper-page > footer h3 { font-size: var(--fs-h3); font-weight: 600; margin-bottom: var(--sp-4); }
+.landscape .paper-page > footer p { max-width: var(--measure); color: var(--text-2); }
+.landscape .paper-page > footer p + p { margin-top: var(--sp-3); }
+.landscape .paper-page > footer strong { color: var(--text); font-weight: 600; }
+
+@media (max-width: 56rem) {
+  .landscape .quotes-grid, .landscape .positions { grid-template-columns: 1fr; }
+  .landscape .pull-quote + .pull-quote, .landscape .position + .position { border-top: var(--bw) solid var(--line); }
+  .landscape .entry-num { grid-column: 1 / span 2; }
+  .landscape .entry-title { grid-column: 3 / span 10; }
+  .landscape .tag { grid-column: 3 / span 10; justify-self: start; margin-top: var(--sp-2); margin-right: 0; }
+  .landscape .entry-title { padding-right: 2rem; }
+  .landscape .body > * { grid-column: 3 / span 10; }
+}
+@media (max-width: 40rem) {
+  .landscape summary { grid-template-columns: 1fr; row-gap: var(--sp-1); }
+  .landscape .entry-num, .landscape .entry-title, .landscape .tag { grid-column: 1; }
+  .landscape .body { display: block; }
+  .landscape .body > * + * { margin-top: var(--sp-3); }
+}

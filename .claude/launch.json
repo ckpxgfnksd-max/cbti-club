@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "cbti",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "wrangler@latest", "pages", "dev", ".", "--compatibility-date=2024-09-01", "--port", "8080", "--ip", "127.0.0.1"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/serve.mjs", "--build", "--port", "8080"],
       "port": 8080
     }
   ]

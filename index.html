@@ -1,1026 +1,261 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-Hans">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CBTI 加密人格测试 | Crypto Behavioral Type Indicator</title>
-  <meta name="description" content="CBTI · Crypto Behavioral Type Indicator · 加密行为类型指标。30 道题告诉你是 24 种加密人格中的哪一种 — 钻石手、赌狗、巨鲸、旋转安迪、爆仓侠……">
-  <meta property="og:title" content="CBTI · Crypto Behavioral Type Indicator">
-  <meta property="og:description" content="加密行为类型指标 · 30 道题 · 24 种人格 · 一个真相。钻石手、赌狗、巨鲸、旋转安迪、爆仓侠、撸毛大军……你是哪一种？">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CBTI · Crypto Behavioral Type Indicator">
-  <meta name="twitter:description" content="加密行为类型指标 · 30 道题 · 24 种人格 · 一个真相。钻石手、赌狗、巨鲸、旋转安迪、爆仓侠……你是哪一种？">
-  <meta property="og:image" content="https://cbti.club/assets/icon/og-image.jpg">
-  <meta property="og:url" content="https://cbti.club">
-  <meta name="twitter:image" content="https://cbti.club/assets/icon/og-image.jpg">
-
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/icon/favicon-16.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon/favicon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon/apple-touch-icon.png">
-  <link rel="shortcut icon" href="assets/icon/favicon.ico">
-  <meta name="theme-color" content="#f2f0e8">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=36">
-  <link rel="stylesheet" href="redesign.css?v=3">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+/* Old routes: Chase's profile, archive and long-form pages moved to chasewang.me.
+   One table, read by app.js too. Replace (not push) so Back does not bounce. */
+window.CBTI_LEGACY = {
+  "read": "https://chasewang.me/writing",
+  "chase": "https://chasewang.me/about",
+  "paper": "https://chasewang.me/paper",
+  "essay-three-body": "https://chasewang.me/essay-three-body",
+  "chase-socials": "https://chasewang.me/about",
+  "chase-writing": "https://chasewang.me/writing",
+  "chase-essays": "https://chasewang.me/writing",
+  "chase-reading-preview": "https://chasewang.me/writing",
+  "chase-tools": "https://chasewang.me/work",
+  "chase-systems": "https://chasewang.me/work"
+};
+(function () {
+  var h = '';
+  try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
+  if (Object.prototype.hasOwnProperty.call(window.CBTI_LEGACY, h)) location.replace(window.CBTI_LEGACY[h]);
+})();
+</script>
+<title>CBTI 加密人格测试 | Crypto Behavioral Type Indicator</title>
+<meta name="description" content="CBTI · Crypto Behavioral Type Indicator · 加密行为类型指标。30 道题告诉你是 24 种加密人格中的哪一种 — 钻石手、赌狗、巨鲸、旋转安迪、爆仓侠……">
+<link rel="canonical" href="https://cbti.club/">
+<meta name="author" content="Chase Wang">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CBTI">
+<meta property="og:title" content="CBTI · Crypto Behavioral Type Indicator">
+<meta property="og:description" content="加密行为类型指标 · 30 道题 · 24 种人格 · 一个真相。钻石手、赌狗、巨鲸、旋转安迪、爆仓侠、撸毛大军……你是哪一种？">
+<meta property="og:url" content="https://cbti.club/">
+<meta property="og:image" content="https://cbti.club/assets/cbti/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@ChaseWang">
+<meta name="twitter:title" content="CBTI · Crypto Behavioral Type Indicator">
+<meta name="twitter:description" content="加密行为类型指标 · 30 道题 · 24 种人格 · 一个真相。钻石手、赌狗、巨鲸、旋转安迪、爆仓侠……你是哪一种？">
+<meta name="twitter:image" content="https://cbti.club/assets/cbti/og.png">
+<meta name="theme-color" content="#fafaf8">
+<link rel="icon" href="/assets/cw/icons/mark.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/cw/icons/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/assets/cw/icons/mark-180.png">
+<link rel="preload" href="/assets/fonts/inter-latin-wght.v5.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/cw/cw.css">
+<link rel="stylesheet" href="/assets/cbti/cbti.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","@id":"https://cbti.club/#app","name":"CBTI","alternateName":["Crypto Behavioral Type Indicator","加密行为类型指标"],"url":"https://cbti.club/","description":"CBTI · Crypto Behavioral Type Indicator · 加密行为类型指标。30 道题告诉你是 24 种加密人格中的哪一种。","inLanguage":["zh-Hans","en"],"browserRequirements":"Requires JavaScript.","isAccessibleForFree":true,"creator":{"@type":"Person","@id":"https://chasewang.me/#person","name":"Chase Wang","url":"https://chasewang.me/"}}</script>
 </head>
-<body>
-
-  <!--
-    THESIS: Chase's public work is one connected system: behavior becomes markets, code becomes institutions, and workflows compound. Refuses the generic dark-editorial portfolio.
-    OWN-WORLD: cool daylight canvas, drafting-blue fields, verification-lime marks, square rules, and a linked three-node field map.
-    STORY: enter through CBTI, the complete reading archive, or Chase; every public article remains one direct action away from Read.
-    FIRST VIEWPORT: oversized name and three-line thesis on the left; an interactive field map on the right; work and social actions remain visible without scrolling.
-    FORM: public research instrument; code-led; seed key CBTI-CHASE-2026-08.
-    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
-  -->
-
-  <!-- ═══ Background video (landing + quiz only; hidden on result) ═══
-       bg.mp4 is pre-baked as forward+reverse concatenated, so native `loop`
-       produces seamless ping-pong (no JS reverse-seek = no keyframe jump). -->
-  <div class="bg-video-wrap" aria-hidden="true">
-    <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/video/bg-poster.jpg">
-      <source src="assets/video/bg.mp4" type="video/mp4">
-    </video>
-    <div class="bg-video-overlay"></div>
-  </div>
-
-  <a class="site-skip" href="#site-main">Skip to content</a>
-  <header class="site-header">
-    <a class="site-brand" href="#landing" aria-label="CBTI home">
-      <strong>CBTI</strong>
-      <span>Crypto Behavioral Type Indicator</span>
-    </a>
-    <nav class="site-nav" aria-label="Primary navigation">
-      <a href="#landing" data-route="cbti">CBTI</a>
-      <a href="#read" data-route="read">Read</a>
-      <a href="#chase" data-route="chase">Chase</a>
+<body class="screen-landing">
+<a class="cw-skip" href="#site-main">跳到正文</a>
+<header class="cw-header">
+  <div class="cw-container cw-header-inner">
+    <a class="cw-brand" href="/#landing"><span class="cw-mark" aria-hidden="true"></span><span class="cw-wordmark">CBTI</span></a>
+    <nav class="cw-nav" aria-label="CBTI">
+      <ul>
+        <li><a href="/#landing" aria-current="page">测试</a></li>
+        <li><a href="/#types">类型</a></li>
+        <li><a href="/#method">方法</a></li>
+      </ul>
     </nav>
-  </header>
+    <div class="cw-header-tools"><a class="cw-header-link" href="https://chasewang.me/" lang="en">by Chase Wang <span aria-hidden="true">↗</span></a></div>
+  </div>
+</header>
 
-  <main id="site-main">
+<main id="site-main">
 
-  <!-- ═══ Landing ═══ -->
-  <div id="landing" class="screen active">
-    <div id="persona-sphere" class="persona-sphere" aria-hidden="true"></div>
-
-    <section class="landing-shell" aria-labelledby="landing-title">
-      <div class="landing-copy">
-        <p class="landing-kicker"><span aria-hidden="true"></span>Behavioral instrument · 行为测量</p>
-        <div class="landing-mark" aria-hidden="true">CBTI</div>
-        <h1 id="landing-title">Map your crypto reflexes.</h1>
-        <p class="landing-lede">30 道题，定位你在风险偏好、信念强度和市场行为上的真实位置。结果对应 24 种加密人格，不评判好坏，只显示你在压力下会怎么做。</p>
-        <p class="landing-lede-en">Thirty questions map how you act under risk, conviction, and market pressure. Your result lands on one of 24 crypto personas.</p>
-
-        <div class="landing-actions">
-          <button class="btn-start" onclick="startTest()">
-            <span>开始测试 · Start</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
-          <a class="btn-meet" href="#chase">Why CBTI exists <span aria-hidden="true">↗</span></a>
-        </div>
-
-        <dl class="landing-facts" aria-label="Test facts">
-          <div><dt>30</dt><dd>questions</dd></div>
-          <div><dt>15</dt><dd>dimensions</dd></div>
-          <div><dt>24</dt><dd>personas</dd></div>
-          <div><dt>4</dt><dd>quadrants</dd></div>
-        </dl>
+<!-- ═══ Landing ═══ -->
+<div id="landing" class="screen active">
+  <section class="cw-container cbti-hero" aria-labelledby="landing-title">
+    <div class="cbti-hero-copy">
+      <p class="cw-kicker"><span lang="en">Crypto Behavioral Type Indicator</span> · 加密行为类型指标</p>
+      <h1 class="cw-display cbti-hero-title" id="landing-title" lang="en">Map your crypto reflexes.</h1>
+      <p class="cw-lede cbti-hero-lede">30 道题，定位你在风险偏好、信念强度和市场行为上的真实位置。结果对应 24 种加密人格，不评判好坏，只显示你在压力下会怎么做。</p>
+      <p class="cw-body-copy cbti-hero-en" lang="en">Thirty questions map how you act under risk, conviction, and market pressure. Your result lands on one of 24 crypto personas.</p>
+      <div class="cbti-hero-actions">
+        <button class="cw-btn cw-btn--primary" type="button" onclick="startTest()">开始测试 <span lang="en">· Start</span></button>
+        <a class="cw-link" href="/#method">怎么计分 <span lang="en">· Method</span><span class="cw-arrow" aria-hidden="true">→</span></a>
       </div>
-
-      <div class="landing-atlas-wrap">
-        <header class="atlas-head">
-          <div><span>TYPE FIELD / 24</span><strong>Risk × Conviction</strong></div>
-          <span>live index</span>
-        </header>
-        <div id="persona-atlas" class="persona-atlas" aria-label="The 24 CBTI personas arranged by behavioral quadrant"></div>
-        <div class="atlas-axis atlas-axis-x">risk preference →</div>
-        <div class="atlas-axis atlas-axis-y">conviction →</div>
-        <div class="atlas-legend" aria-label="Behavioral quadrants">
-          <span class="q-smart-money">Smart Money</span>
-          <span class="q-diamond-degen">Diamond Degen</span>
-          <span class="q-rotating-andy">Rotating Andy</span>
-          <span class="q-gambler">Absolute Gambler</span>
-        </div>
-      </div>
-    </section>
-
-    <div class="landing-method">
-      <p><strong>What it measures</strong><span>investment mindset · emotional control · market worldview · trading style · social behavior</span></p>
-      <a href="#read">Browse all writing <span aria-hidden="true">→</span></a>
+      <noscript><p class="cbti-noscript">测试需要启用 JavaScript。<span lang="en">The test needs JavaScript.</span></p></noscript>
+      <dl class="cbti-facts" aria-label="测试概况">
+        <div><dt>道题 <span lang="en">questions</span></dt><dd>30</dd></div>
+        <div><dt>个维度 <span lang="en">dimensions</span></dt><dd>15</dd></div>
+        <div><dt>种人格 <span lang="en">personas</span></dt><dd>24</dd></div>
+        <div><dt>个象限 <span lang="en">quadrants</span></dt><dd>4</dd></div>
+      </dl>
+      <p class="cbti-note">不用注册，不连钱包，答案只留在这个页面的内存里。<span lang="en">No account. No wallet.</span></p>
     </div>
-  </div>
 
-  <!-- ═══ Quiz ═══ -->
-  <div id="quiz" class="screen">
-    <div class="quiz-shell">
-      <aside class="quiz-aside">
-        <a class="quiz-exit" href="#landing">CBTI / Exit test</a>
-        <div>
-          <p class="quiz-aside-label">Behavioral scan</p>
-          <h1>Answer for the trade you would actually make.</h1>
-          <p>选你真实会做的动作，不选你认为“更聪明”的答案。每页完成后会自动前进。</p>
-        </div>
-        <p class="quiz-privacy">No account. No wallet. Answers stay in this browser session.</p>
-      </aside>
-      <div class="quiz-container quiz-stage">
-        <div class="quiz-header-bar">
-          <div class="progress-bar-wrap">
-            <div class="progress-bar-track">
-              <div class="progress-bar-fill"></div>
-            </div>
-          </div>
-          <div class="quiz-meta">
-            <span class="progress-text">0 / 30</span>
-            <span class="page-indicator"></span>
-          </div>
-        </div>
+    <figure class="cbti-hero-map" aria-labelledby="map-title">
+      <figcaption class="cbti-map-head">
+        <span class="cbti-map-title" id="map-title">24 种人格 · 风险 × 信念 <span lang="en">Risk × Conviction</span></span>
+        <span class="cbti-map-meta">标准坐标 0–100</span>
+      </figcaption>
+      <div class="cbti-map" id="landing-map" data-map="landing"></div>
+    </figure>
+  </section>
 
-        <div id="questions-list"></div>
+  <section class="cw-section cw-container" id="types" aria-labelledby="types-title">
+    <header class="cw-section-head">
+      <h2 class="cw-section-title" id="types-title">类型 <span lang="en">Types</span></h2>
+      <p class="cw-section-desc">24 种人格按各自的标准坐标落进风险 × 信念的四个象限。每行的两个数就是标准坐标（风险 · 信念），和上面的图、结果页的图用的是同一组数。</p>
+      <p class="cw-section-aside"><span class="cw-num">24</span></p>
+    </header>
+    <div class="cbti-types" id="type-index"></div>
+  </section>
 
-        <div class="quiz-nav">
-          <button class="btn-nav btn-prev" onclick="prevPage()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
-            <span>Back</span>
-          </button>
-          <button class="btn-nav btn-next" onclick="nextPage()">
-            <span>Next</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>
-          </button>
-        </div>
-      </div>
+  <section class="cw-section cw-container" id="method" aria-labelledby="method-title">
+    <header class="cw-section-head">
+      <h2 class="cw-section-title" id="method-title">方法 <span lang="en">Method</span></h2>
+      <p class="cw-section-desc">下面每一条都能在公开代码里对上：题目、维度和人格在 <code>data.js</code>，计分在 <code>app.js</code>。</p>
+      <p class="cw-section-aside"><a href="https://github.com/ckpxgfnksd-max/cbti-club" rel="noopener">源代码<span class="cw-arrow" aria-hidden="true">↗</span></a></p>
+    </header>
+    <div class="cbti-method">
+      <dl class="cbti-method-facts">
+        <div><dt>题目 <span lang="en">Questions</span></dt><dd><p>30 道题，每个维度 2 道。每题 3 个选项，每个选项记 1、2 或 3 分。开始测试时题目顺序随机打乱，每页 4 道，共 8 页。</p><p class="cbti-method-en" lang="en">30 questions, 2 per dimension. Each has 3 options; each option scores 1, 2 or 3. The order is shuffled when you start: 4 questions a page, 8 pages.</p></dd></div>
+        <div><dt>维度 <span lang="en">Dimensions</span></dt><dd><p>同一维度的 2 道题分数相加，得到 2–6 分：2 分记为 L，3–4 分记为 M，5–6 分记为 H。结果页的维度条显示的就是这个分数。</p><p class="cbti-method-en" lang="en">The two answers of a dimension add up to 2–6: 2 is L, 3–4 is M, 5–6 is H. The dimension bars on the result show this sum.</p></dd></div>
+        <div><dt>人格 <span lang="en">Personas</span></dt><dd><p>24 个人格各有一条公式，从 5 个维度取分（有的正向，有的反向）加权相加，权重是 3、3、3、2、2，合计 13。得分最高的人格就是结果；同分时取 <code>data.js</code> 里排在前面的那个。</p><p class="cbti-method-en" lang="en">Each of the 24 personas has one formula: a weighted sum of 5 dimensions (some reversed), weights 3, 3, 3, 2, 2, 13 in total. The highest score is the result; a tie goes to the persona listed first in <code>data.js</code>.</p></dd></div>
+        <div><dt>象限 <span lang="en">Quadrants</span></dt><dd><p>每个人格在 <code>data.js</code> 里有一组标准坐标（风险偏好、信念强度，0–100）。风险低于 50、信念不低于 50 是聪明钱；两者都不低于 50 是钻石赌狗；两者都低于 50 是旋转安迪；风险不低于 50、信念低于 50 是纯赌怪。结果页图上的点，画在你所属人格的标准坐标上。</p><p class="cbti-method-en" lang="en">Every persona has canonical coordinates in <code>data.js</code> (risk, conviction, 0–100). Risk below 50 with conviction 50 or more is Smart Money; both 50 or more, Diamond Degen; both below 50, Rotating Andy; risk 50 or more with conviction below 50, Absolute Gambler. The result map plots your persona's canonical position.</p></dd></div>
+        <div><dt>隐私 <span lang="en">Privacy</span></dt><dd><p>不用注册，不连钱包。答案只存在这个页面的内存里，不写入浏览器存储，也不发给任何服务器，刷新页面就清空。分享文案只包含人格代码、中英文名称、中英文各一句介绍和 cbti.club #CBTI。</p><p class="cbti-method-en" lang="en">No account, no wallet. Answers live only in this page's memory: nothing goes to browser storage or to a server, and a reload clears them. The share text holds the persona code, its Chinese and English names, one intro line in each language, and cbti.club #CBTI.</p></dd></div>
+        <div><dt>代码 <span lang="en">Source</span></dt><dd><p>计分代码公开在 <a href="https://github.com/ckpxgfnksd-max/cbti-club/blob/main/app.js" rel="noopener">github.com/ckpxgfnksd-max/cbti-club</a>，入口是 <code>app.js</code> 里的 <code>computeResult()</code>。</p><p class="cbti-method-en" lang="en">The scoring code is public on GitHub; the entry point is <code>computeResult()</code> in <code>app.js</code>.</p></dd></div>
+      </dl>
+      <div class="cbti-dims-wrap" id="method-dims"></div>
     </div>
-  </div>
-
-  <!-- ═══ Result ═══ -->
-  <div id="result" class="screen">
-    <div class="result-container" aria-live="polite">
-      <header class="result-header">
-        <p>CBTI result dossier</p>
-        <h1>Your behavior has coordinates.</h1>
-        <span>Persona identity, quadrant position, and the fifteen dimensions behind it.</span>
-      </header>
-
-      <!-- Section 1: Persona Hero (the reveal) -->
-      <div class="result-persona-card" id="persona-card">
-        <div class="persona-stamp">
-          <span id="persona-badge" class="persona-badge">Your Crypto Persona · 你的加密人格</span>
-          <span id="persona-quadrant" class="persona-quadrant"></span>
-        </div>
-        <div class="persona-hero">
-          <img id="persona-meme" class="persona-meme" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" />
-          <div class="persona-identity">
-            <div id="persona-code" class="persona-code"></div>
-            <div id="persona-cn" class="persona-cn"></div>
-            <div id="persona-en" class="persona-en-label"></div>
-          </div>
-        </div>
-        <div class="persona-intro-block">
-          <div id="persona-intro" class="persona-intro"></div>
-          <div id="persona-intro-en" class="persona-intro persona-intro-sub"></div>
-        </div>
-      </div>
-
-      <!-- Section 2: Share CTA (primary action, right after the reveal) -->
-      <div class="actions-section actions-primary">
-        <button class="btn-action btn-share" onclick="shareResult()">Post on 𝕏</button>
-        <button class="btn-action btn-copy" onclick="copyShareText()">Copy / 复制</button>
-      </div>
-
-      <!-- Section 3: Description (expandable depth) -->
-      <div class="result-desc-card">
-        <div class="section-title">About This Persona / 关于这个人格</div>
-        <div id="persona-desc" class="persona-desc"></div>
-        <div id="persona-desc-en" class="persona-desc-en"></div>
-      </div>
-
-      <!-- Section 4: Scatter Plot -->
-      <div class="scatter-section">
-        <div class="section-title">Your Position / 你的位置</div>
-        <div class="scatter-wrap">
-          <div class="scatter-plot">
-            <canvas id="scatter-canvas" class="scatter-canvas"></canvas>
-          </div>
-          <div class="scatter-legend">
-            <div class="legend-item"><span class="legend-dot smart-money"></span><span>Smart Money 聪明钱</span></div>
-            <div class="legend-item"><span class="legend-dot diamond-degen"></span><span>Diamond Degen 钻石赌狗</span></div>
-            <div class="legend-item"><span class="legend-dot rotating-andy"></span><span>Rotating Andy 旋转安迪</span></div>
-            <div class="legend-item"><span class="legend-dot gambler"></span><span>Absolute Gambler 纯赌怪</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 5: Dimensions -->
-      <div class="dims-section">
-        <div class="section-title">Dimension Scores / 维度得分</div>
-        <div id="dims-list"></div>
-      </div>
-
-      <!-- Section 6: Secondary actions + Tips -->
-      <div class="actions-section actions-secondary">
-        <button class="btn-action btn-share" onclick="shareResult()">Post on 𝕏</button>
-        <button class="btn-action btn-retry" onclick="retryTest()">Retry / 重新测试</button>
-      </div>
-
-      <!-- Tips -->
-      <div class="tips-section">
-        <p class="tips-label">Buy me a coffee / 请我喝杯咖啡 ☕</p>
-        <div class="tips-address" onclick="copyAddress(this)">
-          <span class="tips-chain">EVM</span>
-          <code>0x98338f4ade9d2c2aa9310300f6a016a88538242d</code>
-          <span class="tips-copy">copy</span>
-        </div>
-        <p class="tips-credit">built by <a href="#chase">@ChaseWang</a></p>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ═══ Read — complete public archive ═══ -->
-  <div id="read" class="screen">
-    <section class="read-shell" aria-labelledby="read-title">
-      <header class="read-hero">
-        <p class="read-kicker">READ / PUBLIC ARCHIVE</p>
-        <div class="read-hero-layout">
-          <h1 id="read-title">Writing, research,<br>and field notes.</h1>
-          <div class="read-intro">
-            <p>Token design, crypto institutions, market risk, and AI workflows. Every published piece is indexed here, with the shortest available route to the full text.</p>
-            <p class="read-intro-zh">文章、研究和实践地图统一收在这里。默认优先打开站内全文；只有外部版本的文章会直接前往原始发布渠道。</p>
-          </div>
-        </div>
-
-        <div class="read-controls">
-          <div class="read-filters" role="toolbar" aria-label="Filter the reading archive">
-            <button class="read-filter is-active" type="button" data-read-filter="all" aria-pressed="true">All</button>
-            <button class="read-filter" type="button" data-read-filter="zh" aria-pressed="false">中文</button>
-            <button class="read-filter" type="button" data-read-filter="en" aria-pressed="false">English</button>
-            <button class="read-filter" type="button" data-read-filter="research" aria-pressed="false">Research</button>
-          </div>
-          <p id="read-count" class="read-count" aria-live="polite">Loading archive…</p>
-        </div>
-      </header>
-
-      <div id="read-index" class="read-index" data-state="loading">
-        <div class="read-row read-row-skeleton" aria-hidden="true"><span></span><span></span><span></span></div>
-        <div class="read-row read-row-skeleton" aria-hidden="true"><span></span><span></span><span></span></div>
-        <div class="read-row read-row-skeleton" aria-hidden="true"><span></span><span></span><span></span></div>
-      </div>
-
-      <footer class="read-footer">
-        <p>Prefer delivery over browsing?</p>
-        <a href="https://chasewang2026.substack.com/" target="_blank" rel="noopener">Follow on Substack <span aria-hidden="true">↗</span></a>
-        <a href="https://x.com/ChaseWang" target="_blank" rel="noopener">Follow on X <span aria-hidden="true">↗</span></a>
-      </footer>
-    </section>
-  </div>
-
-  <!-- ═══ Chase — personal profile ═══ -->
-  <div id="chase" class="screen">
-    <div class="chase-container">
-
-      <!-- Hero -->
-      <header class="chase-hero">
-        <nav class="chase-nav" aria-label="Chase profile sections">
-          <a class="chase-nav-mark" href="#landing">CBTI / CHASE</a>
-          <div class="chase-nav-links">
-            <a href="#read">Writing</a>
-            <a href="#chase-tools">Tools</a>
-            <a href="#chase-systems">Systems</a>
-          </div>
-        </nav>
-
-        <div class="chase-hero-layout">
-          <div class="chase-hero-copy">
-            <p class="chase-status"><span aria-hidden="true"></span>Independent research &amp; open systems</p>
-            <h1 class="chase-title" aria-label="Chase Wang">
-              <span>Chase</span>
-              <span aria-hidden="true">Wang</span>
-            </h1>
-            <p class="chase-thesis">
-              <span>Behavior becomes markets.</span>
-              <span>Code becomes institutions.</span>
-              <span>Workflows compound.</span>
-            </p>
-            <p class="chase-tagline">
-              Ex-Binance listing. I write and build across token design, DeFi infrastructure, and AI workflows.
-            </p>
-            <div class="chase-hero-actions">
-              <a class="chase-primary-action" href="#read">
-                <span>Browse all writing</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-              <a class="chase-inline-action" href="https://x.com/ChaseWang" target="_blank" rel="noopener">Follow on X <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
-            </div>
-          </div>
-
-          <div class="chase-system-map" role="img" aria-label="A linked field map connecting CBTI behavior research, Crypto-Body institutional research, and the AI workflow field map.">
-            <div class="chase-map-meta"><span>FIELD / 001</span><span>3 SIGNALS · 1 SYSTEM</span></div>
-            <svg class="chase-map-lines" viewBox="0 0 520 520" aria-hidden="true">
-              <path class="map-orbit" d="M77 329C36 204 135 74 270 70c132-4 233 106 210 239-22 129-151 206-272 159C145 443 98 395 77 329Z"/>
-              <path class="map-link" d="M122 174 261 262 397 144M261 262l91 154M261 262 122 174M261 262 397 144"/>
-              <circle class="map-pulse" cx="261" cy="262" r="72"/>
-              <circle cx="261" cy="262" r="5"/>
-            </svg>
-            <a class="chase-map-node chase-map-node-behavior" href="#landing">
-              <span>BEHAVIOR</span><strong>CBTI</strong><small>24 personas</small>
-            </a>
-            <a class="chase-map-node chase-map-node-code" href="#paper">
-              <span>CODE</span><strong>Crypto-Body</strong><small>ledger → institution</small>
-            </a>
-            <a class="chase-map-node chase-map-node-agents" href="/landscape.html">
-              <span>WORKFLOWS</span><strong>Field Map</strong><small>practice → system</small>
-            </a>
-            <div class="chase-map-core" aria-hidden="true"><span>JUDGMENT</span><strong>×</strong></div>
-          </div>
-        </div>
-
-        <div class="chase-evidence-strip" aria-label="Areas of work">
-          <div><span>Practice</span><strong>Token design &amp; DeFi</strong></div>
-          <div><span>Research</span><strong>Ledgers as institutions</strong></div>
-          <div><span>Systems</span><strong>AI workflows that compound</strong></div>
-        </div>
-      </header>
-
-      <!-- ─── § Socials ─── -->
-      <section class="chase-section chase-socials-section" id="chase-socials">
-        <header class="chase-section-header">
-          <h2 class="section-title">Follow the work</h2>
-        </header>
-        <div class="socials-grid">
-          <a class="social-card" href="https://x.com/ChaseWang" target="_blank" rel="noopener">
-            <span class="social-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </span>
-            <div class="social-text">
-              <div class="social-handle">@ChaseWang</div>
-              <div class="social-platform">X · daily notes on crypto &amp; tokenomics</div>
-            </div>
-            <svg class="social-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-          </a>
-          <a class="social-card" href="https://chasewang2026.substack.com/" target="_blank" rel="noopener">
-            <span class="social-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
-            </span>
-            <div class="social-text">
-              <div class="social-handle">chasewang2026</div>
-              <div class="social-platform">Substack · long-form essays</div>
-            </div>
-            <svg class="social-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-          </a>
-          <a class="social-card" href="https://www.academia.edu/143701755/What_Is_a_Crypto_Body_Rethinking_the_Role_of_the_Blockchain_Ledger" target="_blank" rel="noopener">
-            <span class="social-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            </span>
-            <div class="social-text">
-              <div class="social-handle">Chase Wang</div>
-              <div class="social-platform">Academia.edu · research papers</div>
-            </div>
-            <svg class="social-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-          </a>
-          <a class="social-card" href="https://github.com/ckpxgfnksd-max" target="_blank" rel="noopener">
-            <span class="social-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.96 10.96 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-            </span>
-            <div class="social-text">
-              <div class="social-handle">@ckpxgfnksd-max</div>
-              <div class="social-platform">GitHub · open-source skills</div>
-            </div>
-            <svg class="social-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-          </a>
-        </div>
-      </section>
-
-      <!-- ─── § Articles & Papers ─── -->
-      <section class="chase-section chase-paper-section legacy-writing-section" id="chase-writing">
-        <header class="chase-section-header">
-          <h2 class="section-title">Ideas, in public</h2>
-        </header>
-        <span class="subsection-eyebrow">Academic paper · 2025</span>
-        <div class="paper-card paper-card-feature">
-          <div class="paper-authors">Mun How Mong · Shuyang Shi · Chase Wang</div>
-          <h3 class="paper-title">What Is a Crypto&#8209;Body? <span class="paper-title-sub">Rethinking the Role of the Blockchain Ledger</span></h3>
-          <p class="paper-abstract">
-            Cryptocurrencies are often portrayed as volatile, lightly regulated, or tools for illicit activity. This view overlooks a deeper innovation: the <em>Crypto-Body</em> — a self-sustaining digital ledger system that operates as a programmable institutional substrate. The paper proposes five criteria for when a blockchain qualifies as a Crypto-Body, and argues that Ethereum, post-merge, is the most complete specimen.
-          </p>
-          <div class="paper-quotes">
-            <blockquote class="paper-quote">"A Crypto-Body is not just a coin or a payment system. It is a new species of institution."</blockquote>
-            <blockquote class="paper-quote">"Trust in transparent code and math over trust in fallible human institutions."</blockquote>
-            <blockquote class="paper-quote">"The ledger-as-institution is here to stay; the open question is how it coexists with the institutions of yesterday."</blockquote>
-          </div>
-
-          <div class="paper-viewer" aria-label="Paper preview">
-            <object data="assets/paper/crypto-body.pdf#view=FitH&toolbar=0" type="application/pdf">
-              <div class="paper-viewer-fallback">
-                Inline preview not supported here. Use the links below to read the paper.
-              </div>
-            </object>
-          </div>
-
-          <div class="paper-actions">
-            <a class="paper-action paper-action-primary" href="#paper">
-              <span>Read HTML version</span>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a class="paper-action" href="https://www.academia.edu/143701755/What_Is_a_Crypto_Body_Rethinking_the_Role_of_the_Blockchain_Ledger" target="_blank" rel="noopener">
-              <span>View on Academia.edu</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-            </a>
-            <a class="paper-action" href="assets/paper/crypto-body.pdf" download>
-              <span>Download PDF</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <span class="subsection-eyebrow">Field map · 2026</span>
-        <div class="paper-card paper-card-field-map">
-          <div class="paper-authors">Chase Wang · 2026-05</div>
-          <h3 class="paper-title">AI Workflow <span class="paper-title-sub">Practitioner's Field Map</span></h3>
-          <p class="paper-abstract">
-            36 entries across 6 clusters, 6 active debates, plus a <em>Voices</em> pull-quote gallery. Every <em>[FACT]</em> cites ≥1 month of real workflow use; every <em>[OPINION]</em> is named as such. Modeled on <a href="https://grapeot.github.io/ai-self-evolution-landscape/" target="_blank" rel="noopener">grapeot's frontier landscape</a> — that one maps what's possible at the edge; this one maps what survives daily use.
-          </p>
-          <div class="paper-quotes">
-            <blockquote class="paper-quote">"One resets each time, the other compounds continuously."</blockquote>
-            <blockquote class="paper-quote">"Anything you find yourself reminding the AI of across multiple sessions belongs in the environment, not the prompt."</blockquote>
-            <blockquote class="paper-quote">"If you cannot answer 'what did this session leave behind?' five minutes after closing the window, the workflow is broken."</blockquote>
-          </div>
-
-          <div class="paper-actions">
-            <a class="paper-action paper-action-primary" href="/landscape.html">
-              <span>Read the landscape</span>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a class="paper-action" href="https://github.com/ckpxgfnksd-max/landscape-ai-workflow" target="_blank" rel="noopener">
-              <span>View on GitHub</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Writing section (continues §02 Articles & Papers)
-           Renders directly from writings/index.json. No external widgets.
-           Future publishing agent writes to that file; this markup stays as-is.
-           Schema + agent contract: writings/README.md -->
-      <section class="chase-section chase-writing-section legacy-writing-section" id="chase-essays">
-        <span class="subsection-eyebrow">Essays</span>
-
-        <div id="writing-grid" class="writing-grid" data-state="loading">
-          <div class="writing-card writing-card-skeleton" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-
-        <div class="substack-feature">
-          <div class="substack-feature-text">
-            <span class="substack-feature-eyebrow">Longer essays</span>
-            <div class="substack-feature-name">chasewang2026.substack.com</div>
-            <p class="substack-feature-desc">Tokenomics, DeFi infrastructure, and the crypto economic stack.</p>
-          </div>
-          <a class="paper-action paper-action-primary" href="https://chasewang2026.substack.com/" target="_blank" rel="noopener">
-            <span>Open Substack</span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-          </a>
-        </div>
-      </section>
-
-      <!-- A short profile preview. The complete archive lives on #read. -->
-      <section class="chase-section chase-reading-preview" id="chase-reading-preview">
-        <header class="chase-section-header chase-reading-header">
-          <div>
-            <p class="chase-reading-kicker">LATEST WRITING</p>
-            <h2 class="section-title">Start with an idea.</h2>
-          </div>
-          <a class="chase-reading-all" href="#read">View all writing <span aria-hidden="true">→</span></a>
-        </header>
-        <div id="chase-reading-list" class="chase-reading-list" data-state="loading">
-          <div class="chase-reading-skeleton" aria-hidden="true"></div>
-          <div class="chase-reading-skeleton" aria-hidden="true"></div>
-          <div class="chase-reading-skeleton" aria-hidden="true"></div>
-        </div>
-      </section>
-
-      <!-- ─── § Skills for Agents ─── -->
-      <section class="chase-section chase-skills-section" id="chase-tools">
-        <header class="chase-section-header">
-          <h2 class="section-title">Tools that think with you</h2>
-        </header>
-        <div class="skills-grid">
-          <article class="skill-card" data-id="tls">
-            <div class="skill-card-head">
-              <div class="skill-card-meta">
-                <span class="skill-card-eyebrow">Token Launch Stack</span>
-                <h3 class="skill-card-title">TLS</h3>
-              </div>
-              <a class="skill-card-repo" href="https://github.com/ckpxgfnksd-max/tls" target="_blank" rel="noopener" aria-label="View on GitHub">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.96 10.96 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-                <span>github.com/ckpxgfnksd-max/tls</span>
-              </a>
-            </div>
-            <p class="skill-card-desc">
-              Advisory skills for founders evaluating token launches. Built from 1,000+ project reviews and ~100 token launches in 2025. The tool thinks <em>with</em> you, not <em>for</em> you — it uses forcing questions to surface what you actually know before recommending anything.
-            </p>
-            <ul class="skill-list">
-              <li class="skill-item">
-                <code class="skill-cmd">/why-token</code>
-                <span class="skill-item-desc">Answers the most important question first: <em>why a token at all?</em> Routes pure memes to a quick checklist; deep-dives value accrual for everyone else.</span>
-              </li>
-              <li class="skill-item">
-                <code class="skill-cmd">/tokenomics</code>
-                <span class="skill-item-desc">Turns the thesis into numbers. Build from scratch or start from a real token ($UNI, $JUP, $SOL, $LINK, $ENA, $ONDO). Outputs an Excel release schedule with vesting + buyback simulation.</span>
-              </li>
-            </ul>
-            <div class="skill-card-actions">
-              <a class="paper-action paper-action-primary" href="https://github.com/ckpxgfnksd-max/tls" target="_blank" rel="noopener">
-                <span>View on GitHub</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-              </a>
-              <a class="paper-action" href="https://github.com/ckpxgfnksd-max/tls#install" target="_blank" rel="noopener">
-                <span>Install</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <article class="skill-card" data-id="buffett-says">
-            <div class="skill-card-head">
-              <div class="skill-card-meta">
-                <span class="skill-card-eyebrow">Knowledge graph as a skill · new</span>
-                <h3 class="skill-card-title">buffett-says</h3>
-              </div>
-              <a class="skill-card-repo" href="https://github.com/ckpxgfnksd-max/buffett-says-skill" target="_blank" rel="noopener" aria-label="View on GitHub">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.96 10.96 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-                <span>github.com/ckpxgfnksd-max/buffett-says-skill</span>
-              </a>
-            </div>
-            <p class="skill-card-desc">
-              Answers <em>"What does Buffett say about &lt;X&gt;?"</em> with synthesized takeaways grounded in <strong>verbatim quotes</strong> from his shareholder letters (1956–2024). No paraphrase from memory — every claim traces back to a specific letter, with year and URL.
-            </p>
-            <ul class="skill-list">
-              <li class="skill-item">
-                <code class="skill-cmd">98 letters · 117 entities · 5,659 edges</code>
-                <span class="skill-item-desc">Bundled corpus: every Partnership + Berkshire shareholder letter, plus pre-aggregated dossiers for 49 concepts (护城河, 内在价值, 复利, …), 61 companies (可口可乐, 盖可保险, 苹果, …), and 7 people (芒格, 格雷厄姆, 阿贝尔, …). Sourced from learnbuffett.com.</span>
-              </li>
-              <li class="skill-item">
-                <code class="skill-cmd">Autoresearched · 92.96%</code>
-                <span class="skill-item-desc">Karpathy-style iterative refinement against a 5-dimension rubric, with programmatic verbatim-quote checking. The corpus, the rubric, the citation checker, and the round log all ship in the repo — anyone can reproduce.</span>
-              </li>
-            </ul>
-            <div class="skill-card-actions">
-              <a class="paper-action paper-action-primary" href="https://github.com/ckpxgfnksd-max/buffett-says-skill" target="_blank" rel="noopener">
-                <span>View on GitHub</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-              </a>
-              <a class="paper-action" href="https://github.com/ckpxgfnksd-max/buffett-says-skill#install" target="_blank" rel="noopener">
-                <span>Install</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <article class="skill-card" data-id="uap-release-analyzer">
-            <div class="skill-card-head">
-              <div class="skill-card-meta">
-                <span class="skill-card-eyebrow">Declassified release analyzer · new</span>
-                <h3 class="skill-card-title">uap-release-analyzer</h3>
-              </div>
-              <a class="skill-card-repo" href="https://github.com/ckpxgfnksd-max/uap-release-analyzer" target="_blank" rel="noopener" aria-label="View on GitHub">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.96 10.96 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-                <span>github.com/ckpxgfnksd-max/uap-release-analyzer</span>
-              </a>
-            </div>
-            <p class="skill-card-desc">
-              Turns a folder of declassified UAP/UFO documents — war.gov "PURSUE" releases, FBI Vault tranches, NARA boxes, AARO publications — into an inventory, an entity surface, a per-file digest, and a standardized 11-section <code>REPORT.md</code> you can read in ten minutes. Designed to be honest about what it can't read: scanned PDFs, image-only files, and pypdf-unreadable structures each get their own caveat instead of being silently lumped together.
-            </p>
-            <ul class="skill-list">
-              <li class="skill-item">
-                <code class="skill-cmd">132 files · 4,157 pages · 5 agencies</code>
-                <span class="skill-item-desc">Tuned against the May 2026 war.gov tranche (FBI / DOW / NASA / NARA / DOS). The corpus is mirrored at <a href="https://github.com/ckpxgfnksd-max/uap-release-01" target="_blank" rel="noopener">uap-release-01</a> (Git LFS, 2.4 GB) so anyone can clone and rerun the same pipeline against the same input.</span>
-              </li>
-              <li class="skill-item">
-                <code class="skill-cmd">Eval-driven · 97% / +23pp</code>
-                <span class="skill-item-desc">Skill-creator iteration loop: 4 eval cases × with-skill vs baseline × 8 subagents in parallel. With-skill mean pass rate 96.9% vs baseline 74.4%; ~12 min vs ~26 min wall-clock; cheaper on tokens too. <a href="https://github.com/ckpxgfnksd-max/uap-release-analyzer/blob/main/ARTICLE.md" target="_blank" rel="noopener">ARTICLE.md</a> · <a href="https://github.com/ckpxgfnksd-max/uap-release-analyzer/blob/main/ARTICLE_CN.md" target="_blank" rel="noopener">中文版</a></span>
-              </li>
-            </ul>
-            <div class="skill-card-actions">
-              <a class="paper-action paper-action-primary" href="https://github.com/ckpxgfnksd-max/uap-release-analyzer" target="_blank" rel="noopener">
-                <span>View on GitHub</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
-              </a>
-              <a class="paper-action" href="https://github.com/ckpxgfnksd-max/uap-release-analyzer/releases/latest" target="_blank" rel="noopener">
-                <span>Install</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              </a>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- ─── § Others ─── -->
-      <section class="chase-section chase-others-section" id="chase-systems">
-        <header class="chase-section-header">
-          <h2 class="section-title">Proof of work, running</h2>
-        </header>
-        <div class="others-grid">
-          <a class="other-card" href="#landing">
-            <div class="other-card-meta">
-              <span class="other-card-eyebrow">Web · 网站 · 2026</span>
-              <h3 class="other-card-title">CBTI</h3>
-              <p class="other-card-desc">The crypto personality test you just took. 24 personas, 30 questions, built end-to-end in Claude Code with a "dark luxury editorial" aesthetic. · 你刚才做完的加密人格测试。24 种人格、30 道题，全程用 Claude Code 写出来，"暗调奢华编辑"风格。</p>
-            </div>
-            <span class="other-card-arrow">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </a>
-        </div>
-      </section>
-
-      <!-- Follow -->
-      <section class="chase-follow">
-        <p>Follow <a href="https://x.com/ChaseWang" target="_blank" rel="noopener">@ChaseWang</a> on X for daily notes. · 在 X 上关注 <a href="https://x.com/ChaseWang" target="_blank" rel="noopener">@ChaseWang</a>，每日更新。</p>
-      </section>
-
-      <div class="chase-back">
-        <a class="btn-back" href="#landing">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
-          <span>Back to CBTI · 返回 CBTI</span>
-        </a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ═══ Paper — full HTML reader ═══ -->
-  <div id="paper" class="screen">
-    <div class="paper-page">
-      <nav class="paper-nav">
-        <a class="paper-back" href="#read">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
-          <span>Back to all writing · 返回文章目录</span>
-        </a>
-      </nav>
-
-      <article class="paper-article">
-        <span class="paper-article-eyebrow">Academic paper · 2025</span>
-        <h1 class="paper-article-title">What Is a Crypto-Body?</h1>
-        <p class="paper-article-subtitle">Rethinking the Role of the Blockchain Ledger</p>
-        <p class="paper-article-authors">Mun How Mong · Shuyang Shi · Chase Wang</p>
-
-        <div class="paper-article-body">
-
-          <h2>1. Introducing the idea of a Crypto-Body</h2>
-          <p>Cryptocurrencies are often portrayed as volatile, lightly regulated, or tools for illicit activity. This view overlooks a deeper innovation: the <em>Crypto-Body</em> — a self-sustaining digital ledger system that is essentially a programmable and consensus-governed architecture for recording and automating diverse data and functions. Beyond serving as a store of value or payment rail, a Crypto-Body operates as a programmable institutional substrate whose rules are guaranteed by cryptographic verification. It validates data and transactions, allocates value and credit, enables exchange of verifiable digital assets, and coordinates these activities via energy and computation across individuals, firms, governments, and organizations — all while preserving anonymity and user privacy through pseudonymous identifiers and selective disclosure (e.g., zero-knowledge proofs), and still permitting auditability and legal compliance where required.</p>
-
-          <p>This article suggests five key criteria for a blockchain to qualify as a "Crypto-Body":</p>
-
-          <ol class="paper-list">
-            <li><strong>Adoption Threshold.</strong> The network must attract a critical mass of users, validators, and on-chain activity to sustain itself economically. There needs to be enough demand for validation, and enough participants to satisfy that demand. The system cannot function as a self-sustaining entity without sufficient transactional and validator engagement.</li>
-            <li><strong>Fiat Infrastructure Threshold.</strong> The Crypto-Body has reached sufficient adoption for a robust "fiat infrastructure" to exist, enabling rapid two-way conversion between Crypto-Body tokens and fiat currency. This includes participation by banks, stablecoin issuers, and crypto exchanges, and where applicable, regulatory authorization for derivative products (e.g., ETFs and futures) referencing the Crypto-Body.</li>
-            <li><strong>Composability.</strong> It provides a general-purpose smart contract environment so that multiple functions and applications can interoperate on the same ledger. In practice, this means developers can compose complex services (finance, identity, governance, etc.) on one platform. Improved composability also reinforces the adoption threshold.</li>
-            <li><strong>Deterministic Logic.</strong> Outcomes are enforced by transparent code (smart contracts) rather than by opaque institutional processes. The rules are public and automatic, without requiring a discretionary decision by a central authority.</li>
-            <li><strong>Sustainable Incentives.</strong> The ledger has a built-in token mechanism that provides economic incentive for its own security and sustainable usage. For example, proof-of-stake blockchains reward validators through staking yields and may incorporate fee-burning mechanisms to reduce the circulating supply. These features provide economic returns and help secure the long-term viability of the network.</li>
-          </ol>
-
-          <p>In short, a Crypto-Body is a broadly adopted, composable smart-contract platform operating on a public ledger, with robust fiat conversion infrastructure and durable incentive mechanisms that secure and sustain the network.</p>
-
-          <h2>2. What Can a Crypto-Body Actually Do?</h2>
-          <p>A programmable ledger unlocks applications beyond what fiat currency or static ledgers permit. Domains already explored include:</p>
-          <ul class="paper-list">
-            <li><strong>Financial Contracts (DeFi).</strong> Decentralized finance protocols enable lending, borrowing, trading, and asset management without traditional intermediaries. Automated market makers and liquidity pools let users swap assets algorithmically. Billions of dollars now flow through such contracts on-chain, showing how a Crypto-Body can assume the role of banks and exchanges.</li>
-            <li><strong>Digital Identity and Credentials.</strong> Projects leverage blockchains for identity — from zero-knowledge ID systems that prove who you are without revealing sensitive data, to non-transferable "soulbound" tokens that serve as digital certificates or reputational badges. ENS maps readable names to wallet addresses, and Worldcoin aims to provide unique personhood attestations on-ledger.</li>
-            <li><strong>Registries for Ownership and IP.</strong> Blockchains act as tamper-proof registries for assets. NFTs demonstrate this for digital art and collectibles; similar logic is applied to supply chains (e.g. VeChain tracking goods provenance) and intellectual property rights. Governments are even testing blockchain-based land registries and certificate issuance.</li>
-            <li><strong>Governance via Token Voting (DAOs).</strong> A Crypto-Body can serve as a governance platform. DAOs use tokens to represent voting power, letting stakeholders make decisions transparently on-chain. The Optimism Collective pioneered on-chain governance for public-goods funding.</li>
-            <li><strong>IoT Integration.</strong> Smart contracts can respond to real-world data feeds (via oracles) and even control devices. Chainlink and IOTA have explored connecting IoT sensors and actuators to blockchain logic — imagine smart locks that open only when an on-chain condition is met, or insurance that pays out automatically on weather data.</li>
-          </ul>
-          <p>Real-world examples hint at how Crypto-Bodies could undergird public infrastructure. Estonia's e-Residency program anchors some of its security on blockchain-like distributed logs. In finance, the Monetary Authority of Singapore and others have trialed cross-border payment networks on Ethereum-based platforms. The remainder of this article, however, focuses on monetary and banking functions — because a decentralized Crypto-Body can only be self-sustaining if it offers the right economic incentives, both for developers to build on it and for validators to secure it.</p>
-
-          <h2>3. What is Wrong with Paper Money?</h2>
-          <p>It is worth revisiting the challenges of traditional finance ("TradFi") to appreciate the Crypto-Body alternative. Today's financial system rests on three pillars: sovereign currency, commercial banks, and central banks.</p>
-          <ul class="paper-list">
-            <li><strong>Sovereign Currency.</strong> National governments issue fiat money (like the US dollar), not backed by commodities but by public trust; legal tender laws mandate its acceptance.</li>
-            <li><strong>Commercial Banks.</strong> Private banks create most of the money supply by lending out deposits (the fractional reserve model). They act as custodians of deposits and as intermediaries allocating credit in the economy.</li>
-            <li><strong>Central Banks.</strong> Entities like the Federal Reserve or European Central Bank manage currency and bank liquidity. They set monetary policy and act as lenders of last resort to prevent financial crises.</li>
-          </ul>
-          <p>This system has accomplished much but is prone to well-documented problems:</p>
-          <ul class="paper-list">
-            <li><strong>Inflation and Currency Risk.</strong> History is littered with currencies that lost value due to over-issuance or loss of confidence. In extreme cases, fiat regimes implode in hyperinflation — Zimbabwe's dollar inflation hit an estimated 79.6 billion percent per month in late 2008. Even in mild cases, Argentina and Turkey suffer chronically high inflation that erodes savings.</li>
-            <li><strong>Bank Runs and Bailouts.</strong> Banks engage in maturity transformation: they borrow short and lend long, which makes them fragile by design. The bank fails if too many depositors demand their money back at once, as Diamond and Dybvig formalized in 1983. Government deposit insurance and central bank backstops exist to prevent panics, but these are imperfect — as 2008 demonstrated.</li>
-            <li><strong>Adverse Selection and Moral Hazard in Lending.</strong> Because banks lend other people's money, they do not always price risk with sufficient discipline. The subprime mortgage boom of the 2000s illustrates this vividly: lenders extended credit too freely, underestimating default risk.</li>
-            <li><strong>Opacity.</strong> A bank's true financial health can be hard for outsiders to gauge due to complex balance sheets or off-book exposures; research shows banks are "inherently more opaque" than other firms. Central banks themselves conduct much of their deliberation behind closed doors.</li>
-          </ul>
-          <p>In summary, the current fiat-based system relies on trust in institutions: trust that governments will not debase currency, that banks will not gamble away deposits, and that regulators will act in time. When that trust falters, the consequences range from bank runs to currency crashes.</p>
-
-          <h2>4. How Crypto-Bodies Can Reimagine Finance</h2>
-          <p>Crypto-Bodies offer an alternate vision: trust in transparent code and math over trust in fallible human institutions. Blockchain-ledger systems like Bitcoin and Ethereum directly tackle TradFi pain points by design.</p>
-          <ul class="paper-list">
-            <li><strong>Algorithmic Monetary Policy.</strong> Crypto networks replace central bankers with code. Bitcoin does it bluntly: a hard cap of 21 million coins, doled out on a fixed halving schedule. Ethereum rewrote its monetary logic entirely — in 2021 it began burning a portion of every transaction fee, and in 2022 it abandoned energy-intensive mining for proof-of-stake, rewarding users who lock up tokens to secure the network. Issuance dropped, and supply becomes elastic in the opposite direction compared to traditional monetary policy: increased usage makes ETH more scarce because more ETH is destroyed than created when activity rises. This is a radical break from Keynesian thinking, which all but assumes a growing economy requires a growing monetary supply. Ethereum's "monetary policy" is transparent, non-discretionary, and self-adjusting — a kind of algorithmic Federal Reserve that tightens when demand surges and eases when it slows.</li>
-            <li><strong>Yield by Protocol Design.</strong> In traditional finance, earning interest usually means trusting someone else with your money — putting it in a bank (hoping the bank does not fail) or buying corporate bonds (betting the company does not go bust). Crypto-Bodies like Ethereum offer a different model: yields come from helping keep the network running. On Ethereum, this is staking — locking tokens so the system can use them to validate transactions. In return, you earn rewards, typically 3–5% per year, paid directly by the network itself. Some call this crypto's version of a "risk-free rate," because you are not lending tokens to anyone but being paid for helping keep the system honest.</li>
-            <li><strong>Open Access and Self-Custody.</strong> Anyone with an internet connection can use blockchain-based financial services without a bank account, credit check, or permission. With a simple wallet, people can send money, earn interest, or borrow through platforms like Aave. Unlike traditional banks, these platforms do not hold your money for you — you hold it yourself, so your funds are not at risk if a company goes under. Because everything is tracked publicly on-chain, there are no hidden lending or surprise shortfalls. Bank runs in the traditional sense are not really possible — what you see is what exists.</li>
-            <li><strong>No Central Choke Points.</strong> In decentralized systems, control is spread across thousands of validators. No single institution's failure could crash the whole network. If a few validators break the rules, they lose money and the system keeps running. There is no central authority that can easily shut things down or block transactions across the board — the core infrastructure is designed to resist broad censorship.</li>
-          </ul>
-
-          <p>That said, Crypto-Bodies face their own trade-offs:</p>
-          <ul class="paper-list">
-            <li><strong>Volatility.</strong> Crypto assets used as currencies (like BTC or ETH) have exhibited far greater price volatility than fiat or even equities. Stablecoins partly solve this but introduce their own trust issues by relying on off-chain stores of value.</li>
-            <li><strong>Irreversibility and Bugs.</strong> "Code is law" can be brutally unforgiving: if a smart contract has a flaw, funds can be stolen or frozen and it is often permanent. The 2017 Parity wallet bug permanently locked over $150M USD in ETH. Finality cuts both ways — it prevents arbitrary reversals but means user errors or hacks can be catastrophic.</li>
-            <li><strong>Governance and Upgrades.</strong> Decentralized networks still need human coordination to upgrade protocols, which can lead to disputes and forks. The DAO hack (2016) split Ethereum into ETH and Ethereum Classic. More routinely, getting token-holders to vote is hard — turnout is low and voting power often concentrates.</li>
-            <li><strong>Usability and Security.</strong> Self-custody places a big burden on individuals. Managing private keys is difficult — lost keys mean lost assets forever (an estimated 20% of Bitcoin is lost). Wallet and DeFi UX is improving but remains intimidating for newcomers.</li>
-          </ul>
-          <p>These are growing pains, not fatal flaws. Early financial systems in the 17th–19th centuries also suffered frequent crashes and scandals before modern reforms took place. Crypto-Bodies are likely in an analogous formative stage — learning, improving, and becoming more robust over time.</p>
-
-          <h2>5. Ethereum, Solana, and Bitcoin: Who Fits the Definition?</h2>
-          <p>Not all blockchains are created equal. Using the Crypto-Body lens, we can compare leading networks:</p>
-
-          <div class="paper-table-wrap">
-            <table class="paper-table">
-              <thead>
-                <tr><th>Feature</th><th>Ethereum (PoS)</th><th>Solana (PoS)</th><th>Bitcoin (PoW)</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Ledger Activity</strong></td>
-                  <td>Extensive. ~1.5M tx/day; rich DeFi/NFT activity. High on-chain "GDP."</td>
-                  <td>Rising. Very high TPS capacity; tens of millions of daily tx (many are consensus messages). Growing DeFi/NFT usage, below Ethereum in value settled.</td>
-                  <td>Basic. ~0.4M tx/day, mostly simple transfers. Limited expressivity keeps activity narrow.</td>
-                </tr>
-                <tr>
-                  <td><strong>Composability</strong></td>
-                  <td>High. Turing-complete smart contracts; thousands of dApps interlinked. L2s extend composability.</td>
-                  <td>Moderate. Supports smart contracts (Rust-based). Growing app ecosystem, more siloed.</td>
-                  <td>None. Script is intentionally not Turing-complete; Bitcoin cannot natively support complex dApps.</td>
-                </tr>
-                <tr>
-                  <td><strong>Deterministic Logic</strong></td>
-                  <td>High. Protocol changes go through transparent EIPs; consensus and state transitions are algorithmic and well-specified.</td>
-                  <td>Moderate. Core is deterministic, but network has a history of coordinated restarts; reliance on a smaller validator set.</td>
-                  <td>High (limited scope). Rules are hard-coded (21M cap, block time). Governance is conservative; scope of automation is minimal.</td>
-                </tr>
-                <tr>
-                  <td><strong>Incentive Structure</strong></td>
-                  <td>Robust. ETH staking yield (~3–4%) plus fee burns. Token economics designed for sustainability (low inflation, occasionally deflationary).</td>
-                  <td>Workable. SOL staking yields are higher (~8%+) but come with higher inflation. No fee burn; outages have shaken confidence.</td>
-                  <td>Sparse. Miners earn block rewards; ordinary BTC holders get no yield. Long-term security relies on fees and continued high price.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <p>Bitcoin remains the gold standard for secure, immutable record of value transfers — ultra-reliable at what it does, but purposely does very little. There is no integrated way to deploy new financial contracts on Bitcoin's base layer. That inflexibility maximizes security and simplicity at the cost of innovation.</p>
-
-          <p>Solana represents almost the opposite end: highly flexible and fast, with a design optimized for throughput. It powers NFT markets and DeFi apps with impressive speeds. However, its push for performance has sometimes come at the expense of resilience — multiple network-wide outages, and a more centralized validator set.</p>
-
-          <p>Ethereum, over time, has balanced decentralization with functionality. With hundreds of thousands of validators securing the chain after the switch to proof-of-stake, Ethereum is considered sufficiently decentralized to avoid any single point of failure. It is fully programmable, and its economic design post-2022 aims for sustainability: low issuance, often offset by fee burns, and users who stake earn returns without any off-chain intermediaries. No other blockchain of Ethereum's scale has this combination of composability, decentralization, and self-sustaining incentives. Ethereum is the closest real-world instantiation of a Crypto-Body as defined — a decentralized financial institution where the ledger itself is the platform for an entire economy's worth of activity.</p>
-
-          <h2>6. Crypto Legislation and the Emergence of ETH as a Financial Instrument</h2>
-          <p>Three pieces of 2023–2025 U.S. legislation are accelerating the mainstreaming of Crypto-Bodies, especially Ethereum:</p>
-
-          <h3>1. The Digital Asset Market CLARITY Act (2025)</h3>
-          <p>The House bill (H.R. 3633) provides a comprehensive framework for classifying digital assets — drawing a line between digital commodities and digital securities.</p>
-          <ul class="paper-list">
-            <li><strong>Jurisdictional Clarity.</strong> The CFTC gains exclusive oversight of "digital commodities," while the SEC retains jurisdiction over "digital assets offered as part of an investment contract." For years tokens like ETH were in a gray area; CLARITY formally leans toward treating sufficiently decentralized tokens as commodities. The Act also creates a "Certification of Decentralization" process — Ethereum, with thousands of independent validators, is a prime candidate.</li>
-            <li><strong>Regulatory Framework.</strong> Exchanges dealing in crypto commodities must register as Digital Commodity Exchanges with the CFTC; AML laws apply. The onus is on crypto institutions to implement compliance, which also reassures traditional institutions.</li>
-            <li><strong>Impact on Ethereum.</strong> By likely cementing ETH's status as a commodity rather than a regulated security, the Act removes a major overhang. The Act's progress correlates with increasing talk of ETH spot ETFs (first approved by the SEC in May 2024) and even inclusion of ETH in retirement portfolios.</li>
-          </ul>
-
-          <h3>2. The GENIUS Act (2025)</h3>
-          <p>Signed in July 2025, the Guiding and Establishing National Innovation for U.S. Stablecoins Act is America's first federal law focused on stablecoins.</p>
-          <ul class="paper-list">
-            <li><strong>Two-tier licensing.</strong> Small issuers (&lt;$10B outstanding) can operate under state regimes with federal standards; large issuers must obtain a federal license. Companies like Circle (USDC) and Tether face bank-like scrutiny.</li>
-            <li><strong>Full reserve and transparency.</strong> Payment stablecoins must be 100% backed by high-quality liquid assets (short-term Treasuries, bank deposits, etc.) with monthly reserve disclosures. A stablecoin must essentially operate like a narrow bank.</li>
-            <li><strong>Consumer protections.</strong> Issuers are subject to Bank Secrecy Act obligations — KYC, transaction monitoring, freeze/blacklist capabilities where legally required. A concession to law enforcement, integrating stablecoins into the regulated perimeter.</li>
-            <li><strong>Why it matters for Ethereum.</strong> Most USD-backed stablecoins run on Ethereum. By legalizing and structuring the industry, GENIUS paves the way for much larger institutional use of stablecoins on open ledgers — cementing Ethereum's role as a global settlement layer for digital dollars. The law is pushing the crypto-dollar model rather than a Fed-issued CBDC.</li>
-          </ul>
-
-          <h3>3. The CBDC Anti-Surveillance State Act (2024)</h3>
-          <p>Passed by the House in 2024, this bill prohibits the Federal Reserve from issuing a retail CBDC without Congressional approval. It was born from concerns that a U.S. CBDC could enable government surveillance of private transactions.</p>
-          <p>If the U.S. foregoes a government-run programmable dollar, the field is wide open for Ethereum and other public networks to fill that role. We can expect growth in USD stablecoins on Ethereum and adoption of privacy-preserving technologies. By banning a Fed CBDC, Congress is indirectly endorsing the crypto approach — leveraging open networks and private innovation to modernize payments rather than a top-down system.</p>
-
-          <h2>7. Implications for ETH as an Asset</h2>
-          <p>Ethereum's native token stands to gain a new narrative. It is transforming from just a "speculative cryptocurrency" into a bona-fide financial instrument with characteristics of multiple asset classes:</p>
-          <ul class="paper-list">
-            <li><strong>Institutional access.</strong> With the introduction of spot ETH ETFs (first allowed to trade in July 2024), institutional investors can now get exposure through familiar vehicles — analogous to gold ETFs in the 2000s.</li>
-            <li><strong>Yield-bearing.</strong> ETH now provides a yield (from staking) on par with dividend stocks or bonds — around 3–5% annual rewards with relatively low variance. Analysts have started calling staked ETH "the new risk-free rate" in crypto.</li>
-            <li><strong>Regulatory derisking.</strong> The legislative clarity further derisks ETH in institutional eyes. As ETH is treated more like a commodity and stablecoin use on Ethereum gets official approval, ETH slots into portfolios as a long-term holding — a sort of digital oil that powers an economy of transactions, with fee revenue analogous to dividends.</li>
-          </ul>
-          <p>One could argue ETH is becoming a multi-faceted asset: a commodity (fuel for using the network), a capital asset (producing yield for stakers), and quasi-equity (ownership giving a share of collective fees and upside from network growth). This "triple point asset" nature was theoretical in 2019; by 2025 it is visibly playing out. The EIP-1559 burn mechanism has at times made ETH deflationary when usage surges, directly tying economic activity to token scarcity — much like how stock buybacks increase equity value.</p>
-
-          <h2>8. Conclusion: The Ledger Is the Institution</h2>
-          <p>In the twentieth century, trust and coordination in society were mediated by paper contracts, corporate hierarchies, and government agencies. In the twenty-first, we are seeing the rise of ledgers, validators, and code as an alternative mode of coordination. Crypto-Bodies like Ethereum show that it is possible to have an institutional framework without traditional institutions — a public ledger that functions as courthouse, bank, and marketplace all at once.</p>
-
-          <p>This is a profound shift. A Crypto-Body is not just a coin or a payment system. It is a new species of institution: programmable (rules adjusted via code and smart contracts), auditable (everything transparent on-chain by default), and decentralized (no single party monopolizes control). Such an entity can hold and transfer value, enforce agreements, and adjudicate through code — without relying on conventional legal enforcement.</p>
-
-          <p>Ethereum, at present, is the most complete specimen of this phenomenon. It issues currency, manages savings (via staking), allocates capital (through DAO treasury votes and DeFi lending), and keeps records (property as tokens) — all on a ledger accessible worldwide. It is as if the functions of a central bank, a stock exchange, a notary public, and a clearinghouse were bundled into one open protocol.</p>
-
-          <p>The implications are only beginning to unfold. As regulations solidify and technology matures, we may witness ledgers becoming primary vehicles of policy (imagine welfare distribution via smart contracts), or even the law itself being coded (dispute resolutions by algorithm). The Crypto-Body concept urges us to rethink what a "financial institution" or "market institution" can be when jurisdiction is global and trust is algorithmic.</p>
-
-          <p>To conclude on a forward-looking note: if one asks "who regulates a Crypto-Body?", the answer might ultimately be <em>the holders and the code</em> — a form of self-governance that is neither anarchy nor traditional state control, but something in between. We are watching the birth of autonomous economic organisms, and much like the early internet, they will evolve, face setbacks, and challenge existing paradigms. The ledger-as-institution is here to stay; the open question is how it will coexist or compete with the institutions of yesterday.</p>
-
-        </div>
-
-        <footer class="paper-article-footer">
-          <p>Originally published on <a href="https://www.academia.edu/143701755/What_Is_a_Crypto_Body_Rethinking_the_Role_of_the_Blockchain_Ledger" target="_blank" rel="noopener">academia.edu</a> · <a href="assets/paper/crypto-body.pdf" download>Download PDF</a></p>
-          <p class="paper-article-copy">© 2025 Mun How Mong · Shuyang Shi · Chase Wang</p>
-        </footer>
-      </article>
-
-      <div class="chase-back">
-        <a class="btn-back" href="#read">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
-          <span>Back to all writing · 返回文章目录</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ Essay — The Three-Body Problem of Crypto Dominance ═══ -->
-  <div id="essay-three-body" class="screen">
-    <div class="paper-page essay-page">
-      <nav class="paper-nav">
-        <a class="paper-back" href="#read">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
-          <span>Back to all writing · 返回文章目录</span>
-        </a>
-      </nav>
-
-      <article class="paper-article essay-article">
-        <span class="paper-article-eyebrow">Essay · April 2026</span>
-        <h1 class="paper-article-title">The Three-Body Problem of Crypto Dominance</h1>
-        <p class="paper-article-subtitle"><em>Market share, industry growth, public goods — you only get two.</em> Reflections on the <em>Discourses on Salt and Iron</em>.</p>
-        <p class="paper-article-authors">Chase Wang</p>
-
-        <div class="paper-article-body essay-article-body">
-<p>In 81 BCE, at the court of Emperor Zhao of Han, a fierce debate broke out between Sang Hongyang, the imperial finance minister, and a group of Confucian scholars summoned from across the empire. The official pretext for the assembly was "to inquire into the sufferings of the people." The real question was narrower and sharper: <strong>should the state monopolies on salt and iron continue?</strong></p>
-<p>Sang's position was brutally pragmatic. The frontier demanded silver. The empire needed revenue. Leave the trade to private hands and the treasury collects nothing. Therefore: state monopoly.</p>
-<p>The Confucian scholars' indictment was equally concrete. The state-made iron implements, they argued, "cannot cut grass; their axe heads chip and break." Farmers were forced to use inferior tools. The salt and iron officers "extracted without limit," bankrupting small producers. The state, by entering commerce itself, corrupted public morals.</p>
-<p>This debate is usually read today as a clash between statism and laissez-faire. But look closely at the text — the question is not the abstract one of whether the state should intervene in the economy. The question is narrower and more specific: <strong>as a monopoly operator, what did the state-run salt and iron enterprise take on, what did it shirk, and who paid the cost?</strong></p>
-<p>The Confucian critique was not aimed at the Han state itself. It was aimed at the <strong>salt and iron officers as monopoly operators</strong> — they occupied the market, collected the profits, but offloaded every responsibility that came with an industry's public goods: product quality, distribution reach, honest pricing.</p>
-<p>Two thousand years later, looking at the crypto industry, one finds an almost isomorphic scene. An industry that claims to bypass the state and govern itself through code is replaying, at the level of its leading firms, the exact same argument: <strong>can you simultaneously grow the industry, hold onto dominant market share, and refuse to bear the cost of industry public goods?</strong></p>
-<p>This essay argues: <strong>no.</strong></p>
-<hr>
-<h2>1. Why You Cannot Have All Three</h2>
-<p><strong>In an industry that lacks an external provider of public goods, no single leading firm can long sustain all three of: high market share, positive industry-wide growth, and low public-goods investment.</strong></p>
-<p>These three goals form an impossibility triangle. To see why, we first need to pin down what "public goods" means here.</p>
-<p>In crypto — the economy I described in a previous essay as "lacking a lender of last resort" — industry-wide growth depends on a bundle of non-excludable public goods:</p>
-<ul>
-<li><strong>Regulatory legitimacy</strong>: a framework that institutional capital can safely enter</li>
-<li><strong>Protocol and interoperability standards</strong>: rails that let developers and capital move across ecosystems</li>
-<li><strong>Liquidity depth</strong>: the precondition for price discovery and risk management</li>
-<li><strong>Early-stage risk capital</strong>: the seeds of the next cycle</li>
-<li><strong>Cycle-stabilization mechanisms</strong>: something that prevents collapses from cascading into systemic wipeouts</li>
-</ul>
-<p>In traditional economies these public goods are supplied by the state or by private actors under state regulation — the Fed as lender of last resort, the SEC as disclosure regulator, exchanges as standard-setters. In crypto, this economy without a state, the question of <strong>who provides them</strong> hangs open.</p>
-<p>Mancur Olson's logic of collective action gives us the answer. Among a group of beneficiaries, <strong>the member with the most unequal stake has the strongest incentive to provide the public good unilaterally</strong> — because his marginal payoff is the highest. Structurally, then, <strong>only industry leaders will supply public goods</strong>. Everyone smaller rationally free-rides.</p>
-<p>This defines the structural position of the leader: <strong>providing public goods becomes its "tax" — it bears the cost, others consume the benefit.</strong></p>
-<p>Public-goods provision carries two kinds of cost. The first is <strong>direct</strong>: money, attention, compliance budgets, audit fees. The second is <strong>visibility cost</strong>: regulatory attention, antitrust focus, politicization risk, the chains of being watched. Visibility cost erodes dominance <strong>nonlinearly</strong>, because it converts implicit power into explicit responsibility.</p>
-<p>So the logic of the triangle becomes clear:</p>
-<ul>
-<li>If the leader <strong>provides</strong> public goods → compliance constraints and jurisdictional boundaries cap its expansion → market share hits a ceiling</li>
-<li>If the leader <strong>withholds</strong> public goods → the shortfall eventually gets settled all at once → market share is halved and only partially recovers</li>
-<li>Neither path preserves "high share + industry growth + low public-goods cost" simultaneously</li>
-</ul>
-<p>Note that this argument doesn't depend on leaders being lazy or shortsighted. Even with full rationality and perfect information, the structure itself makes the triangle unachievable.</p>
-<p>It is a sharper claim than the familiar "monopolists who don't innovate get disrupted." It is not a timing problem. It is a structural one.</p>
-<p>One corollary worth flagging up front: <strong>the triangle is a constraint, not a promise.</strong> It says <em>you cannot have all three</em>. It does not say <em>providing public goods will make you win</em>. Both strategies come with their own ceilings, their own costs. The case studies below return to this point repeatedly.</p>
-<figure class="essay-figure">
-  <img alt="Figure 1: The structural constraint of the impossibility triangle" src="assets/essays/three-body/fig1_triangle.png" loading="lazy">
-  <figcaption>Figure 1: The structural constraint of the impossibility triangle</figcaption>
-</figure>
-<hr>
-<h2>2. Two Ways to Live in Every Category</h2>
-<p>The claim holds in every major crypto vertical. Look at the top two players in each, and the same pattern appears.</p>
-<p><strong>Every category has two leaders coexisting — one on the low-public-goods path, one on the high-public-goods path. They are not sequential phases; they are a spatial division of labor that has held stable for a decade or more.</strong></p>
-<h3>Stablecoins: Where the Growth Flows Matters More Than Who's Number One</h3>
-<p>The contrast between Tether (USDT) and Circle (USDC) is textbook.</p>
-<p><strong>USDT's strategy.</strong> Tether chose the low-public-goods path. Reserves are attested quarterly by BDO Italia — not a full third-party audit. Tether refused to comply with MiCA; after the EU's MiCA regime came fully into force at end-2024, USDT was delisted from major European CEXes. In October 2021, <a href="https://www.cftc.gov/PressRoom/PressReleases/8450-21" target="_blank" rel="noopener">the CFTC fined Tether $41M for reserve misrepresentation</a>, officially finding that "Tether reserves were fully-backed for only 27.6% of the days in a 26-month sample period between 2016 and 2018." Tether moved its domicile from the British Virgin Islands to El Salvador, systematically selecting the jurisdiction with the lowest regulatory cost.</p>
-<p><strong>USDC's strategy.</strong> Circle chose the opposite path. Deloitte publishes monthly reserve attestations. Reserves sit primarily in a BlackRock-managed money market fund under SEC oversight. Circle actively adapted to MiCA, becoming one of the first globally compliant USD stablecoins. When SVB briefly depegged USDC in 2022, the de-pegging and recovery were publicly disclosed in full.</p>
-<p><strong>How does the triangle settle these two strategies?</strong></p>
-<p>The telling metric isn't absolute market cap. It's <strong>where the marginal growth flows when the industry expands.</strong></p>
-<p>In January 2025, total stablecoin market cap was roughly $205B. By April 2026, it had reached <a href="https://news.bitcoin.com/stablecoin-market-crosses-320b-as-tether-usdt-dominance-falls-2-5-in-2026/" target="_blank" rel="noopener">$320B</a> — <strong>net growth of $115B, a 56% expansion.</strong> This is the largest bull run in stablecoin history, driven by institutional capital entering after the GENIUS Act.</p>
-<p>And in this expansion, USDT is not the primary beneficiary.</p>
-<ul>
-<li>Over 2025, <a href="https://www.coindesk.com/markets/2026/01/06/circle-s-usdc-outpaces-growth-of-tether-s-usdt-for-second-year-running" target="_blank" rel="noopener">USDC grew 72%, USDT grew 36%</a> — USDC's growth rate was double Tether's</li>
-<li><a href="https://news.bitcoin.com/stablecoin-market-crosses-320b-as-tether-usdt-dominance-falls-2-5-in-2026/" target="_blank" rel="noopener">USDT's share of stablecoin market cap fell from 60%+ at the start of 2024 to 57.96% by April 2026</a> — still number one, but in continuous decline</li>
-<li><a href="https://www.spotedcrypto.com/usdt-market-cap-decline-usdc-circle-earnings-stablecoin-war-february-2026/" target="_blank" rel="noopener">In January–February 2026, Tether recorded its first consecutive monthly market cap contraction since FTX</a>, burning 6.5 billion USDT</li>
-<li>The most striking data point is on the transaction-volume side — <strong>in March 2026, USDC captured 64% of stablecoin transaction volume for the first time in nearly a decade, surpassing USDT</strong> (per CoinMarketCap tracking)</li>
-<li>Institutional rails — Visa, Mastercard, BlackRock settlement and treasury operations — prefer USDC</li>
-</ul>
-<figure class="essay-figure">
-  <img alt="Figure 2: USDT vs USDC market cap trajectory and YoY growth" src="assets/essays/three-body/fig2_stablecoin.png" loading="lazy">
-  <figcaption>Figure 2: USDT vs USDC market cap trajectory and YoY growth</figcaption>
-</figure>
-<p>This is how the triangle operates: <strong>when the industry expands, the marginal growth is not distributed evenly.</strong> It flows disproportionately to the provider of compliance public goods. USDT has not lost its existing users — the crypto trading base, the USD substitute in emerging markets. But it is almost entirely excluded from the fattest segment of the 2025–2026 expansion. Tether's Q2 2025 net income was $4.9B — it remains a profit machine. Its problem isn't earning power. Its problem is that <strong>the slope of the growth curve has transferred to someone else.</strong></p>
-<p>In October 2025, Tether announced USAT — a product specifically designed for GENIUS Act compliance. That announcement was Tether's implicit admission: without public-goods investment, the new-volume arenas cannot be held.</p>
-<h3>Exchanges: Two Different Ceilings, Each With Its Price</h3>
-<p>The public discourse often reduces this pair to "the compliant one won, the non-compliant one lost." The data is more complex than that, and more instructive about what the triangle actually constrains.</p>
-<p><strong>Binance's moment of settlement.</strong></p>
-<p>On November 21, 2023, <a href="https://home.treasury.gov/news/press-releases/jy1925" target="_blank" rel="noopener">Binance reached a sweeping settlement with the DOJ, FinCEN, OFAC, and CFTC — a combined $4.3B in penalties</a> — the largest enforcement action in Treasury and FinCEN history. The Treasury's official statement describes Binance as "the world's largest virtual currency exchange, responsible for an estimated 60% of centralized virtual currency spot trading" — primary-source confirmation of the peak market share.</p>
-<p><a href="https://www.cnbc.com/2024/04/30/binance-founder-changpeng-zhao-cz-sentenced-to-four-months-in-prison-.html" target="_blank" rel="noopener">CZ stepped down as CEO, paid $50M personally, and was sentenced to four months in prison in April 2024</a>. Binance's early growth model — "global, low-friction, expansive listings" — had been ruthlessly effective in the industry's formative years. But one of its costs was deferring investment in compliance infrastructure: KYC, AML, sanctions, jurisdictional registration. The DOJ settlement was, in effect, that deferred cost settled all at once.</p>
-<p>The market's reaction was clear and drawn out. <a href="https://www.bloomberg.com/news/articles/2024-10-03/binance-s-crypto-market-share-drops-to-lowest-level-in-four-years" target="_blank" rel="noopener">Per CCData, Binance's spot market share fell to 27% in September 2024 — its lowest since January 2021 — and dropped further to 25% by December 2024</a>. Binance then did two things: <a href="https://www.coindesk.com/business/2023/11/21/binance-to-settle-charges-with-us-doj-source" target="_blank" rel="noopener">appointed Richard Teng as new CEO</a> (former head of markets at the Abu Dhabi Global Market, former senior regulator in Singapore), and seated its first independent board of directors.</p>
-<figure class="essay-figure">
-  <img alt="Figure 3: Binance spot market share trajectory" src="assets/essays/three-body/fig3_binance.png" loading="lazy">
-  <figcaption>Figure 3: Binance spot market share trajectory</figcaption>
-</figure>
-<p>In other words, post-settlement, Binance was <strong>forced to supply the compliance public goods</strong> it had previously skimped on. Once it did, <a href="https://www.ethnews.com/binance-dominates-spot-trading-with-nearly-40-market-share/" target="_blank" rel="noopener">Binance's spot share recovered to a cumulative 39.6% over August 2025 to January 2026</a> — back to number one globally, but <strong>nowhere near the 60% peak.</strong></p>
-<p><strong>Coinbase's ceiling.</strong></p>
-<p>Coinbase walked the opposite path. A voluntary IPO in 2021 — into full SEC disclosure. A public stand against the SEC's 2023 Wells Notice, using litigation to force legal clarity. The Base L2 as public infrastructure. Active lobbying for the CLARITY Act.</p>
-<p>But the <strong>ceiling</strong> on this path is lower than most people assume.</p>
-<p><strong>Inside the U.S. market, Coinbase is a fortified oligopolist.</strong> Per <a href="https://www.coingecko.com/research/publications/exchanges-us-market-share" target="_blank" rel="noopener">CoinGecko data from 2023</a>, Coinbase holds around 76% of U.S. web traffic among centralized exchanges — "2 to 3 out of every 4 U.S. crypto users are on Coinbase." The institutional side is even more concentrated. <a href="https://www.sec.gov/Archives/edgar/data/0001679788/000167978825000153/q225shareholderletter.htm" target="_blank" rel="noopener">In its Q2 2025 shareholder letter</a>, Coinbase disclosed: "Coinbase is the custodian for over 80% of U.S. BTC and ETH ETF assets as of the end of Q2" — over 80% of U.S. BTC and ETH ETF assets held by Coinbase alone, with assets under custody of <strong>$245.7 billion</strong>.</p>
-<p><strong>But shift the lens from "U.S. market" to "global market" and the picture changes entirely.</strong> Per <a href="https://www.coingecko.com/research/publications/2025-q3-crypto-report" target="_blank" rel="noopener">CoinGecko's 2025 Q3 report</a>, Coinbase has <strong>fallen to #10 among global centralized spot exchanges</strong> — even as it remains the largest in the U.S. Its global footprint depends on derivatives and international expansion, not its core U.S. spot business.</p>
-<p>This contrast is revealing: <strong>the cost of actively choosing the compliance vertex is not lost market share — it is a surrendered "global scale" vertex.</strong> Coinbase's TAM is bounded by "what U.S. regulators will accept." Inside that boundary, it is nearly a monopoly. But that boundary itself only covers a small slice of global crypto trading volume. Compliance is not free — its price is <strong>a geographic and jurisdictional ceiling.</strong></p>
-<p><strong>Kraken further illustrates that the return on compliance is not linear.</strong> Within a year of FTX's collapse, <a href="https://www.theblock.co/post/244348/kraken-outpaces-coinbase-as-most-liquid-us-exchange-for-altcoins-kaiko" target="_blank" rel="noopener">Kraken's share among USD-deposit-supporting exchanges rose from 8.3% to 21.1%</a>, while Coinbase's U.S. share rose by less than one percentage point over the same period. Choosing the compliance vertex does not automatically deliver market share. It only spares you a Binance-style one-time settlement.</p>
-<p><strong>The complete picture of this pair: Binance chose "high share × industry growth" — and paid in deferred-compliance settlement. Coinbase chose "compliance × stable position" — and paid in global scale foregone. Both paid. Neither escaped the triangle.</strong></p>
-<h3>Layer 1s: Refusing to Have a Head Is Itself a Choice</h3>
-<p>The BTC-vs-ETH contrast is the most theoretically instructive, because they represent the two extremes of "public-goods provision."</p>
-<p><strong>BTC's path is: refusing to acknowledge that a leader exists.</strong> No foundation (the Bitcoin Foundation was marginalized long ago). No CEO. No designated counterparty for outside negotiation. Protocol governance is deliberately ossified — the BIP process demands near-consensus, and any "active governance" is read by the community as betrayal of decentralization.</p>
-<p>This is the purest form of the low-public-goods path. Its cost: <strong>all the public goods that a leader would normally supply have been outsourced to the outside world — chiefly, to the dollar system.</strong></p>
-<ul>
-<li><strong>Regulatory legitimacy</strong>: supplied by BlackRock's IBIT and ten other spot BTC ETFs — <a href="https://www.theblock.co/post/373966/blackrock-bitcoin-etf-ibit-800000-btc-aum" target="_blank" rel="noopener">by October 2025, IBIT alone had approached $100B in AUM</a>, holding over 800,000 BTC</li>
-<li><strong>Institutional access</strong>: supplied by CME futures, Fidelity custody</li>
-<li><strong>Credit layer and unit of account</strong>: supplied by Strategy's STRC and similar preferred-stock products — STRC is a perpetual preferred with a USD par, monthly USD dividends, and an 11.5% annualized yield, repackaging BTC as a USD-denominated fixed-income product</li>
-<li><strong>Sovereign legitimacy</strong>: supplied by the SBR — the U.S. Strategic Bitcoin Reserve</li>
-</ul>
-<p>BTC has indeed achieved "high share + no public-goods investment" — but it has done so by <strong>letting BTC stop functioning as industry infrastructure.</strong> DeFi isn't built on BTC. Stablecoins aren't issued on BTC. Applications don't run on BTC. BTC remains rock-solid as an independent asset class, but its relevance as the <strong>industry's platform</strong> has steadily declined.</p>
-<p><strong>ETH's path is the opposite.</strong> The Ethereum Foundation takes on protocol coordination. Devcon aligns the community. The EIP process provides transparent technical governance. The grants system allocates ecosystem public-goods funding. These are unambiguous public-goods investments.</p>
-<p>The cost: EF bears simultaneous pressure from both directions — complaints that it "does too much" (token economics) and that it "does too little" (L2 sequencing, MEV). But it is precisely this layer of coordination that makes <strong>ETH the default base layer for the majority of DeFi, stablecoins, and RWA applications.</strong></p>
-<p><strong>This pair reveals an important corollary of the triangle: when a leader refuses to supply any public goods, it doesn't get disrupted — it gets routed around. Its role as the industry's platform passes to whoever does supply them.</strong></p>
-<p>BTC wasn't disrupted by ETH — they coexist. But BTC ceded the identity of "industry infrastructure" to ETH (and later Solana), in exchange for its stability as "digital gold." That was a structural retreat.</p>
-<hr>
-<h2>3. Not a Timeline Problem — A Division-of-Labor Problem</h2>
-<p>Lined up side by side:</p>
-<div class="essay-table-wrap">
-<table class="paper-table essay-table">
-<thead>
-<tr><th>Category</th><th>Low-Public-Goods Path</th><th>High-Public-Goods Path</th></tr>
-</thead>
-<tbody>
-<tr><td>Stablecoins</td><td>USDT — minimal attestation, non-MiCA</td><td>USDC — monthly audits, active compliance</td></tr>
-<tr><td>CEX</td><td>Binance — deferred compliance until settlement</td><td>Coinbase — voluntary IPO, CLARITY advocacy</td></tr>
-<tr><td>L1</td><td>BTC — refuses leadership</td><td>ETH — EF bears protocol coordination</td></tr>
-</tbody>
-</table>
+  </section>
+
+  <section class="cw-section cw-container" id="writing" aria-labelledby="writing-title">
+    <header class="cw-section-head">
+      <h2 class="cw-section-title" id="writing-title">作者的写作 <span lang="en">Writing</span></h2>
+      <p class="cw-section-desc">CBTI 由 Chase Wang 制作。<span lang="en">I study how institutions work. Then I turn the judgment into tools.</span></p>
+      <p class="cw-section-aside"><a href="https://chasewang.me/" lang="en">chasewang.me<span class="cw-arrow" aria-hidden="true">↗</span></a></p>
+    </header>
+    <ol class="cw-index" id="author-writing">
+<!-- author-writing:start -->
+<!-- author-writing:end -->
+    </ol>
+    <p class="cbti-writing-more">
+      <a class="cw-link" href="https://chasewang.me/writing">全部写作 → chasewang.me/writing</a>
+      <a class="cw-link" href="https://chasewang.me/about">关于 Chase Wang<span class="cw-arrow" aria-hidden="true">↗</span></a>
+    </p>
+  </section>
 </div>
-<p>A reader might object that this is just the standard "industries are chaotic early, then they get regulated" pattern — true of late-Qing banking, true of early internet, true of every industry. But the crypto pattern is actually more specific, and more worth analyzing.</p>
-<p><strong>This is not a stage on a timeline. It is a division of labor in space.</strong></p>
-<p>The traditional "early chaos → mature compliance" transition usually happens at the <strong>industry level</strong> — regulation enters, and the industry as a whole moves from anarchy to rules. The 1930s American stock market, the 1990s Chinese internet, and so on. Crypto does not do this. Crypto has <strong>two leaders, with two different strategies, coexisting</strong> — and this split is stable, not transitional.</p>
-<p>USDC and USDT have coexisted for 8 years, both Top 2. Coinbase and Binance for 10 years, both Top 2. ETH and BTC for 11 years, both Top 2. Over windows this long, there is no case of "the number one eventually imitated the number two" (or vice versa) — no convergence. These are <strong>two different business models coexisting</strong>, serving different user preferences, different jurisdictions, different risk appetites. Not a sequence.</p>
-<p>Why is it that in each category, the compliant player is always number two, not number one?</p>
-<p>Because <strong>public-goods investment is the only lever a latecomer has to pry at an incumbent's dominance.</strong> The incumbent's moat is network effects, liquidity, brand. The latecomer cannot compete on those directly — it has to open a new dimension: "I am compliant and you are not; I am transparent and you are not; I coordinate and you do not." These are all public-goods investments. Not moral superiority — <strong>forced differentiation.</strong></p>
-<p>And <strong>incumbents cannot easily pivot.</strong> Once the brand and the public identity are built on "low rules, high speed, global reach," any move toward compliance is read by the market as a wavering of conviction — users leave, employees leave, the narrative cracks. Only when external pressure reaches a breaking point (DOJ settlement, MiCA delisting) does the incumbent belatedly comply.</p>
-<p>Returning this updated pattern to the triangle:</p>
-<ul>
-<li>Top 1 sustains high share + low public-goods investment → at the cost of losing the slope of growth to Top 2, or a forced catch-up at some threshold</li>
-<li>Top 2 sustains public-goods provision → at the cost of geographic and jurisdictional ceilings; share growth depends on external regulatory tailwinds</li>
-<li>Both live inside the triangle — they have merely chosen different pairs of vertices</li>
-</ul>
-<p>And this, in turn, returns us to the sharpest point in the <em>Discourses on Salt and Iron</em>. The Confucian scholars were not attacking "the state" as such. They were attacking <strong>a monopoly operator that had chosen a particular strategy.</strong> They knew, explicitly, that under the same industry, private operators (like the Zhuo clan of Linqiong in early Han private iron) had made sharper tools, at lower cost, with broader distribution. The claim was not "private is always better than state" — it was <strong>specific strategies produce specific consequences.</strong> Crypto's triangle is the same observation.</p>
-<hr>
-<h2>4. The Frontier Is Always Where TradFi Won't Go</h2>
-<p>So far the triangle has led us to a somber conclusion: the structure of crypto keeps it dependent on the dollar system for its public goods. My previous essay, <em>From Korea's Reintegration to the Compute-Dollar</em>, made the same argument at the macro level. But something happened in April 2026 worth adding as a qualifying footnote.</p>
-<p>On April 10, <a href="https://www.globenewswire.com/news-release/2026/04/13/3272611/0/en/Bitget-Launches-New-Pre-IPO-Product-With-SpaceX-as-First-Listing.html" target="_blank" rel="noopener">Bitget launched IPO Prime</a>. Its first product, preSPAX, is a SpaceX-exposure token issued through a partnership with the licensed securitization platform Republic, structured under Regulation S, denominated and subscribed in USDT. Global retail can access it with a $500 minimum. On April 11, Binance Wallet listed five pre-IPO assets — SpaceX, OpenAI, Anthropic, xAI, Anduril — via the PreStocks protocol on Solana, using an SPV 1:1 equity-mapping token structure. On <a href="https://beincrypto.com/gate-pre-ipo-spacex-spcx-live/" target="_blank" rel="noopener">April 15, Gate launched its Pre-IPOs product, SPCX</a>, a USDT-settled Contingent Payout Note supporting 1–10x leverage.</p>
-<p>Three firms. Three different structures. All in the same week. All competing for the same outcome: <strong>making pre-IPO assets — previously accessible only to VCs and accredited investors — available to global retail.</strong></p>
-<figure class="essay-figure">
-  <img alt="Figure 4: Three paths to pre-IPO tokenization" src="assets/essays/three-body/fig4_preipo.png" loading="lazy">
-  <figcaption>Figure 4: Three paths to pre-IPO tokenization</figcaption>
-</figure>
-<p>A few observations are worth recording.</p>
-<p><strong>First, this is something TradFi will not do.</strong> U.S. pre-IPO platforms like Forge Global and EquityZen only serve accredited investors with $1M+ net worth. Retail investors in Europe, Asia, Latin America — even those willing to put in a few hundred dollars — simply cannot access the valuation curves of SpaceX or OpenAI. This is not a technical problem. It is a choice: TradFi's infrastructure, regulatory pathways, and compliance costs do not support the combination of "global retail × high-valuation private assets." Crypto is filling <strong>a gap TradFi has declined to fill.</strong></p>
-<p><strong>Second, this is itself a new form of public-goods investment.</strong> The underlying technical stack for pre-IPO tokenization — SPV architecture, legal wrappers, global compliance registrations, cross-jurisdictional settlement — is an expensive bundle of infrastructure. Bitget, by partnering with Republic under Reg S, is actively exposing its largest regulatory surface area to the U.S. system. Gate, with a Contingent Payout Note structure, is taking on derivatives-settlement responsibility itself. Binance Wallet, with the Solana SPV route, is building bottom-up compliance engineering in a Web3-native direction. <strong>None of the three is a "no-risk" option. All three are actively assuming a public-goods role that TradFi refuses to take on.</strong></p>
-<p><strong>Third — and this is the most important — none of these firms is the Top 1 in the verticals analyzed above.</strong> Binance is the Top 1 exchange, but the pre-IPO play is coming out of Binance Wallet, a flank. Bitget and Gate are second-tier in spot market share. <strong>The industry's innovation frontier often does not come from the Top 1's main position. It comes from second-tier players opening up new dimensions.</strong></p>
-<p>This is exactly consistent with the triangle's logic. Top 1 is under enormous structural pressure to maintain its core position — any disruption in any dimension threatens it. Top 2 and second-tier players have every incentive to take risks in new dimensions — because without doing so, they will never catch up.</p>
-<p>Stacked against crypto's 17-year history, a more optimistic narrative emerges: <strong>crypto natives, while being "Keynesianized" on their existing turf, keep opening new frontiers of public-goods supply.</strong> Stablecoins were not built by TradFi. Layer 1s were not built by TradFi. DeFi was not built by TradFi. And now pre-IPO tokenization — still not built by TradFi. Each of these openings extends the answer to the question "What can crypto do that TradFi cannot?"</p>
-<p>This is not to say crypto will "become independent of the dollar system" — my previous essay already argued it will not. But crypto can, within the extensions of the dollar system, continue to supply public goods that TradFi cannot. <strong>That is the competitive position of the crypto native — not to reject compliance, not to refuse being absorbed, but to be the first to build infrastructure in every dimension TradFi will not, cannot, or dare not touch.</strong></p>
-<p>Sang Hongyang, in the <em>Discourses</em>, said something that reads very pointedly today:</p>
-<blockquote class="essay-pullquote">
-<p><strong>"Wealth lies in stratagem, not in labor of the body; profit lies in commanding position, not in the plough's exertion."</strong></p>
-<p class="essay-pullquote-cn">(富在术数,不在劳身;利在势居,不在力耕)</p>
-</blockquote>
-<p>His meaning: real wealth comes from institutional design and position-selection, not from effort itself; real profit comes from occupying key nodes, not from repeating labor. Two thousand years later, transposed to crypto, the same sentence reads: <strong>the competition at the top is not about out-laboring one's rivals on existing dimensions. It is about being first to occupy the key node on a new one.</strong></p>
-<p>The triangle is a structural constraint. But what it constrains is "having all three at once." It does not constrain "starting over on a new dimension." Every dimensional expansion is a reset of the triangle.</p>
-<p>And every reset, so far, has been reached first by crypto natives.</p>
-        </div>
 
-        <footer class="paper-article-footer">
-          <p>Also posted as a thread on <a href="https://x.com/ChaseWang/status/2046608460830105710" target="_blank" rel="noopener">@ChaseWang</a> · Published April 21, 2026</p>
-          <p class="paper-article-copy">© 2026 Chase Wang</p>
-        </footer>
-      </article>
-
-      <div class="chase-back">
-        <a class="btn-back" href="#read">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
-          <span>Back to all writing · 返回文章目录</span>
-        </a>
+<!-- ═══ Quiz ═══ -->
+<div id="quiz" class="screen">
+  <div class="cw-container cbti-quiz">
+    <aside class="cbti-quiz-rail">
+      <a class="cw-link" href="/#landing"><span class="cw-arrow" aria-hidden="true">←</span> 退出测试 <span lang="en">· Exit</span></a>
+      <p class="cw-kicker">行为测量 · <span lang="en">Behavioral scan</span></p>
+      <h1 class="cbti-quiz-title" lang="en">Answer for the trade you would actually make.</h1>
+      <p class="cw-body-copy">选你真实会做的动作，不选你认为“更聪明”的答案。每页完成后会自动前进。</p>
+      <p class="cbti-note" lang="en">No account. No wallet. Answers stay in this browser session.</p>
+    </aside>
+    <div class="cbti-quiz-main">
+      <div class="cbti-quiz-status">
+        <progress class="cw-progress" max="30" value="0" aria-label="已答题数">0 / 30</progress>
+        <p class="cbti-quiz-counts"><span>已答 <span class="progress-text">0 / 30</span></span><span>第 <span class="page-indicator">1 / 8</span> 页</span></p>
+      </div>
+      <div id="questions-list" tabindex="-1"></div>
+      <div class="cbti-quiz-nav">
+        <button class="cw-btn cw-btn--quiet btn-prev" type="button" onclick="prevPage()">上一页</button>
+        <button class="cw-btn cw-btn--primary btn-next" type="button" onclick="nextPage()">下一页 · Next</button>
       </div>
     </div>
   </div>
+</div>
 
-  </main>
+<!-- ═══ Result ═══ -->
+<div id="result" class="screen">
+  <div class="cw-container cbti-result">
+    <p class="cw-kicker">CBTI · 你的加密人格 <span lang="en">· Your crypto persona</span></p>
+    <article class="cbti-reveal" id="persona-card" aria-labelledby="persona-code">
+      <div class="cbti-reveal-id">
+        <p class="cbti-stamp" id="persona-quadrant"></p>
+        <h1 class="cbti-code" id="persona-code" tabindex="-1"></h1>
+        <p class="cbti-names"><span id="persona-cn" class="cbti-cn"></span><span id="persona-en" class="cbti-en" lang="en"></span></p>
+        <blockquote class="cbti-intro">
+          <p id="persona-intro"></p>
+          <p id="persona-intro-en" lang="en"></p>
+        </blockquote>
+      </div>
+      <figure class="cbti-meme"><img id="persona-meme" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" width="480" height="480"></figure>
+    </article>
 
-  <script src="data.js?v=35"></script>
-  <script src="app.js?v=38"></script>
+    <div class="cbti-actions">
+      <button class="cw-btn cw-btn--primary btn-share" type="button" onclick="shareResult()">Post on 𝕏</button>
+      <button class="cw-btn btn-copy" type="button" onclick="copyShareText()">Copy / 复制</button>
+      <button class="cw-btn cw-btn--quiet btn-retry" type="button" onclick="retryTest()">Retry / 重新测试</button>
+    </div>
+    <p class="cw-visually-hidden" id="result-status" role="status"></p>
+
+    <section class="cbti-about" aria-labelledby="about-title">
+      <header class="cbti-block-head">
+        <h2 class="cbti-block-title" id="about-title">关于这个人格 <span lang="en">About this persona</span></h2>
+      </header>
+      <p class="cbti-about-zh" id="persona-desc"></p>
+      <p class="cbti-about-en" id="persona-desc-en" lang="en"></p>
+    </section>
+
+    <div class="cbti-analysis">
+      <section aria-labelledby="position-title">
+        <header class="cbti-block-head">
+          <h2 class="cbti-block-title" id="position-title">你的位置 <span lang="en">Your position</span></h2>
+          <p class="cbti-block-desc">黑圈标出的点是你所属人格的标准坐标，其余 23 个浅色点是另外 23 种人格。你自己每个维度的得分在维度条里。</p>
+        </header>
+        <div class="cbti-map" id="result-map" data-map="result"></div>
+      </section>
+      <section aria-labelledby="dims-title">
+        <header class="cbti-block-head">
+          <h2 class="cbti-block-title" id="dims-title">维度得分 <span lang="en">Dimension scores</span></h2>
+          <p class="cbti-block-desc">每个维度 2 道题，合计 2–6 分；条越长分越高。L、M、H 分别对应 2、3–4、5–6 分。</p>
+        </header>
+        <div id="dims-list"></div>
+      </section>
+    </div>
+
+    <div class="cbti-actions">
+      <button class="cw-btn cw-btn--primary btn-share" type="button" onclick="shareResult()">Post on 𝕏</button>
+      <button class="cw-btn btn-retry" type="button" onclick="retryTest()">Retry / 重新测试</button>
+    </div>
+
+    <aside class="cbti-tips" aria-label="打赏">
+      <p>请我喝杯咖啡 <span lang="en">· Buy me a coffee</span></p>
+      <button class="cbti-address" type="button" onclick="copyAddress(this)" aria-label="复制 EVM 地址"><span class="cw-badge">EVM</span><code>0x98338f4ade9d2c2aa9310300f6a016a88538242d</code><span class="tips-copy">copy</span></button>
+      <p lang="en">built by <a href="https://chasewang.me/">Chase Wang<span class="cw-arrow" aria-hidden="true">↗</span></a></p>
+    </aside>
+  </div>
+</div>
+
+</main>
+
+<footer class="cw-footer">
+  <div class="cw-container cw-footer-inner">
+    <div class="cw-footer-brand">
+      <a class="cw-brand" href="/#landing"><span class="cw-mark" aria-hidden="true"></span><span class="cw-wordmark">CBTI</span></a>
+      <p><span lang="en">Crypto Behavioral Type Indicator</span> · 加密行为类型指标</p>
+    </div>
+    <nav class="cw-footer-nav" aria-label="页脚导航">
+      <p class="cw-footer-label">CBTI</p>
+      <ul><li><a href="/#landing">测试</a></li><li><a href="/#types">类型</a></li><li><a href="/#method">方法</a></li></ul>
+    </nav>
+    <div class="cw-footer-links">
+      <p class="cw-footer-label">Chase Wang</p>
+      <ul>
+        <li><a href="https://chasewang.me/">chasewang.me<span class="cw-arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://chasewang.me/writing">写作<span class="cw-arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://x.com/ChaseWang" rel="noopener">X<span class="cw-arrow" aria-hidden="true">↗</span></a></li>
+        <li><a href="https://github.com/ckpxgfnksd-max/cbti-club" rel="noopener">GitHub<span class="cw-arrow" aria-hidden="true">↗</span></a></li>
+      </ul>
+    </div>
+    <p class="cw-footer-base"><span>© Chase Wang</span><a href="https://chasewang.me/" lang="en">CBTI — by Chase Wang<span class="cw-arrow" aria-hidden="true">↗</span></a></p>
+  </div>
+</footer>
+
+<script src="/data.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

@@ -1,13 +1,20 @@
 # writings/ — single source of truth for Chase's published essays
 
-This folder is the manifest layer for Chase's writing across X, Substack, and
-cbti.club. The `#read` archive and compact `#chase` preview render directly from
-`index.json` — **no external widgets, no third-party JS**. Works in mainland
-China, behind ad-blockers, and inside browsers that block X embeds.
+This folder is the manifest layer for Chase's writing across X, Substack,
+chasewang.me and cbti.club. Two surfaces render from `index.json`, both as static
+HTML at build time — **no external widgets, no third-party JS**:
 
-A future Claude Code "publishing agent" reads from / writes to this same
-manifest. The site code does not need to change when the agent ships — the
-agent's only contract is to keep `index.json` valid.
+- **chasewang.me/writing** — the complete index, grouped by format (Research,
+  Analysis, Essays). The chasewang.me build reads this file from this public
+  repository through the GitHub API (daily cron), with a committed fallback copy.
+- **cbti.club landing, "作者的写作"** — the latest three items, rendered by
+  `scripts/build.mjs` into `_site/index.html` on every deploy.
+
+The old `#read` archive and `#chase` profile moved to chasewang.me; those hash
+routes now redirect there (`https://chasewang.me/writing`, `/about`).
+
+The x-auto publishing adapter reads from / writes to this same manifest. Its only
+contract is to keep `index.json` valid; nothing in this redesign changed it.
 
 ---
 
@@ -23,6 +30,8 @@ agent's only contract is to keep `index.json` valid.
       "datePrecision": "year" | "month", // optional — use when only year/month is verified
       "primaryLang": "en" | "zh",       // REQUIRED — which lang renders on the card
       "kind": "Essay",                  // optional — visible content-type label
+                                        //   ("Academic paper", "Field map", "Data study", …)
+      "format": "research" | "analysis" | "essay", // optional — hand-maintained entries only
 
       "tags": ["macro", "stablecoin"],  // optional, for future filtering
 
@@ -59,7 +68,10 @@ need to maintain order — write in any order, oldest or newest.
 4. `primaryLang` must be a key present in `title` and `excerpt`
 5. Every `channels[].lang` must be a key present in `title`
 6. At least one `channels[]` entry is required
-7. URLs must be `https://`; existing same-page SPA routes may use `#...`
+7. URLs must be `https://`. The adapter's validator also accepts `#...` (the
+   old same-page routes); no entry uses one any more — `#paper` and
+   `#essay-three-body` became `https://chasewang.me/paper` and
+   `https://chasewang.me/essay-three-body`.
 
 If any item fails validation, the renderer **skips that item silently** and
 logs to console. The page does not break.
@@ -82,7 +94,43 @@ When x-auto marks an Article `published`, its cbti adapter:
    already-public X Article.
 
 The adapter **never** edits the renderer code. Schema changes require a
-human-reviewed change to both `index.json` and the renderer in `app.js`.
+human-reviewed change to `index.json`, `scripts/build.mjs` / `scripts/lib/`
+here, and the chasewang.me build.
+
+### Format (how an item is grouped)
+
+Both sites classify every item the same way, so adapter entries never need a
+field they would lose on replay:
+
+1. `format` field, when present (only hand-maintained entries carry one);
+2. else tag `x-article` → **analysis** (every adapter entry);
+3. else `kind` is Academic paper / Field map / Data study, or a tag contains
+   `research` → **research**;
+4. else **essay**.
+
+### Deploy-time normalization (the adapter contract is unchanged)
+
+The adapter writes each `writings/<id>/index.html` whole, in its own dark
+template, and may rewrite it on any replay. Those repository files are left
+exactly as the adapter wrote them. At deploy time `scripts/build.mjs` copies the
+site into `_site/` and runs `scripts/lib/normalize.mjs` on the **copy** of every
+`writings/*/index.html`:
+
+- it reads the adapter's known page shape (title, canonical, og tags, date,
+  `<article class="article">` body, X link) and rebuilds the page in the shared
+  Chase Wang reading template (cw-system), with the body carried over
+  byte-for-byte;
+- canonical and og tags are kept; `lang="zh"` becomes `zh-Hans`; the meta
+  description is cleaned (whitespace, length); Google Fonts are dropped; the
+  `/#chase` links become `https://chasewang.me/writing`; Article JSON-LD is added
+  with the author `https://chasewang.me/#person`;
+- a page whose structure is not recognised is published unchanged, the build
+  prints a warning and still deploys.
+
+`node scripts/test-normalize.mjs` checks the normalizer against a fixture built
+from the adapter's template and against the real pages here. Nothing about the
+page path, the manifest fields, the `add writing: <id>` commit, or pushing to
+`main` changed.
 
 ---
 
@@ -109,4 +157,4 @@ human-reviewed change to both `index.json` and the renderer in `app.js`.
   audience; live embeds were the v0 implementation and were unusable for them.
 - **A flat JSON manifest** is the smallest thing that works everywhere, gives
   Chase full editorial control over how each piece is presented, and gives the
-  future agent an unambiguous machine-writable target.
+  adapter an unambiguous machine-writable target.

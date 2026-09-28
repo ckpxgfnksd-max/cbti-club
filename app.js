@@ -37,63 +37,80 @@ function levelToNum(level) {
   return level === 'H' ? 3 : level === 'M' ? 2 : 1;
 }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function prefersReducedMotion() {
+  return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
+
+function showScreen(id, anchor) {
   var el = document.getElementById(id);
-  if (!el) { el = document.getElementById('landing'); id = 'landing'; }
+  if (!el || !el.classList.contains('screen')) { el = document.getElementById('landing'); id = 'landing'; }
+  document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
   el.classList.add('active');
-  // Body class drives video visibility as a :has() fallback; pause the video on static pages.
-  // Replace any existing screen-* prefix class while preserving everything else
-  // (e.g. .anim-done, which gates the one-shot landing reveal animations).
-  var preserved = (document.body.className || '').split(/\s+/).filter(function(c) {
+  // The body class names the active screen (styling hook). Replace any existing screen-*
+  // class while preserving everything else.
+  var preserved = (document.body.className || '').split(/\s+/).filter(function (c) {
     return c && c.indexOf('screen-') !== 0;
   });
   preserved.push('screen-' + id);
   document.body.className = preserved.join(' ');
-  var themeMeta = document.querySelector('meta[name="theme-color"]');
-  if (themeMeta) themeMeta.setAttribute('content', '#f2f0e8');
 
-  // Keep the global site navigation synchronized with the SPA screen.
-  var routeKey = id === 'chase' ? 'chase'
-    : (id === 'read' || id === 'paper' || id === 'essay-three-body') ? 'read'
-    : 'cbti';
-  document.querySelectorAll('.site-nav [data-route]').forEach(function(link) {
-    if (link.getAttribute('data-route') === routeKey) link.setAttribute('aria-current', 'page');
-    else link.removeAttribute('aria-current');
-  });
-
-  // The redesigned site uses the behavioral field as its visual signature.
-  // The legacy background video stays in the repo for rollback, but never burns CPU here.
-  if (typeof BgVideo !== 'undefined') {
-    BgVideo.pause();
-  }
-  // Run once now and once on the next frame. The second pass wins over the
-  // browser's native deep-link scroll on direct /#route loads.
-  window.scrollTo(0, 0);
-  requestAnimationFrame(function () { window.scrollTo(0, 0); });
-
-  // The complete archive and the short Chase preview share one cached manifest.
-  if (id === 'read' || id === 'chase') loadWritings();
-
-  // The former 3D sphere is retained as rollback code, but the new atlas is static
-  // by design and keeps motion, power use, and cognitive load bounded.
-  if (typeof PersonaSphere !== 'undefined') {
-    PersonaSphere.stop();
-  }
+  // Landing anchors (#types, #method, #writing) scroll to their section; every other screen
+  // change starts at the top. Run once now and once on the next frame: the second pass wins
+  // over the browser's own deep-link scroll on direct loads.
+  var target = anchor ? document.getElementById(anchor) : null;
+  var place = function () {
+    if (target) target.scrollIntoView();
+    else window.scrollTo(0, 0);
+  };
+  place();
+  requestAnimationFrame(place);
 }
 
-// ── Hash-based router: supports /#chase and /#paper deep links + browser back/forward.
-// Screens handled by the router (others like #quiz are driven by startTest()).
-var ROUTED_SCREENS = ['landing', 'read', 'chase', 'paper', 'essay-three-body'];
+// ── Hash router. #landing is the default screen; #quiz and #result are driven by the test
+// itself (they have no URL, as before). Landing sections are reachable as #types, #method
+// and #writing. The old routes (#read, #chase, #paper, #essay-three-body, #chase-*) moved to
+// chasewang.me: the table lives in index.html (window.CBTI_LEGACY) so the redirect can run
+// before first paint; hashchange lands here.
+var ROUTED_SCREENS = ['landing'];
+var LANDING_ANCHORS = ['types', 'method', 'writing', 'site-main'];
 function routeFromHash() {
-  var hash = (location.hash || '').replace('#', '');
+  var hash = '';
+  try { hash = decodeURIComponent((location.hash || '').replace('#', '')); } catch (e) { hash = ''; }
+  var legacy = window.CBTI_LEGACY || {};
+  if (Object.prototype.hasOwnProperty.call(legacy, hash)) {
+    location.replace(legacy[hash]);
+    return;
+  }
   if (ROUTED_SCREENS.indexOf(hash) !== -1) {
     showScreen(hash);
   } else if (!hash || hash === 'node') {
     if (hash === 'node') history.replaceState(null, '', '#landing');
     showScreen('landing');
+  } else if (LANDING_ANCHORS.indexOf(hash) !== -1) {
+    showScreen('landing', hash);
   }
   // else: leave current screen alone (e.g. during quiz)
+}
+
+// A link to the hash already in the address bar fires no hashchange (for example "类型"
+// clicked again from the quiz). Route it by hand so the nav always works.
+function routeSameHashClick(event) {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  var link = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+  if (!link) return;
+  var url;
+  try { url = new URL(link.getAttribute('href'), location.href); } catch (e) { return; }
+  if (url.origin !== location.origin || url.pathname !== location.pathname || !url.hash) return;
+  if (url.hash === location.hash) {
+    event.preventDefault();
+    routeFromHash();
+  }
 }
 
 // ── Quiz rendering ──
@@ -118,35 +135,36 @@ function renderPage(pageIndex) {
   state.currentPage = pageIndex;
   const container = document.getElementById('questions-list');
   container.innerHTML = '';
-  container.classList.remove('page-enter');
 
   const pageQs = getPageQuestions(pageIndex);
   const globalOffset = pageIndex * QUESTIONS_PER_PAGE;
+  const total = state.shuffledQs.length;
 
   pageQs.forEach((q, i) => {
-    const card = document.createElement('div');
-    card.className = 'question-card';
+    const card = document.createElement('section');
+    card.className = 'cbti-q question-card';
     if (state.answers[q.id] !== undefined) card.classList.add('answered');
     card.id = 'card-' + q.id;
+    card.setAttribute('aria-labelledby', 'qt-' + q.id);
 
     const dim = dimensionMeta[q.dim];
     const globalIdx = globalOffset + i + 1;
 
     card.innerHTML =
-      '<div class="question-header">' +
-        '<span class="question-num"># ' + globalIdx + '</span>' +
-        '<span class="question-dim">' + (dim ? dim.en : q.dim) + '</span>' +
-      '</div>' +
-      '<div class="question-text">' + q.text + '</div>' +
-      '<div class="question-text-en">' + q.en + '</div>' +
-      '<div class="option-list">' +
+      '<p class="cbti-q-meta">' +
+        '<span>' + String(globalIdx).padStart(2, '0') + ' / ' + total + '</span>' +
+        '<span lang="en">' + esc(dim ? dim.en : q.dim) + '</span>' +
+      '</p>' +
+      '<h2 class="cbti-q-text" id="qt-' + q.id + '">' + esc(q.text) + '</h2>' +
+      '<p class="cbti-q-en" lang="en">' + esc(q.en) + '</p>' +
+      '<div class="cbti-options" role="group" aria-labelledby="qt-' + q.id + '">' +
         q.options.map(function(opt, oi) {
-          var selected = state.answers[q.id] === opt.value ? ' selected' : '';
-          return '<button class="option-btn' + selected + '" data-qid="' + q.id + '" data-value="' + opt.value + '">' +
-            '<span class="option-label">' + String.fromCharCode(65 + oi) + '</span>' +
-            '<span class="option-text-wrap">' +
-              '<span>' + opt.label + '</span>' +
-              '<span class="option-text-en">' + opt.en + '</span>' +
+          var selected = state.answers[q.id] === opt.value;
+          return '<button type="button" class="cbti-option option-btn' + (selected ? ' selected' : '') + '" aria-pressed="' + selected + '" data-qid="' + q.id + '" data-value="' + opt.value + '">' +
+            '<span class="cbti-option-key" aria-hidden="true">' + String.fromCharCode(65 + oi) + '</span>' +
+            '<span class="cbti-option-body">' +
+              '<span>' + esc(opt.label) + '</span>' +
+              '<span class="cbti-option-en" lang="en">' + esc(opt.en) + '</span>' +
             '</span>' +
           '</button>';
         }).join('') +
@@ -163,8 +181,12 @@ function renderPage(pageIndex) {
       state.answers[qid] = value;
 
       var card = btn.closest('.question-card');
-      card.querySelectorAll('.option-btn').forEach(function(b) { b.classList.remove('selected'); });
+      card.querySelectorAll('.option-btn').forEach(function(b) {
+        b.classList.remove('selected');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('selected');
+      btn.setAttribute('aria-pressed', 'true');
       card.classList.add('answered');
 
       updateProgress();
@@ -173,12 +195,18 @@ function renderPage(pageIndex) {
     });
   });
 
-  // Animate in
-  requestAnimationFrame(function() { container.classList.add('page-enter'); });
-
   updateProgress();
   updateNav();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Keyboard and screen-reader users continue from the new page, not from the top of the
+  // document. Page 1 starts at the top; later pages scroll to the question column.
+  container.setAttribute('role', 'group');
+  container.setAttribute('aria-label', '第 ' + (pageIndex + 1) + ' / ' + state.totalPages + ' 页');
+  try { container.focus({ preventScroll: true }); } catch (e) { container.focus(); }
+  var behavior = prefersReducedMotion() ? 'auto' : 'smooth';
+  var main = document.querySelector('.cbti-quiz-main');
+  if (pageIndex === 0 || !main) window.scrollTo({ top: 0, behavior: behavior });
+  else main.scrollIntoView({ behavior: behavior, block: 'start' });
 }
 
 function checkAutoAdvance() {
@@ -214,9 +242,13 @@ function prevPage() {
 function updateProgress() {
   var total = state.shuffledQs.length;
   var answered = Object.keys(state.answers).length;
-  var pct = (answered / total) * 100;
 
-  document.querySelector('.progress-bar-fill').style.width = pct + '%';
+  var bar = document.querySelector('.cbti-quiz-status progress');
+  if (bar) {
+    bar.max = total;
+    bar.value = answered;
+    bar.textContent = answered + ' / ' + total;
+  }
   document.querySelector('.progress-text').textContent = answered + ' / ' + total;
   document.querySelector('.page-indicator').textContent = (state.currentPage + 1) + ' / ' + state.totalPages;
 }
@@ -233,17 +265,15 @@ function updateNav() {
   var allAnswered = pageQs.every(function(q) { return state.answers[q.id] !== undefined; });
 
   if (state.currentPage >= state.totalPages - 1) {
-    nextBtn.textContent = 'See Results ✨';
+    nextBtn.textContent = '查看结果 · See results';
   } else {
-    nextBtn.textContent = 'Next →';
+    nextBtn.textContent = '下一页 · Next';
   }
 
   if (allAnswered) {
-    nextBtn.classList.remove('disabled');
     nextBtn.disabled = false;
     nextBtn.setAttribute('aria-disabled', 'false');
   } else {
-    nextBtn.classList.add('disabled');
     nextBtn.disabled = true;
     nextBtn.setAttribute('aria-disabled', 'true');
   }
@@ -375,6 +405,31 @@ function computeAxisScore(weights, dimSums) {
   return Math.max(5, Math.min(95, score));
 }
 
+// ── Quadrants ──
+// Quadrant = persona's canonical coordinates, same thresholds everywhere (stamp, maps, index).
+var QUADRANTS = {
+  smart_money:   { cls: 'q-smart',    zh: '聪明钱',   en: 'Smart Money',      rule: '风险 < 50 · 信念 ≥ 50' },
+  diamond_degen: { cls: 'q-diamond',  zh: '钻石赌狗', en: 'Diamond Degen',    rule: '风险 ≥ 50 · 信念 ≥ 50' },
+  rotating_andy: { cls: 'q-rotating', zh: '旋转安迪', en: 'Rotating Andy',    rule: '风险 < 50 · 信念 < 50' },
+  gambler:       { cls: 'q-gambler',  zh: '纯赌怪',   en: 'Absolute Gambler', rule: '风险 ≥ 50 · 信念 < 50' }
+};
+var QUADRANT_ORDER = ['smart_money', 'diamond_degen', 'rotating_andy', 'gambler'];
+
+function quadrantOf(scatter) {
+  var risk = scatter.risk, conviction = scatter.conviction;
+  return risk < 50 && conviction >= 50 ? 'smart_money'
+    : risk >= 50 && conviction >= 50 ? 'diamond_degen'
+    : risk < 50 && conviction < 50 ? 'rotating_andy'
+    : 'gambler';
+}
+
+function quadrantCounts() {
+  var counts = {};
+  QUADRANT_ORDER.forEach(function (k) { counts[k] = 0; });
+  Object.keys(personas).forEach(function (k) { counts[quadrantOf(personas[k].scatter)] += 1; });
+  return counts;
+}
+
 // ── Result rendering ──
 
 function renderResult() {
@@ -383,40 +438,25 @@ function renderResult() {
 
   // Determine quadrant from PERSONA's canonical position (not user's scatter)
   // This keeps the stamp consistent with the persona identity
-  var pRisk = p.scatter.risk;
-  var pConv = p.scatter.conviction;
-  var qKey = pRisk < 50 && pConv >= 50 ? 'smart_money'
-    : pRisk >= 50 && pConv >= 50 ? 'diamond_degen'
-    : pRisk < 50 && pConv < 50 ? 'rotating_andy'
-    : 'gambler';
-  var qLabel = {
-    smart_money:   'Smart Money · 聪明钱',
-    diamond_degen: 'Diamond Degen · 钻石赌狗',
-    rotating_andy: 'Rotating Andy · 旋转安迪',
-    gambler:       'Absolute Gambler · 纯赌怪'
-  }[qKey];
+  var qKey = quadrantOf(p.scatter);
+  var q = QUADRANTS[qKey];
 
-  // Apply quadrant class to persona card (for glow + accent)
   var card = document.getElementById('persona-card');
   if (card) {
-    card.classList.remove('q-smart_money','q-diamond_degen','q-rotating_andy','q-gambler');
-    card.classList.add('q-' + qKey);
+    card.classList.remove('q-smart', 'q-diamond', 'q-rotating', 'q-gambler');
+    card.classList.add(q.cls);
   }
-
-  document.getElementById('persona-badge').textContent = 'Your Crypto Persona · 你的加密人格';
   var qEl = document.getElementById('persona-quadrant');
   if (qEl) {
-    qEl.className = 'persona-quadrant q-' + qKey;
-    qEl.textContent = qLabel;
+    qEl.innerHTML = '<span class="q-swatch ' + q.cls + '" aria-hidden="true"></span>' + q.zh + ' <span lang="en">' + q.en + '</span>';
   }
 
   const memeImg = document.getElementById('persona-meme');
   memeImg.onerror = null;
   memeImg.style.display = '';
-  const imgSrc = 'assets/personas/' + p.code + '.jpg';
   memeImg.alt = p.cn;
   memeImg.onerror = function() { this.style.display = 'none'; };
-  memeImg.src = imgSrc;
+  memeImg.src = '/assets/personas/' + p.code + '.jpg';
 
   document.getElementById('persona-code').textContent = p.code;
   document.getElementById('persona-cn').textContent = p.cn;
@@ -428,6 +468,12 @@ function renderResult() {
 
   renderDimensions();
   renderScatter();
+
+  // Move focus to the reveal so keyboard and screen-reader users land on the result.
+  var heading = document.getElementById('persona-code');
+  if (heading) {
+    try { heading.focus({ preventScroll: true }); } catch (e) { heading.focus(); }
+  }
 }
 
 function renderDimensions() {
@@ -443,174 +489,200 @@ function renderDimensions() {
 
   for (const [model, dims] of Object.entries(groups)) {
     const group = document.createElement('div');
-    group.className = 'dim-group';
-
-    group.innerHTML = `<div class="dim-group-title">${model}</div>`;
-
-    for (const d of dims) {
+    group.className = 'cbti-dim-group';
+    const rows = dims.map(function (d) {
       const score = state.dimScores[d.dim] || 2;
       const level = state.dimLevels[d.dim] || 'L';
       const pct = ((score - 2) / 4) * 100; // 2-6 → 0-100
-
-      const row = document.createElement('div');
-      row.className = 'dim-row';
-      row.innerHTML = `
-        <span class="dim-label">${d.en}</span>
-        <div class="dim-bar-track">
-          <div class="dim-bar-fill" style="width: ${pct}%"></div>
-        </div>
-        <span class="dim-level ${level}">${level}</span>
-      `;
-      group.appendChild(row);
-    }
-
+      return '<li class="cbti-dim-row">' +
+        '<span class="cbti-dim-code">' + esc(d.dim) + '</span>' +
+        '<span class="cbti-dim-name">' + esc(dimensionZh(d)) + ' <span lang="en">' + esc(d.en) + '</span></span>' +
+        '<span class="cw-meter" role="img" aria-label="' + score + ' 分（2–6）"><span style="--value:' + (pct / 100) + '"></span></span>' +
+        '<span class="cbti-dim-level">' + level + '</span>' +
+      '</li>';
+    }).join('');
+    group.innerHTML = '<h3 class="cbti-dim-group-title">' + modelLabel(model) + '</h3>' +
+      '<ul class="cbti-dim-rows">' + rows + '</ul>';
     container.appendChild(group);
   }
 }
 
+// dimensionMeta: name 'IM1 风险承受', model '投资心态 Investment Mindset'
+function dimensionZh(meta) {
+  return String(meta.name || '').replace(/^[A-Z]+\d+\s+/, '');
+}
+function modelLabel(model) {
+  var i = String(model).indexOf(' ');
+  if (i < 0) return esc(model);
+  return esc(model.slice(0, i)) + ' <span lang="en">' + esc(model.slice(i + 1)) + '</span>';
+}
+
 function renderScatter() {
-  const canvas = document.getElementById('scatter-canvas');
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const parent = canvas.parentElement;
-  const size = Math.min(parent.clientWidth, parent.clientHeight) || 360;
-  canvas.width = size * dpr;
-  canvas.height = size * dpr;
-  canvas.style.width = size + 'px';
-  canvas.style.height = size + 'px';
-  ctx.scale(dpr, dpr);
+  // The dot sits at the PERSONA's canonical position, not at the user's answer-derived
+  // position (state.scatterPos): the rule-based scorer and the axis math read different
+  // dimensions, so a canonical dot keeps the stamp, the map and the identity coherent.
+  // The user's own answers are shown in the dimension bars.
+  if (!state.result) return;
+  TypeMap.mount(document.getElementById('result-map'), { highlight: state.result.code });
+}
 
-  // New palette (matches CSS tokens)
-  const C = {
-    sm:   '#00E676',  // Smart Money
-    dd:   '#B24BF3',  // Diamond Degen
-    ra:   '#FFB800',  // Rotating Andy
-    ag:   '#FF2E4C',  // Absolute Gambler
-    grid: 'rgba(17,19,26,0.14)',
-    axis: 'rgba(17,19,26,0.42)',
-    label: 'rgba(17,19,26,0.62)'
-  };
+// ── Type map: one SVG renderer for the landing map and the result map ──
+var TypeMap = (function () {
+  var mounts = [];
+  var observer = null;
 
-  // Single pad value — leaves room above for top quadrant labels and below for bottom labels + axis.
-  const pad = 36;
-  const plotSize = size - pad * 2;
-
-  // Subtle quadrant washes — very low alpha on black
-  const qWash = [
-    { x: 0, y: 0, fill: 'rgba(0,230,118,0.04)'  },   // Smart Money
-    { x: 1, y: 0, fill: 'rgba(178,75,243,0.05)' },   // Diamond Degen
-    { x: 0, y: 1, fill: 'rgba(255,184,0,0.04)'  },   // Rotating Andy
-    { x: 1, y: 1, fill: 'rgba(255,46,76,0.05)'  },   // Gambler
-  ];
-  qWash.forEach(q => {
-    ctx.fillStyle = q.fill;
-    ctx.fillRect(pad + q.x * plotSize / 2, pad + q.y * plotSize / 2, plotSize / 2, plotSize / 2);
-  });
-
-  // Grid: thin mid-lines
-  ctx.strokeStyle = C.grid;
-  ctx.lineWidth = 1;
-  ctx.setLineDash([3, 5]);
-  ctx.beginPath();
-  ctx.moveTo(pad + plotSize / 2, pad);
-  ctx.lineTo(pad + plotSize / 2, pad + plotSize);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(pad, pad + plotSize / 2);
-  ctx.lineTo(pad + plotSize, pad + plotSize / 2);
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Outer frame
-  ctx.strokeStyle = C.grid;
-  ctx.strokeRect(pad, pad, plotSize, plotSize);
-
-  // Axis labels — mono, terminal feel. Risk label sits below the quadrant labels.
-  ctx.fillStyle = C.label;
-  ctx.font = '10px "JetBrains Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('RISK  →  风险偏好', pad + plotSize / 2, pad + plotSize + 34);
-  ctx.save();
-  ctx.translate(14, pad + plotSize / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.fillText('CONVICTION  →  信念强度', 0, 0);
-  ctx.restore();
-
-  // Quadrant labels — placed OUTSIDE the plot so they never collide with dots
-  ctx.font = '9px "JetBrains Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillStyle = C.sm + 'B0';
-  ctx.fillText('SMART MONEY',     pad + plotSize * 0.25, pad - 8);
-  ctx.fillStyle = C.dd + 'B0';
-  ctx.fillText('DIAMOND DEGEN',   pad + plotSize * 0.75, pad - 8);
-  ctx.fillStyle = C.ra + 'B0';
-  ctx.fillText('ROTATING ANDY',   pad + plotSize * 0.25, pad + plotSize + 16);
-  ctx.fillStyle = C.ag + 'B0';
-  ctx.fillText('ABSOLUTE GAMBLER', pad + plotSize * 0.75, pad + plotSize + 16);
-
-  // Plot other personas as dim dots
-  ctx.globalAlpha = 0.45;
-  for (const [code, p] of Object.entries(personas)) {
-    if (code === state.result.code) continue;
-    const x = pad + (p.scatter.risk / 100) * plotSize;
-    const y = pad + (1 - p.scatter.conviction / 100) * plotSize;
-    ctx.fillStyle = getQuadrantColor(p.scatter.risk, p.scatter.conviction);
-    ctx.beginPath();
-    ctx.arc(x, y, 3, 0, Math.PI * 2);
-    ctx.fill();
+  function overlap(a, b) {
+    var x = Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x));
+    var y = Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+    return x * y;
   }
-  ctx.globalAlpha = 1;
 
-  // User dot is plotted at the PERSONA's canonical position.
-  // Rationale: the rule-based scorer and the risk/conviction axis math can disagree
-  // (different dimensions feed each), so a user scoring BUIDL could end up visually
-  // in the Rotating Andy quadrant, which contradicts the SMART MONEY stamp. Plotting
-  // at canonical keeps everything coherent. The user's actual answer breakdown is
-  // already shown in the dimension bars below.
-  const ux = pad + (state.result.scatter.risk / 100) * plotSize;
-  const uy = pad + (1 - state.result.scatter.conviction / 100) * plotSize;
-  const userColor = getQuadrantColor(state.result.scatter.risk, state.result.scatter.conviction);
+  // Greedy label placement: first candidate position that clears other labels and dots.
+  function placeLabels(points, frame) {
+    var placed = [];
+    var order = points.slice().sort(function (a, b) {
+      return (b.you - a.you) || (a.y - b.y) || (a.x - b.x);
+    });
+    order.forEach(function (p) {
+      var w = p.code.length * p.fs * 0.6, h = p.fs, g = p.you ? 6 : 3, r = p.you ? 11 : p.r;
+      var cands = [
+        [p.x + r + g, p.y - h / 2], [p.x - r - g - w, p.y - h / 2],
+        [p.x - w / 2, p.y - r - g - h], [p.x - w / 2, p.y + r + g],
+        [p.x + r, p.y - r - h], [p.x + r, p.y + r], [p.x - r - w, p.y - r - h], [p.x - r - w, p.y + r]
+      ];
+      var best = null, bestScore = Infinity;
+      for (var i = 0; i < cands.length; i++) {
+        var box = { x: cands[i][0], y: cands[i][1], w: w, h: h };
+        if (box.x < frame.x - 2 || box.x + w > frame.x + frame.s + 2 || box.y < frame.y - 2 || box.y + h > frame.y + frame.s + 2) continue;
+        var score = 0;
+        placed.forEach(function (o) { score += overlap(box, o); });
+        points.forEach(function (o) {
+          if (o === p) return;
+          var cx = Math.max(box.x, Math.min(o.x, box.x + w)), cy = Math.max(box.y, Math.min(o.y, box.y + h));
+          if ((cx - o.x) * (cx - o.x) + (cy - o.y) * (cy - o.y) < (o.r + 1) * (o.r + 1)) score += 20;
+        });
+        if (score < bestScore) { bestScore = score; best = box; }
+        if (score === 0) break;
+      }
+      p.label = best || { x: p.x + r + g, y: p.y - h / 2, w: w, h: h };
+      placed.push(p.label);
+    });
+  }
 
-  // Outer glow
-  const glow = ctx.createRadialGradient(ux, uy, 0, ux, uy, 28);
-  glow.addColorStop(0, userColor + '66');
-  glow.addColorStop(1, userColor + '00');
-  ctx.fillStyle = glow;
-  ctx.beginPath();
-  ctx.arc(ux, uy, 28, 0, Math.PI * 2);
-  ctx.fill();
+  function render(el, opts) {
+    var width = Math.floor(el.clientWidth);
+    if (!width) return false;
+    var highlight = opts.highlight || '';
+    if (el.getAttribute('data-rendered') === width + '|' + highlight) return true;
 
-  // Inner ring
-  ctx.strokeStyle = userColor + '55';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.arc(ux, uy, 14, 0, Math.PI * 2);
-  ctx.stroke();
+    var compact = width < 460;
+    var pad = { l: compact ? 26 : 42, r: 6, t: 30, b: compact ? 50 : 58 };
+    var s = width - pad.l - pad.r;
+    var height = pad.t + s + pad.b;
+    var frame = { x: pad.l, y: pad.t, s: s };
+    var fs = compact ? 10 : 11;
+    var X = function (risk) { return pad.l + risk / 100 * s; };
+    var Y = function (conviction) { return pad.t + (1 - conviction / 100) * s; };
+    var n = function (v) { return Math.round(v * 10) / 10; };
+    var id = el.id || 'type-map';
 
-  // Core dot
-  ctx.fillStyle = userColor;
-  ctx.strokeStyle = '#f2f0e8';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(ux, uy, 6, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
+    var points = Object.keys(personas).map(function (k) {
+      var p = personas[k];
+      var you = p.code === highlight;
+      return {
+        code: p.code, cn: p.cn, en: p.en, q: QUADRANTS[quadrantOf(p.scatter)],
+        risk: p.scatter.risk, conviction: p.scatter.conviction,
+        x: X(p.scatter.risk), y: Y(p.scatter.conviction),
+        r: you ? 6 : (compact ? 3.5 : 4), fs: you ? fs + 1 : (highlight ? Math.max(10, fs - 1) : fs), you: you
+      };
+    });
+    placeLabels(points, frame);
 
-  // Label with mono font — position below dot if too close to top edge to avoid clashing with quadrant title
-  ctx.fillStyle = '#11131a';
-  ctx.font = 'bold 11px "JetBrains Mono", monospace';
-  ctx.textAlign = 'center';
-  var labelAbove = (uy - pad) > 40;
-  var labelY = labelAbove ? (uy - 18) : (uy + 24);
-  ctx.fillText(state.result.code, ux, labelY);
-}
+    var counts = quadrantCounts();
+    var title, desc;
+    var mine = points.filter(function (p) { return p.you; })[0];
+    if (mine) {
+      title = '你的位置：' + mine.code + ' ' + mine.cn + '，' + mine.q.zh + '象限';
+      desc = mine.code + ' 的标准坐标是风险 ' + mine.risk + '、信念 ' + mine.conviction + '。图上另外 23 个点是其余人格。';
+    } else {
+      title = '24 种人格在风险 × 信念平面上的标准坐标';
+      desc = QUADRANT_ORDER.map(function (k) { return QUADRANTS[k].zh + ' ' + counts[k] + ' 种'; }).join('，') + '。完整列表在下方「类型」。';
+    }
 
-function getQuadrantColor(risk, conviction) {
-  if (risk < 50 && conviction >= 50) return '#00E676'; // Smart Money
-  if (risk >= 50 && conviction >= 50) return '#B24BF3'; // Diamond Degen
-  if (risk < 50 && conviction < 50) return '#FFB800'; // Rotating Andy
-  return '#FF2E4C';                                    // Gambler
-}
+    var out = [];
+    out.push('<svg xmlns="http://www.w3.org/2000/svg" class="tm tm--' + (highlight ? 'result' : 'landing') + '" viewBox="0 0 ' + width + ' ' + height + '" width="' + width + '" height="' + height + '" role="img" aria-labelledby="' + id + '-t ' + id + '-d">');
+    out.push('<title id="' + id + '-t">' + esc(title) + '</title><desc id="' + id + '-d">' + esc(desc) + '</desc>');
+
+    // Frame and the two 50-lines that split the quadrants.
+    out.push('<rect class="tm-frame" x="' + pad.l + '" y="' + pad.t + '" width="' + s + '" height="' + s + '"/>');
+    out.push('<line class="tm-mid" x1="' + n(X(50)) + '" y1="' + pad.t + '" x2="' + n(X(50)) + '" y2="' + (pad.t + s) + '"/>');
+    out.push('<line class="tm-mid" x1="' + pad.l + '" y1="' + n(Y(50)) + '" x2="' + (pad.l + s) + '" y2="' + n(Y(50)) + '"/>');
+
+    // Quadrant names outside the frame: never under a dot.
+    var qname = function (k, x, y) {
+      var q = QUADRANTS[k];
+      return '<g class="' + q.cls + '"><rect class="tm-qswatch" x="' + n(x) + '" y="' + n(y - 8) + '" width="8" height="8"/>' +
+        '<text class="tm-qname" x="' + n(x + 12) + '" y="' + n(y) + '">' + q.zh +
+        (compact ? '' : ' <tspan class="tm-qname-en">' + q.en + '</tspan>') +
+        ' <tspan class="tm-qcount">' + counts[k] + '</tspan></text></g>';
+    };
+    out.push(qname('smart_money', pad.l, pad.t - 10));
+    out.push(qname('diamond_degen', X(50) + 6, pad.t - 10));
+    out.push(qname('rotating_andy', pad.l, pad.t + s + 20));
+    out.push(qname('gambler', X(50) + 6, pad.t + s + 20));
+
+    // Axes: titles, plus 0 / 50 / 100 ticks where there is room.
+    out.push('<text class="tm-axis" x="' + n(pad.l + s / 2) + '" y="' + (pad.t + s + (compact ? 42 : 48)) + '" text-anchor="middle">风险偏好 <tspan lang="en">Risk</tspan> →</text>');
+    out.push('<text class="tm-axis" transform="translate(' + (compact ? 10 : 12) + ' ' + n(pad.t + s / 2) + ') rotate(-90)" text-anchor="middle">信念强度 <tspan lang="en">Conviction</tspan> →</text>');
+    if (!compact) {
+      [0, 50, 100].forEach(function (v) {
+        out.push('<text class="tm-tick" x="' + n(pad.l - 6) + '" y="' + n(Y(v) + 3.5) + '" text-anchor="end">' + v + '</text>');
+      });
+    }
+
+    // Other personas first, the highlighted one last (on top).
+    points.sort(function (a, b) { return a.you - b.you; }).forEach(function (p) {
+      var cls = 'tm-pt ' + p.q.cls + (p.you ? ' is-you' : '');
+      var g = '<g class="' + cls + '">';
+      if (p.you) {
+        g += '<rect class="tm-you-bg" x="' + n(p.label.x - 2) + '" y="' + n(p.label.y - 1) + '" width="' + n(p.label.w + 4) + '" height="' + n(p.label.h + 2) + '"/>';
+        g += '<circle class="tm-ring" cx="' + n(p.x) + '" cy="' + n(p.y) + '" r="11"/>';
+      }
+      g += '<circle class="tm-dot" cx="' + n(p.x) + '" cy="' + n(p.y) + '" r="' + p.r + '"/>';
+      g += '<text class="tm-code" x="' + n(p.label.x) + '" y="' + n(p.label.y + p.fs * 0.8) + '" font-size="' + p.fs + '">' + p.code + '</text>';
+      out.push(g + '</g>');
+    });
+    out.push('</svg>');
+
+    el.innerHTML = out.join('');
+    el.setAttribute('data-rendered', width + '|' + highlight);
+    return true;
+  }
+
+  function mount(el, opts) {
+    if (!el || typeof personas === 'undefined') return;
+    var existing = mounts.filter(function (m) { return m.el === el; })[0];
+    if (existing) existing.opts = opts || {};
+    else {
+      existing = { el: el, opts: opts || {} };
+      mounts.push(existing);
+      if (observer) observer.observe(el);
+    }
+    render(el, existing.opts);
+  }
+
+  function refresh() {
+    mounts.forEach(function (m) { render(m.el, m.opts); });
+  }
+
+  if (typeof ResizeObserver !== 'undefined') {
+    observer = new ResizeObserver(function () { refresh(); });
+  } else {
+    window.addEventListener('resize', refresh);
+  }
+
+  return { mount: mount, refresh: refresh };
+})();
 
 // ── Share ──
 
@@ -638,12 +710,24 @@ function shareResult() {
   window.open(twitterUrl, '_blank');
 }
 
+function announce(message) {
+  var status = document.getElementById('result-status');
+  if (!status) return;
+  status.textContent = '';
+  setTimeout(function () { status.textContent = message; }, 30);
+}
+
 function copyShareText() {
   const text = getShareText();
+  const btn = document.querySelector('.btn-copy');
+  const orig = btn.textContent;
   navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector('.btn-copy');
-    const orig = btn.textContent;
-    btn.textContent = 'Copied!';
+    btn.textContent = 'Copied! 已复制';
+    announce('分享文案已复制');
+    setTimeout(() => btn.textContent = orig, 2000);
+  }, () => {
+    btn.textContent = '复制失败 · Copy failed';
+    announce('复制失败');
     setTimeout(() => btn.textContent = orig, 2000);
   });
 }
@@ -657,580 +741,80 @@ function copyAddress(el) {
   navigator.clipboard.writeText(addr).then(() => {
     const copyEl = el.querySelector('.tips-copy');
     copyEl.textContent = 'copied!';
+    announce('地址已复制');
     setTimeout(() => { copyEl.textContent = 'copy'; }, 2000);
   });
 }
 
+// ── Landing: the 24 types, grouped by quadrant (same data and thresholds as the maps) ──
+function renderTypeIndex() {
+  var root = document.getElementById('type-index');
+  if (!root || typeof personas === 'undefined') return;
+  var groups = {};
+  QUADRANT_ORDER.forEach(function (k) { groups[k] = []; });
+  Object.keys(personas).sort().forEach(function (k) {
+    groups[quadrantOf(personas[k].scatter)].push(personas[k]);
+  });
+  var row = function (p) {
+    return '<li class="cbti-type">' +
+      '<span class="cbti-type-code">' + esc(p.code) + '</span>' +
+      '<div>' +
+        '<h4 class="cbti-type-name">' + esc(p.cn) + '<span lang="en">' + esc(p.en) + '</span></h4>' +
+        '<p class="cbti-type-intro">' + esc(p.intro) + '</p>' +
+        '<p class="cbti-type-intro" lang="en">' + esc(p.introEn) + '</p>' +
+      '</div>' +
+      '<p class="cbti-type-coords"><span class="cw-visually-hidden">标准坐标：风险 </span>' + p.scatter.risk +
+        '<span aria-hidden="true"> · </span><span class="cw-visually-hidden">，信念 </span>' + p.scatter.conviction + '</p>' +
+    '</li>';
+  };
+  // Groups start open; on phones they start closed (the summary still lists every code).
+  var open = !(window.matchMedia && window.matchMedia('(max-width: 40rem)').matches);
+  var block = function (k) {
+    var q = QUADRANTS[k];
+    return '<details class="cbti-quad ' + q.cls + '"' + (open ? ' open' : '') + '>' +
+      '<summary class="cbti-quad-head"><span class="q-swatch" aria-hidden="true"></span>' + q.zh +
+        ' <span lang="en">' + q.en + '</span> <span class="cw-num">' + groups[k].length + '</span>' +
+        '<span class="cbti-quad-rule">' + q.rule + '</span>' +
+        '<span class="cbti-quad-codes">' + groups[k].map(function (p) { return esc(p.code); }).join(' ') + '</span></summary>' +
+      '<ol class="cbti-type-list">' + groups[k].map(row).join('') + '</ol>' +
+    '</details>';
+  };
+  root.innerHTML =
+    '<div class="cbti-types-col">' + block('smart_money') + '</div>' +
+    '<div class="cbti-types-col">' + block('diamond_degen') + block('rotating_andy') + block('gambler') + '</div>';
+}
+
+// ── Landing: the 15 dimensions, from dimensionMeta ──
+function renderMethodDims() {
+  var root = document.getElementById('method-dims');
+  if (!root || typeof dimensionMeta === 'undefined') return;
+  var groups = {};
+  var order = [];
+  Object.keys(dimensionMeta).forEach(function (code) {
+    var meta = dimensionMeta[code];
+    if (!groups[meta.model]) { groups[meta.model] = []; order.push(meta.model); }
+    groups[meta.model].push({ code: code, meta: meta });
+  });
+  root.innerHTML = '<table class="cbti-dim-table">' +
+    '<caption>' + Object.keys(dimensionMeta).length + ' 个维度，分 ' + order.length + ' 组 <span lang="en">' + Object.keys(dimensionMeta).length + ' dimensions, ' + order.length + ' groups</span></caption>' +
+    order.map(function (model) {
+      return '<tbody><tr><th scope="rowgroup" colspan="3">' + modelLabel(model) + '</th></tr>' +
+        groups[model].map(function (d) {
+          return '<tr><td>' + esc(d.code) + '</td><td>' + esc(dimensionZh(d.meta)) + '</td><td lang="en">' + esc(d.meta.en) + '</td></tr>';
+        }).join('') + '</tbody>';
+    }).join('') +
+  '</table>';
+}
+
 // ── Init ──
-// ── Background video control ──
-// bg.mp4 is pre-baked as forward+reverse concatenated (see assets/video/),
-// so the browser's native `loop` attribute produces seamless ping-pong.
-// We only need to play/pause it when switching screens.
-const BgVideo = {
-  _el: null,
-  _get: function () {
-    if (!this._el) this._el = document.querySelector('.bg-video');
-    return this._el;
-  },
-  resume: function () {
-    var v = this._get();
-    if (!v) return;
-    try { v.play().catch(function () {}); } catch (e) {}
-  },
-  pause: function () {
-    var v = this._get();
-    if (!v) return;
-    try { v.pause(); } catch (e) {}
-  },
-};
-
 document.addEventListener('DOMContentLoaded', () => {
-  PersonaAtlas.build();
+  renderTypeIndex();
+  renderMethodDims();
+  TypeMap.mount(document.getElementById('landing-map'), {});
 
-  // Start wherever the URL hash points (deep links to #chase / #paper), else landing.
+  // Start wherever the URL hash points, else landing.
   routeFromHash();
-
-  // After the longest landing reveal animation finishes (.landing-personas at
-  // 1.5s delay + 0.9s duration ≈ 2.4s), mark the body as anim-done. CSS uses
-  // this to suppress the blur-in animations on subsequent re-shows of #landing
-  // — without this, navigating Back to CBTI from #chase replays the animations
-  // and leaves landing content invisible (opacity 0) for ~1.5s, during which
-  // only the bg video is visible. That's the "shows video instead of page" bug.
-  setTimeout(function () {
-    document.body.classList.add('anim-done');
-  }, 2600);
 });
 
 window.addEventListener('hashchange', routeFromHash);
-
-// ── Writing manifest: render the complete archive and Chase's short preview.
-// No third-party widgets — works in mainland China, behind ad-blockers, etc.
-// Schema + agent contract: writings/README.md
-var writingsLoaded = false;
-var writingsCache = [];
-var activeReadFilter = 'all';
-function loadWritings() {
-  if (writingsLoaded) {
-    if (writingsCache.length) renderWritingSurfaces(writingsCache);
-    return;
-  }
-  writingsLoaded = true;
-  fetch('writings/index.json', { cache: 'no-cache' })
-    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(function (manifest) { renderWritings(manifest); })
-    .catch(function (err) {
-      console.warn('[writings] load failed:', err);
-      renderWritingsFallback();
-    });
-}
-
-function renderWritings(manifest) {
-  var items = (manifest && Array.isArray(manifest.items)) ? manifest.items : [];
-  items = items.filter(isValidWriting);
-  if (items.length === 0) { renderWritingsFallback(); return; }
-  items.sort(function (a, b) {
-    return (b.publishedAt || '').localeCompare(a.publishedAt || '');
-  });
-  writingsCache = items;
-  renderWritingSurfaces(items);
-}
-
-function renderWritingSurfaces(items) {
-  renderReadIndex(items);
-  renderChaseReadingPreview(items.slice(0, 3));
-  bindReadFilters();
-}
-
-function renderReadIndex(items) {
-  var index = document.getElementById('read-index');
-  if (!index) return;
-  index.setAttribute('data-state', 'ready');
-  index.innerHTML = items.map(readRowHTML).join('');
-  applyReadFilter(activeReadFilter);
-}
-
-function readRowHTML(it, index) {
-  var lang = it.primaryLang;
-  var title = pickLang(it.title, lang);
-  var subtitle = pickLang(it.subtitle, lang);
-  var excerpt = pickLang(it.excerpt, lang);
-  var primary = primaryWritingChannel(it);
-  var href = normalizeWritingUrl(primary.url);
-  var attrs = writingLinkAttributes(href);
-  var kind = writingKind(it);
-  var tags = (it.tags || []).slice(0, 3);
-  var filterTags = (it.tags || []).concat([kind.toLowerCase()]).join(' ');
-  var secondary = it.channels.filter(function (channel) {
-    return channel !== primary;
-  }).map(function (channel) {
-    var channelHref = normalizeWritingUrl(channel.url);
-    return '<a href="' + esc(channelHref) + '"' + writingLinkAttributes(channelHref) + '>' +
-      esc(shortChannelLabel(channel)) + '<span aria-hidden="true">↗</span></a>';
-  }).join('');
-
-  return '<article class="read-row" data-lang="' + esc(lang) + '" data-tags="' + esc(filterTags) + '">' +
-    '<a class="read-row-primary" href="' + esc(href) + '"' + attrs + '>' +
-      '<span class="read-row-number">' + String(index + 1).padStart(2, '0') + '</span>' +
-      '<div class="read-row-copy">' +
-        '<div class="read-row-meta"><span>' + esc(kind) + '</span><span>' + esc(formatWritingDate(it.publishedAt, lang, it.datePrecision)) + '</span><span>' + (lang === 'zh' ? '中文' : 'English') + '</span></div>' +
-        '<h2>' + esc(title) + '</h2>' +
-        (subtitle ? '<p class="read-row-subtitle">' + esc(subtitle) + '</p>' : '') +
-        '<p class="read-row-excerpt">' + esc(excerpt) + '</p>' +
-        (tags.length ? '<div class="read-row-tags">' + tags.map(function (tag) { return '<span>' + esc(tag) + '</span>'; }).join('') + '</div>' : '') +
-      '</div>' +
-      '<span class="read-row-open"><span>Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>' +
-    '</a>' +
-    (secondary ? '<div class="read-row-channels" aria-label="Other versions">' + secondary + '</div>' : '') +
-  '</article>';
-}
-
-function renderChaseReadingPreview(items) {
-  var list = document.getElementById('chase-reading-list');
-  if (!list) return;
-  list.setAttribute('data-state', 'ready');
-  list.innerHTML = items.map(function (it, index) {
-    var lang = it.primaryLang;
-    var primary = primaryWritingChannel(it);
-    var href = normalizeWritingUrl(primary.url);
-    return '<a class="chase-reading-item" data-lang="' + esc(lang) + '" href="' + esc(href) + '"' + writingLinkAttributes(href) + '>' +
-      '<span class="chase-reading-number">0' + (index + 1) + '</span>' +
-      '<div><p>' + esc(writingKind(it)) + ' · ' + esc(formatWritingDate(it.publishedAt, lang, it.datePrecision)) + '</p>' +
-      '<h3>' + esc(pickLang(it.title, lang)) + '</h3></div>' +
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
-    '</a>';
-  }).join('');
-}
-
-function bindReadFilters() {
-  document.querySelectorAll('[data-read-filter]').forEach(function (button) {
-    if (button.dataset.bound === 'true') return;
-    button.dataset.bound = 'true';
-    button.addEventListener('click', function () {
-      applyReadFilter(button.getAttribute('data-read-filter') || 'all');
-    });
-  });
-}
-
-function applyReadFilter(filter) {
-  activeReadFilter = filter || 'all';
-  var shown = 0;
-  document.querySelectorAll('#read-index .read-row').forEach(function (row) {
-    var matches = activeReadFilter === 'all'
-      || row.getAttribute('data-lang') === activeReadFilter
-      || (activeReadFilter === 'research' && /research|paper|field map/.test(row.getAttribute('data-tags') || ''));
-    row.hidden = !matches;
-    if (matches) shown += 1;
-  });
-  document.querySelectorAll('[data-read-filter]').forEach(function (button) {
-    var selected = button.getAttribute('data-read-filter') === activeReadFilter;
-    button.classList.toggle('is-active', selected);
-    button.setAttribute('aria-pressed', selected ? 'true' : 'false');
-  });
-  var count = document.getElementById('read-count');
-  if (count) count.textContent = shown + (shown === 1 ? ' piece' : ' pieces');
-}
-
-function primaryWritingChannel(it) {
-  return it.channels.find(function (channel) {
-    return isOwnedWritingUrl(channel.url);
-  }) || it.channels.find(function (channel) {
-    return channel.platform === 'substack' || channel.platform === 'longform';
-  }) || it.channels[0];
-}
-
-function isOwnedWritingUrl(url) {
-  return /^#/.test(url || '') || /^\/(?!\/)/.test(url || '') || /^https:\/\/(www\.)?cbti\.club\//.test(url || '');
-}
-
-function normalizeWritingUrl(url) {
-  return String(url || '').replace(/^https:\/\/(www\.)?cbti\.club/, '') || '/';
-}
-
-function writingLinkAttributes(url) {
-  return /^#/.test(url || '') || /^\/(?!\/)/.test(url || '')
-    ? ''
-    : ' target="_blank" rel="noopener"';
-}
-
-function writingKind(it) {
-  if (it.kind) return it.kind;
-  var tags = it.tags || [];
-  if (tags.indexOf('deep-research') !== -1) return 'Research';
-  if (tags.indexOf('ai-workflow') !== -1) return 'Field map';
-  if (tags.indexOf('paper') !== -1) return 'Paper';
-  return 'Essay';
-}
-
-function shortChannelLabel(channel) {
-  if (channel.platform === 'x') return 'X';
-  if (channel.platform === 'substack') return 'Substack';
-  if (channel.platform === 'paper') return 'PDF';
-  if (isOwnedWritingUrl(channel.url)) return 'CBTI';
-  return channel.label || 'Source';
-}
-
-function isValidWriting(it) {
-  if (!it || typeof it !== 'object') return false;
-  if (!it.id || !it.publishedAt || !it.primaryLang) return false;
-  if (!it.title || !it.title[it.primaryLang]) return false;
-  if (!it.excerpt || !it.excerpt[it.primaryLang]) return false;
-  if (!Array.isArray(it.channels) || it.channels.length === 0) return false;
-  return true;
-}
-
-function writingCardHTML(it) {
-  var lang = it.primaryLang;
-  var title = pickLang(it.title, lang);
-  var subtitle = pickLang(it.subtitle, lang);
-  var quote = pickLang(it.pullQuote, lang);
-  var excerpt = pickLang(it.excerpt, lang);
-  var date = formatWritingDate(it.publishedAt, lang);
-  var langClass = lang === 'zh' ? ' lang-zh' : ' lang-en';
-
-  var chips = it.channels.map(function (ch) {
-    var label = ch.label || channelDefaultLabel(ch);
-    var langTag = ch.lang === 'zh' ? '中文' : 'EN';
-    // Hash URLs (#essay-*, #paper) stay inside the SPA; external URLs open in a new tab.
-    var internal = (ch.url || '').charAt(0) === '#';
-    var anchor = internal
-      ? ' target="_self"'
-      : ' target="_blank" rel="noopener"';
-    var cls = internal ? 'writing-chip writing-chip-internal' : 'writing-chip';
-    var arrow = internal
-      ? '<svg class="writing-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
-      : '<svg class="writing-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>';
-    return '<a class="' + cls + '" href="' + esc(ch.url) + '"' + anchor + '>' +
-           '<span class="writing-chip-lang">' + langTag + '</span>' +
-           '<span class="writing-chip-sep">·</span>' +
-           '<span class="writing-chip-label">' + esc(label) + '</span>' +
-           arrow +
-           '</a>';
-  }).join('');
-
-  return '<article class="writing-card writing-card-essay' + langClass + '" data-id="' + esc(it.id) + '">' +
-           '<div class="writing-card-meta"><span class="writing-card-eyebrow">' +
-             (lang === 'zh' ? '文章' : 'Essay') + ' · ' + esc(date) +
-           '</span></div>' +
-           '<h3 class="writing-card-title">' + esc(title) + '</h3>' +
-           (subtitle ? '<p class="writing-card-subtitle">' + esc(subtitle) + '</p>' : '') +
-           (quote ? '<blockquote class="writing-card-quote">' + esc(quote) + '</blockquote>' : '') +
-           '<p class="writing-card-excerpt">' + esc(excerpt) + '</p>' +
-           '<div class="writing-card-channels">' + chips + '</div>' +
-         '</article>';
-}
-
-function renderWritingsFallback() {
-  var index = document.getElementById('read-index');
-  if (index) {
-    index.setAttribute('data-state', 'fallback');
-    index.innerHTML = '<div class="read-empty"><p>The archive could not load.</p><button type="button" onclick="retryWritings()">Try again</button></div>';
-  }
-  var preview = document.getElementById('chase-reading-list');
-  if (preview) {
-    preview.setAttribute('data-state', 'fallback');
-    preview.innerHTML = '<a class="chase-reading-item" href="https://x.com/ChaseWang" target="_blank" rel="noopener"><span class="chase-reading-number">↗</span><div><p>Writing</p><h3>Follow @ChaseWang on X</h3></div></a>';
-  }
-  var count = document.getElementById('read-count');
-  if (count) count.textContent = 'Archive unavailable';
-}
-
-function retryWritings() {
-  writingsLoaded = false;
-  writingsCache = [];
-  loadWritings();
-}
-
-function pickLang(map, lang) {
-  if (!map) return '';
-  if (map[lang]) return map[lang];
-  var keys = Object.keys(map);
-  return keys.length ? map[keys[0]] : '';
-}
-
-function channelDefaultLabel(ch) {
-  if (ch.platform === 'substack') return 'Read on Substack';
-  if (ch.platform === 'x') return 'Read on X';
-  if (ch.platform === 'longform') return 'Read on cbti.club';
-  if (ch.platform === 'paper') return 'View paper';
-  return 'Open';
-}
-
-function formatWritingDate(iso, lang, precision) {
-  // ISO YYYY-MM-DD → "Mar 22, 2026" / "2026 年 3 月 22 日"
-  var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
-  if (!m) return iso || '';
-  var y = m[1], mm = parseInt(m[2], 10), d = parseInt(m[3], 10);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  if (precision === 'year') return y;
-  if (precision === 'month') return lang === 'zh' ? y + ' 年 ' + mm + ' 月' : months[mm - 1] + ' ' + y;
-  if (lang === 'zh') return y + ' 年 ' + mm + ' 月 ' + d + ' 日';
-  return months[mm - 1] + ' ' + d + ', ' + y;
-}
-
-function esc(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-}
-
-// ── Persona atlas ─────────────────────────────────────────────────────────
-// A stable, readable field of all 24 result types. Quadrant placement uses the
-// same canonical risk/conviction coordinates as the result scatter plot.
-var PersonaAtlas = (function () {
-  var order = ['smart-money', 'diamond-degen', 'rotating-andy', 'gambler'];
-  var labels = {
-    'smart-money': 'Smart Money',
-    'diamond-degen': 'Diamond Degen',
-    'rotating-andy': 'Rotating Andy',
-    'gambler': 'Absolute Gambler'
-  };
-
-  function quadrant(p) {
-    var risk = p && p.scatter ? p.scatter.risk : 50;
-    var conviction = p && p.scatter ? p.scatter.conviction : 50;
-    if (risk < 50 && conviction >= 50) return 'smart-money';
-    if (risk >= 50 && conviction >= 50) return 'diamond-degen';
-    if (risk < 50 && conviction < 50) return 'rotating-andy';
-    return 'gambler';
-  }
-
-  function build() {
-    var root = document.getElementById('persona-atlas');
-    if (!root || typeof personas === 'undefined') return;
-    var groups = {};
-    order.forEach(function(key) { groups[key] = []; });
-    Object.keys(personas).sort().forEach(function(key) {
-      var p = personas[key];
-      groups[quadrant(p)].push(p);
-    });
-    root.innerHTML = order.map(function(key) {
-      var nodes = groups[key].map(function(p) {
-        return '<span class="atlas-node" title="' + esc(p.cn + ' / ' + p.en) + '">' + esc(p.code) + '</span>';
-      }).join('');
-      return '<section class="atlas-quadrant q-' + key + '" aria-label="' + labels[key] + '">' +
-        '<header><span>' + labels[key] + '</span><strong>' + groups[key].length + '</strong></header>' +
-        '<div>' + nodes + '</div>' +
-      '</section>';
-    }).join('');
-  }
-
-  return { build: build };
-})();
-
-// ── Persona sphere ────────────────────────────────────────────────────────
-// Decorative 3D arrangement of all 24 personas around the landing hero.
-// - Fibonacci-distributed positions on a sphere
-// - Auto-rotates at a slow constant pace
-// - Pointer drag (anywhere on an orb) spins the sphere; momentum on release
-// - Each orb is counter-rotated so it always faces the viewer (billboard)
-// - Z-depth dims the back side, foreground orbs read fully
-// - Click on an orb starts the test (the brand CTA)
-// Hidden via CSS on very small screens to avoid scroll conflicts.
-var PersonaSphere = (function () {
-  var root, orbs = [], positions = [];
-  var rotY = 0, rotX = 8;          // current rotation (deg)
-  var velY = 0.12, velX = 0;       // angular velocity (deg/frame @ 60fps)
-  var dragging = false;
-  var lastX = 0, lastY = 0;
-  var lastMoveT = 0;
-  var rafId = null;
-  var quadrantOf = null;
-  var R = 280;                     // sphere radius in px (overridden on mount)
-
-  function quadrant(p) {
-    var risk = p && p.scatter && typeof p.scatter.risk === 'number' ? p.scatter.risk : 50;
-    var conv = p && p.scatter && typeof p.scatter.conviction === 'number' ? p.scatter.conviction : 50;
-    if (risk < 50 && conv >= 50) return 'smart-money';
-    if (risk >= 50 && conv >= 50) return 'diamond-degen';
-    if (risk < 50 && conv < 50) return 'rotating-andy';
-    return 'gambler';
-  }
-
-  function fibonacci(n, radius) {
-    var out = [];
-    var phi = Math.PI * (3 - Math.sqrt(5)); // golden angle
-    for (var i = 0; i < n; i++) {
-      var y = 1 - (i / Math.max(1, n - 1)) * 2; // -1..1
-      var r = Math.sqrt(1 - y * y);
-      var theta = phi * i;
-      out.push([Math.cos(theta) * r * radius, y * radius, Math.sin(theta) * r * radius]);
-    }
-    return out;
-  }
-
-  function pickRadius() {
-    var w = window.innerWidth || 1200;
-    if (w < 540) return 150;
-    if (w < 900) return 220;
-    if (w < 1300) return 280;
-    return 320;
-  }
-
-  function build() {
-    if (typeof personas === 'undefined') return false;
-    root = document.getElementById('persona-sphere');
-    if (!root) return false;
-    var keys = Object.keys(personas);
-    if (keys.length === 0) return false;
-
-    R = pickRadius();
-    positions = fibonacci(keys.length, R);
-    root.innerHTML = '';
-    var stage = document.createElement('div');
-    stage.className = 'persona-sphere-stage';
-    root.appendChild(stage);
-
-    orbs = keys.map(function (key, i) {
-      var p = personas[key];
-      var pos = positions[i];
-      var orb = document.createElement('a');
-      orb.className = 'persona-orb q-' + quadrant(p);
-      orb.href = '#';
-      // Sphere parent is aria-hidden; keep orbs out of the keyboard tab
-      // order too so the explicit Start button is the canonical CTA.
-      // Mouse clicks still fire startTest (see addEventListener below).
-      orb.tabIndex = -1;
-      orb.dataset.x = pos[0];
-      orb.dataset.y = pos[1];
-      orb.dataset.z = pos[2];
-      orb.dataset.code = p.code || key;
-      orb.innerHTML =
-        '<span class="orb-cn">' + esc(p.cn || '') + '</span>' +
-        '<span class="orb-en">' + esc(p.en || p.code || key) + '</span>';
-      orb.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (suppressClickUntil > Date.now()) return;
-        if (typeof startTest === 'function') startTest();
-      });
-      stage.appendChild(orb);
-      return orb;
-    });
-
-    // Pointer events on the root capture drags anywhere over the sphere area.
-    // CSS makes only the orbs hit-testable, so empty space passes clicks
-    // through to the underlying button.
-    orbs.forEach(function (o) { o.addEventListener('pointerdown', onDown); });
-    return true;
-  }
-
-  var suppressClickUntil = 0;
-
-  function onDown(e) {
-    dragging = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    lastMoveT = performance.now();
-    velY = 0; velX = 0;
-    document.body.classList.add('sphere-dragging');
-    try { e.target.setPointerCapture(e.pointerId); } catch (_) {}
-    e.target.addEventListener('pointermove', onMove);
-    e.target.addEventListener('pointerup', onUp);
-    e.target.addEventListener('pointercancel', onUp);
-  }
-  function onMove(e) {
-    if (!dragging) return;
-    var dx = e.clientX - lastX;
-    var dy = e.clientY - lastY;
-    var now = performance.now();
-    var dt = Math.max(1, now - lastMoveT);
-    rotY += dx * 0.4;
-    rotX = Math.max(-70, Math.min(70, rotX - dy * 0.3));
-    velY = (dx * 0.4) * (16 / dt);
-    velX = (-dy * 0.3) * (16 / dt);
-    lastX = e.clientX;
-    lastY = e.clientY;
-    lastMoveT = now;
-    if (Math.abs(dx) + Math.abs(dy) > 4) suppressClickUntil = Date.now() + 250;
-  }
-  function onUp(e) {
-    if (!dragging) return;
-    dragging = false;
-    document.body.classList.remove('sphere-dragging');
-    try { e.target.releasePointerCapture(e.pointerId); } catch (_) {}
-    e.target.removeEventListener('pointermove', onMove);
-    e.target.removeEventListener('pointerup', onUp);
-    e.target.removeEventListener('pointercancel', onUp);
-  }
-
-  function tick() {
-    if (!dragging) {
-      // Decay momentum, then settle to a slow constant Y spin.
-      velY = velY * 0.96;
-      velX = velX * 0.92;
-      if (Math.abs(velY) < 0.12) velY = 0.12;
-      if (Math.abs(velX) < 0.01) velX = 0;
-      rotY += velY;
-      rotX += velX;
-      // Drift X back toward 8 degrees so it doesn't end up upside down
-      rotX += (8 - rotX) * 0.01;
-      rotX = Math.max(-70, Math.min(70, rotX));
-    }
-
-    // Rotation matrix (Y then X, world coords). Counter-rotate orbs to billboard.
-    var ry = rotY * Math.PI / 180;
-    var rx = rotX * Math.PI / 180;
-    var cosY = Math.cos(ry), sinY = Math.sin(ry);
-    var cosX = Math.cos(rx), sinX = Math.sin(rx);
-
-    for (var i = 0; i < orbs.length; i++) {
-      var o = orbs[i];
-      var lx = +o.dataset.x, ly = +o.dataset.y, lz = +o.dataset.z;
-      // World = Rx · Ry · local
-      var x1 = cosY * lx + sinY * lz;
-      var z1 = -sinY * lx + cosY * lz;
-      var y1 = ly;
-      var y2 = cosX * y1 - sinX * z1;
-      var z2 = sinX * y1 + cosX * z1;
-      // Billboard: each orb counter-rotates so it always faces the camera.
-      // Position in world space from translate3d, then negate parent rotation.
-      o.style.transform =
-        'translate3d(' + x1.toFixed(1) + 'px,' + y2.toFixed(1) + 'px,' + z2.toFixed(1) + 'px)';
-      // Depth fade: front (z2 ≈ +R) opaque; back (z2 ≈ -R) faint.
-      var depthT = (z2 + R) / (2 * R); // 0..1
-      var op = 0.18 + 0.72 * depthT;
-      var scale = 0.86 + 0.18 * depthT;
-      // Center fade: orbs that drift directly in front of the hero column
-      // (high z, small |x|, |y|) get extra-dimmed so the brand reads through
-      // them without competition. Falloff radius ≈ 200px from center.
-      var distFromCenter = Math.hypot(x1, y2);
-      if (z2 > -R * 0.2) {
-        var fade = Math.min(1, distFromCenter / 200);
-        op = op * (0.35 + 0.65 * fade);
-      }
-      o.style.opacity = op.toFixed(3);
-      o.style.zIndex = String(Math.round(z2 + R));
-      // Apply scale via CSS variable so :hover can override gracefully.
-      o.style.setProperty('--orb-scale', scale.toFixed(3));
-    }
-    rafId = requestAnimationFrame(tick);
-  }
-
-  function start() {
-    if (rafId) return;
-    if (!root && !build()) return;
-    rafId = requestAnimationFrame(tick);
-  }
-  function stop() {
-    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-  }
-
-  // Recompute radius on resize so the sphere always fits the viewport.
-  var resizeT;
-  window.addEventListener('resize', function () {
-    clearTimeout(resizeT);
-    resizeT = setTimeout(function () {
-      if (!root || orbs.length === 0) return;
-      var newR = pickRadius();
-      if (newR === R) return;
-      R = newR;
-      positions = fibonacci(orbs.length, R);
-      orbs.forEach(function (o, i) {
-        o.dataset.x = positions[i][0];
-        o.dataset.y = positions[i][1];
-        o.dataset.z = positions[i][2];
-      });
-    }, 120);
-  });
-
-  return { start: start, stop: stop };
-})();
+document.addEventListener('click', routeSameHashClick);

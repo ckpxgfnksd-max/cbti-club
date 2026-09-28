@@ -8,6 +8,7 @@
       "datePrecision": "year",
       "primaryLang": "en",
       "kind": "Academic paper",
+      "format": "research",
       "tags": [
         "paper",
         "institutions",
@@ -27,8 +28,8 @@
         {
           "lang": "en",
           "platform": "longform",
-          "url": "#paper",
-          "label": "Read on cbti.club"
+          "url": "https://chasewang.me/paper",
+          "label": "Read on chasewang.me"
         },
         {
           "lang": "en",
@@ -49,6 +50,7 @@
       "publishedAt": "2026-05-23",
       "primaryLang": "en",
       "kind": "Field map",
+      "format": "research",
       "tags": [
         "research",
         "ai-workflow",
@@ -83,6 +85,8 @@
       "id": "crypto-crime-and-enforcement",
       "publishedAt": "2026-08-10",
       "primaryLang": "zh",
+      "kind": "Data study",
+      "format": "research",
       "tags": [
         "crypto",
         "deep-research",
@@ -121,6 +125,7 @@
       "id": "three-body-problem-of-crypto-dominance",
       "publishedAt": "2026-04-21",
       "primaryLang": "en",
+      "format": "essay",
       "tags": [
         "macro",
         "industry-structure",
@@ -147,8 +152,8 @@
         {
           "lang": "en",
           "platform": "longform",
-          "url": "#essay-three-body",
-          "label": "Read on cbti.club"
+          "url": "https://chasewang.me/essay-three-body",
+          "label": "Read on chasewang.me"
         },
         {
           "lang": "zh",
@@ -162,6 +167,7 @@
       "id": "from-tragedy-of-commons-to-compute-dollar",
       "publishedAt": "2026-03-22",
       "primaryLang": "zh",
+      "format": "essay",
       "tags": [
         "macro",
         "stablecoin",
@@ -193,6 +199,7 @@
       "id": "fallacy-of-composition",
       "publishedAt": "2026-03-15",
       "primaryLang": "en",
+      "format": "essay",
       "tags": [
         "crypto",
         "tokenomics",

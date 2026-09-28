@@ -20,13 +20,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Fixture tests only: a future change to the x-auto adapter's page template must not block a
+      # deploy (the build publishes an unrecognised page unchanged and prints a warning instead).
+      - name: Test the writings normalizer
+        run: node scripts/test-normalize.mjs --fixtures-only
+
+      # Allowlist copy into _site/, deploy-time normalization of writings/*/index.html,
+      # generated robots/sitemap/_headers, and output checks (private denylist, repo metadata,
+      # third-party requests, broken internal links). No npm install: zero dependencies.
+      - name: Build _site
+        run: node scripts/build.mjs
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: >-
-            pages deploy .
+            pages deploy _site
             --project-name=cbti-club
             --branch=main
             --commit-hash=${{ github.sha }}
