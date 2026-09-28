@@ -1,78 +1,61 @@
 # CBTI Design System
 
-CBTI is one behavioral instrument with several modes: test, result dossier, public research, and long-form reading. Every route belongs to the same world.
+CBTI is a product site: **CBTI — by Chase Wang**. It runs on **cw-system**, the design system it
+shares with chasewang.me, plus one product layer. Chase's profile, writing archive and long-form
+pages live on chasewang.me; cbti.club keeps the test and hosts a few of Chase's publications
+(writings, the field map, the crime-timeline report) in the shared Chase Wang reading template.
 
-The center of gravity is the risk × conviction field. The homepage exposes all 24 personas on that field; the quiz measures behavior; the result places the user back on the same map. Chase, papers, and tools are evidence that the instrument is part of a larger practice, not unrelated microsites.
+## Layers
 
-## Product modes
+| Layer | Files | Owner |
+|---|---|---|
+| cw-system (tokens, base, components, reading template, fonts, icons) | `assets/cw/**`, `assets/fonts/**` | chasewang.me repo; copied here byte for byte, never edited here (`node ../chasewang-me/scripts/check-shared.mjs . --frozen <CW_SYSTEM_FROZEN.json>`) |
+| Product layer | `assets/cbti/cbti.css` | this repo |
+| Author pages | `assets/cbti/landscape.css` (byte copy of chasewang.me `assets/site/landscape.css`), `assets/cbti/report.css` | this repo |
 
-- **Experience:** landing, quiz, and result. Task completion and state are primary.
-- **Read:** the complete archive, papers, essays, landscape, articles, and research. Retrieval and argument are primary.
-The modes change density and composition, not brand language.
+Reference for tokens and markup: chasewang.me `docs/CW_SYSTEM.md` and `docs/cw-specimen.html`.
 
-## Visual signature
+## Visual rules
 
-The site uses warm daylight canvas, drafting blue fields, lime verification marks, carbon operational fields, square rules, and measurable data. Avoid glass, ambient blur, decorative glow, pill-heavy controls, faux dashboards, and dark-cinematic section resets.
+- Paper `#fafaf8`, ink `#0a0a0a`, one accent: IKB `#002FA7` for links, current state, focus and the
+  primary button. Inter (self-hosted, latin) for type, JetBrains Mono for metadata only (dates,
+  counts, type codes, coordinates), system fonts for Chinese. No third-party fonts or scripts.
+- The single design move is the precise index: hairline-separated rows, a mono metadata column,
+  titles first. Writing rows, the 24 types and the method facts all use it.
+- Square corners, hairlines, no shadows, gradients, glow or glass. Motion only for state.
 
-Quadrant colors are semantic and appear only for classification:
+## Quadrant palette (product data layer)
 
-| Quadrant | Color | Token |
-|---|---:|---|
-| Smart Money | `#008c58` | `--site-smart` |
-| Diamond Degen | `#7f3eb5` | `--site-diamond` |
-| Rotating Andy | `#a06b00` | `--site-rotating` |
-| Gambler | `#c72d49` | `--site-gambler` |
+Quadrant colours are semantic and mark classification only: map dots, swatches, the result's top
+rule. They never colour text — two of them are below AA for text on paper.
 
-## Core tokens
+| Quadrant | Colour | Token | On paper |
+|---|---:|---|---:|
+| Smart Money · 聪明钱 | `#008c58` | `--q-smart` | 4.11:1 (marks only) |
+| Diamond Degen · 钻石赌狗 | `#7f3eb5` | `--q-diamond` | 6.17:1 |
+| Rotating Andy · 旋转安迪 | `#a06b00` | `--q-rotating` | 4.37:1 (marks only) |
+| Absolute Gambler · 纯赌怪 | `#c72d49` | `--q-gambler` | 5.15:1 |
 
-| Role | Value | Token |
-|---|---:|---|
-| Canvas | `#f2f0e8` | `--site-canvas` |
-| Paper | `#fbfaf5` | `--site-paper` |
-| Ink | `#11131a` | `--site-ink` |
-| Drafting blue | `#2347ff` | `--site-blue` |
-| Deep blue | `#1732bb` | `--site-blue-deep` |
-| Verification lime | `#dfff42` | `--site-lime` |
-| Carbon | `#171922` | `--site-carbon` |
+All four pass the 3:1 non-text threshold (lowest: Smart Money on `--surface-raised`, 3.76:1). The
+quadrant of a result is always taken from the persona's canonical coordinates in `data.js`, the
+same rule for the result stamp, both maps and the types index.
 
-Typography:
+## Screens and routes
 
-- `Archivo Black` carries identity, section statements, and large numeric signals.
-- `Barlow` carries interface copy and controls.
-- `Noto Serif SC` / `Instrument Serif` carry sustained reading.
-- `JetBrains Mono` is reserved for measurements, type codes, dates, and system status.
+- `/#landing` (default): proposition, test facts, start, the 24-type map (SVG, canonical
+  coordinates), the types index (`#types`), the method (`#method`, code facts only), and the author
+  strip (`#writing`, latest three manifest items, rendered at build time).
+- Quiz and result have no URL (as before). Flow, scoring and share text are pinned by the golden
+  harness; the result map plots the persona's canonical position.
+- Old routes `#read`, `#chase`, `#paper`, `#essay-three-body`, `#chase-*` redirect to chasewang.me
+  (table in `index.html`, `window.CBTI_LEGACY`). `#node` still falls back to the landing.
 
-System fallbacks preserve hierarchy when the font CDN is unavailable.
+## Build and verification
 
-## Layout and controls
+`node scripts/build.mjs` writes `_site/` (the only deployed directory). Before shipping:
 
-- A persistent global header makes CBTI, Read, and Chase one product. `Read` always opens the complete archive; it never drops a visitor into an arbitrary single article.
-- The archive is a flat editorial index rather than a grid of competing cards. Every row has one primary reading route, optional alternate channels, a visible content type, language, date, and tags.
-- Chase contains a three-item latest-writing preview. The old duplicate paper cards, embedded PDF, and essay grid stay outside the rendered experience.
-- Fields use square corners or a restrained 2–4px radius. Shadows are unnecessary when rules and color fields establish hierarchy.
-- Standalone controls are at least 44px tall. Primary actions use blue; verified or highlighted actions use lime.
-- Focus uses a 3px blue outline with visible offset.
-- Inline links remain text links; navigation and decisions may use framed controls.
-- Long-form pages target roughly 65–75 characters per line and allow tables or figures to widen beyond the reading column.
-
-## Motion
-
-Motion explains state only. Screen transitions are short and finite; progress and selection changes are direct. `prefers-reduced-motion` removes authored animation and smooth scrolling without hiding information.
-
-## Responsive contract
-
-- Desktop: the landing proposition and 24-type atlas share the first screen; Chase pairs identity with its linked field map.
-- Tablet: complex two-column experiences stack while keeping the task or argument first.
-- Mobile: navigation stays reachable, tap targets remain at least 44px, archive filters become a two-by-two control, reading rows recompose into one scanning column, and long strings wrap without horizontal page scroll.
-- The paper remains available as HTML and PDF from the archive. An embedded PDF is intentionally absent from the main discovery path.
-
-## Verification
-
-Before shipping:
-
-1. Run `audit_web.py` against the project and resolve every error.
-2. Test landing → all 30 questions → result, including disabled and selected states.
-3. Open Read, exercise every filter, follow an owned article route, open an internal paper, and return to the complete archive.
-4. Capture desktop 1440×900 and mobile 390×844 whole-page screenshots.
-5. Confirm no page-level horizontal overflow, broken assets, or unexpected console errors.
-6. Test keyboard focus, `prefers-reduced-motion`, and article-manifest loading.
+1. `node <run>/R-audit/scoring/harness.mjs . --compare golden.json` → MATCH.
+2. `node scripts/test-normalize.mjs` → all checks pass.
+3. Build twice → same tree hash; `audit_web.py` → no ERROR.
+4. Desktop 1440 and mobile 390 screenshots of landing, quiz, result, a writing page, `/landscape`
+   and `/research/crypto-crime-timeline/`; no horizontal overflow, no console errors, visible focus.
