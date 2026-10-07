@@ -134,10 +134,12 @@ await put('writings/index.json', manifestText);
 
 // Author pages kept as templates.
 const sitemap = [{ loc: `${ORIGIN}/` }];
-/** A page belongs in this sitemap unless its canonical names another origin (a missing canonical counts as local). */
+/** A page belongs in this sitemap unless its canonical names another host (a missing canonical counts as local;
+ *  http/https and the www form of this host count as this host). */
 function localCanonical(url) {
   if (!url) return true;
-  try { return new URL(url.replace(/&amp;/g, '&')).origin === ORIGIN; } catch { return true; }
+  const host = (u) => new URL(u).hostname.replace(/^www\./, '');
+  try { return host(url.replace(/&amp;/g, '&')) === host(ORIGIN); } catch { return true; }
 }
 for (const t of TEMPLATES) {
   const raw = await readFile(path.join(ROOT, t.src), 'utf8');
@@ -180,8 +182,9 @@ for (const id of writingDirs) {
   }
   if (!byId.has(id)) warn(`writings/${id}/ has no manifest entry`);
   await put(`writings/${id}/index.html`, result.html);
-  // Pages whose emitted canonical is chasewang.me/writings/<id>/ stay out of this sitemap.
-  if (localCanonical(result.html.match(/<link rel="canonical" href="([^"]*)"/i)?.[1])) {
+  // Normalized pages whose canonical is chasewang.me/writings/<id>/ stay out of this sitemap. Pages published as-is
+  // keep their own canonical: chasewang.me cannot parse them either, so it does not host them.
+  if (result.status !== 'normalized' || localCanonical(result.canonical)) {
     sitemap.push({ loc: `${ORIGIN}/writings/${id}/`, lastmod: byId.get(id)?.publishedAt });
   }
 }

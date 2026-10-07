@@ -246,7 +246,8 @@ export function mapUrl(u) {
     // The research page and the field map live on chasewang.me (2026-10-07): link to the home copy. Adapter writing
     // pages stay linked here: chasewang.me picks a new one up on its next rebuild (up to 6 h later), and this site's
     // copy, whose canonical names chasewang.me, exists from the moment it is published.
-    if (p === '/research/crypto-crime-timeline/' || p === '/landscape') return `${HOME}${p}${url.hash}`;
+    const home = { '/research/crypto-crime-timeline': '/research/crypto-crime-timeline/', '/landscape': '/landscape' }[p.replace(/\/$/, '')];
+    if (home) return `${HOME}${home}${url.hash}`;
     return (p || '/') + url.hash;
   }
   return url.toString();

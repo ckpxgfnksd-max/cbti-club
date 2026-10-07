@@ -77,6 +77,7 @@ function assertNormalized(name, html, item) {
     && ld.url === home && ld.mainEntityOfPage === home && ld.datePublished === p.date
     && ld.headline === unesc(p.headline) && ld.inLanguage === L, ldText?.slice(0, 120));
 
+  check(`${name}: result.canonical is the declared canonical`, r.canonical === home);
   const again = normalizeWritingPage(out, { item });
   check(`${name}: idempotent (normalizing twice = once)`, again.status === 'already' && again.html === out);
 }
@@ -177,6 +178,8 @@ check('classify and kindLabel ignore tags that are not a list', classify({ tags:
     && homeCanonical('https://cbti.club/writings/arc/x/', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://cbti.club/writings/arc/x/');
   check('mapUrl sends the research page and the field map home', mapUrl('https://cbti.club/research/crypto-crime-timeline/') === 'https://chasewang.me/research/crypto-crime-timeline/'
     && mapUrl('https://cbti.club/landscape.html') === 'https://chasewang.me/landscape');
+  check('mapUrl sends slash and .html variants of the moved pages home', mapUrl('https://cbti.club/research/crypto-crime-timeline') === 'https://chasewang.me/research/crypto-crime-timeline/'
+    && mapUrl('https://www.cbti.club/landscape/') === 'https://chasewang.me/landscape' && mapUrl('https://cbti.club/research/crypto-crime-timeline/index.html#x') === 'https://chasewang.me/research/crypto-crime-timeline/#x');
   check('mapUrl keeps other cbti.club paths local', mapUrl('https://cbti.club/assets/paper/crypto-body.pdf') === '/assets/paper/crypto-body.pdf');
   for (const u of ['#nope', '#chase-nope', '#node', '#landing', '#constructor', '#__proto__', '#', '#%E0%A4%A']) {
     let threw = false;

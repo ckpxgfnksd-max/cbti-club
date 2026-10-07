@@ -90,6 +90,7 @@ export function cleanDescription(text, lang, limit = 160) {
 /**
  * normalizeWritingPage(html, { item }) → { html, status, warnings }
  *   status: 'normalized' | 'already' (carries the marker; returned as-is) | 'unrecognized' (as-is)
+ *   canonical: the canonical URL a normalized page declares (normalized pages only)
  *   item: the manifest entry for this page when there is one (format, kind and a clean excerpt).
  */
 export function normalizeWritingPage(html, { item = null } = {}) {
@@ -169,5 +170,5 @@ export function normalizeWritingPage(html, { item = null } = {}) {
     jsonld,
     body,
   });
-  return { html: out, status: 'normalized', warnings: [] };
+  return { html: out, status: 'normalized', warnings: [], canonical };
 }
