@@ -21,15 +21,16 @@ export const MARK = 'data-cw-normalized';
  *  chasewang.me (scripts/lib/hosted.mjs CBTI_WRITING) recognises the same forms; keep the two in step. */
 export const WRITING_URL = /^https:\/\/(?:www\.)?cbti\.club\/writings\/([a-z0-9][a-z0-9-]*)\/(?:index\.html)?(?:#.*)?$/;
 
-/** The writing lives on chasewang.me (2026-10-07): chasewang.me hosts /writings/<id>/ for every manifest item that
- *  links https://cbti.club/writings/<id>/, built from these same repository files. So an adapter page's canonical
- *  maps to that home copy only when its manifest item links it; otherwise (no manifest entry, another URL) the URL
- *  is returned unchanged, so a canonical never points at a page chasewang.me does not build. */
+/** The writing lives on chasewang.me (2026-10-07): for each manifest item, chasewang.me hosts /writings/<id>/ for the
+ *  FIRST channel URL that matches WRITING_URL (scripts/build.mjs there: urls.find), built from these same repository
+ *  files. So an adapter page's canonical maps to that home copy only when it is that first writing channel of its
+ *  manifest item; otherwise (no manifest entry, another page, another URL) the URL is returned unchanged, so a
+ *  canonical never points at a page chasewang.me does not build. */
 export function homeCanonical(url, item) {
   const m = String(url).match(WRITING_URL);
-  const linked = m && Array.isArray(item?.channels)
-    && item.channels.some((c) => typeof c?.url === 'string' && c.url.match(WRITING_URL)?.[1] === m[1]);
-  return linked ? `${HOME}/writings/${m[1]}/` : url;
+  const first = Array.isArray(item?.channels)
+    ? item.channels.map((c) => c?.url).find((u) => typeof u === 'string' && WRITING_URL.test(u)) : undefined;
+  return m && first && first.match(WRITING_URL)[1] === m[1] ? `${HOME}/writings/${m[1]}/` : url;
 }
 
 /** True when the document's own <html> start tag carries the marker (text elsewhere does not count). */

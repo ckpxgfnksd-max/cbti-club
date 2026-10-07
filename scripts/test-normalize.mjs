@@ -27,7 +27,7 @@ function check(name, ok, detail = '') {
   else failures.push(`${name}${detail ? ` — ${detail}` : ''}`);
 }
 
-function assertNormalized(name, html, item) {
+function assertNormalized(name, html, item, expectCanonical) {
   const p = parseAdapterPage(html);
   const r = normalizeWritingPage(html, { item });
   check(`${name}: recognised`, r.status === 'normalized', r.warnings.join('; '));
@@ -49,12 +49,9 @@ function assertNormalized(name, html, item) {
   check(`${name}: no adapter inline CSS`, !out.includes('--bg:#050506') && !out.includes('/redesign.css'));
   check(`${name}: no /#chase or /#read links`, !/href="\/#(chase|read)"/.test(out));
   check(`${name}: writing links go to chasewang.me/writing`, out.includes('href="https://chasewang.me/writing"'));
-  // With a manifest item that links this page, chasewang.me hosts it and the canonical names that copy; without one
-  // chasewang.me does not build it, so the adapter's own canonical is kept.
-  const linked = (item?.channels || []).some((c) => c.url === unesc(p.canonical));
-  const home = linked ? unesc(p.canonical).replace('https://cbti.club/writings/', 'https://chasewang.me/writings/') : unesc(p.canonical);
-  check(`${name}: canonical is ${linked ? 'the chasewang.me copy' : 'kept (no manifest link)'}`,
-    home.startsWith(linked ? 'https://chasewang.me/writings/' : 'https://cbti.club/writings/') && out.includes(`<link rel="canonical" href="${esc(home)}">`), home);
+  // The caller states the expected canonical: the chasewang.me copy when chasewang.me hosts the page, else the adapter's.
+  const home = expectCanonical;
+  check(`${name}: canonical is ${home}`, out.includes(`<link rel="canonical" href="${esc(home)}">`), attr(/<link rel="canonical" href="([^"]*)">/));
   check(`${name}: title kept`, out.includes(`<title>${p.title}</title>`));
   check(`${name}: og:url equals the canonical`, unesc(attr(/<meta property="og:url" content="([^"]*)">/) || '') === home);
   for (const k of ['type', 'title', 'image']) {
@@ -89,8 +86,17 @@ for (const lang of ['zh', 'en']) {
   const id = `fixture-${lang}`;
   const item = { id, primaryLang: lang, tags: ['deep-research', 'x-article'], excerpt: { [lang]: excerpts[id] },
     channels: [{ url: `https://cbti.club/writings/${id}/` }] };
-  assertNormalized(`fixture ${lang}`, html, item);
-  assertNormalized(`fixture ${lang} (no manifest entry)`, html, null);
+  const home = `https://chasewang.me/writings/${id}/`;
+  const own = `https://cbti.club/writings/${id}/`;
+  assertNormalized(`fixture ${lang}`, html, item, home);
+  assertNormalized(`fixture ${lang} (no manifest entry)`, html, null, own);
+  // Same-slug URL forms on either side map home; a page that is not its item's first writing channel does not.
+  const wwwIndex = html.replace(`href="${own}"`, `href="https://www.cbti.club/writings/${id}/index.html"`);
+  check(`fixture ${lang}: www/index.html canonical variant present`, wwwIndex !== html);
+  assertNormalized(`fixture ${lang} (www/index.html canonical)`, wwwIndex, item, home);
+  assertNormalized(`fixture ${lang} (www/index.html canonical, no manifest entry)`, wwwIndex, null, `https://www.cbti.club/writings/${id}/index.html`);
+  assertNormalized(`fixture ${lang} (channel with fragment)`, html, { ...item, channels: [{ url: `${own}#top` }] }, home);
+  assertNormalized(`fixture ${lang} (second writing channel)`, html, { ...item, channels: [{ url: 'https://cbti.club/writings/other/' }, { url: own }] }, own);
 
   // The hand-edited shape of ai-btc / crypto-k: site header, /redesign.css, body/main attributes, /#read.
   const handEdited = html
@@ -98,7 +104,7 @@ for (const lang of ['zh', 'en']) {
     .replace('<body>', '<body class="standalone-article">\n  <a class="site-skip" href="#article-main">Skip to content</a>\n  <header class="site-header site-header-standalone"><a class="site-brand" href="/#landing"><strong>CBTI</strong></a></header>')
     .replace('<main class="page">', '<main class="page standalone-site-main" id="article-main">')
     .replace(/href="\/#chase"/g, 'href="/#read"');
-  assertNormalized(`fixture ${lang} (hand-edited variant)`, handEdited, item);
+  assertNormalized(`fixture ${lang} (hand-edited variant)`, handEdited, item, home);
 
   // Unrecognised shapes are returned unchanged with reasons (the build then warns and publishes as-is).
   for (const [label, broken] of [
@@ -169,6 +175,8 @@ check('classify and kindLabel ignore tags that are not a list', classify({ tags:
   }
   check('mapUrl decodes the hash as app.js does', mapUrl('#chase%2Dtools') === 'https://chasewang.me/work');
   check('mapUrl keeps adapter writing on this site', mapUrl('https://cbti.club/writings/arc/') === '/writings/arc/');
+  check('homeCanonical follows the first writing channel, as chasewang.me does', homeCanonical('https://cbti.club/writings/arc/', { channels: [{ url: 'https://cbti.club/writings/agent/' }, { url: 'https://cbti.club/writings/arc/' }] }) === 'https://cbti.club/writings/arc/'
+    && homeCanonical('https://cbti.club/writings/agent/', { channels: [{ url: 'https://x.com/a' }, { url: 'https://cbti.club/writings/agent/' }, { url: 'https://cbti.club/writings/arc/' }] }) === 'https://chasewang.me/writings/agent/');
   check('homeCanonical maps only a page its manifest item links', homeCanonical('https://cbti.club/writings/arc/', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://chasewang.me/writings/arc/'
     && homeCanonical('https://www.cbti.club/writings/arc/index.html', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://chasewang.me/writings/arc/'
     && homeCanonical('https://cbti.club/writings/arc/', null) === 'https://cbti.club/writings/arc/'
@@ -225,7 +233,10 @@ if (!fixturesOnly) {
     let html;
     try { html = await readFile(path.join(ROOT, 'writings', id, 'index.html'), 'utf8'); } catch { continue; }
     check(`writings/${id}: repository copy not normalized`, !isNormalized(html));
-    assertNormalized(`writings/${id}`, html, byId.get(id) || null);
+    // chasewang.me hosts /writings/<id>/ for these: each real item's only writing channel is https://cbti.club/writings/<id>/.
+    const item = byId.get(id) || null;
+    const hosted = (item?.channels || []).map((c) => c.url).find((u) => /^https:\/\/cbti\.club\/writings\//.test(u)) === `https://cbti.club/writings/${id}/`;
+    assertNormalized(`writings/${id}`, html, item, hosted ? `https://chasewang.me/writings/${id}/` : parseAdapterPage(html).canonical);
   }
 }
 
