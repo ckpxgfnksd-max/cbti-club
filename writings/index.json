@@ -160,6 +160,12 @@
           "platform": "x",
           "url": "https://x.com/ChaseWang/status/2046608460830105710",
           "label": "在 X 上阅读"
+        },
+        {
+          "lang": "en",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/the-three-body-problem-of-crypto",
+          "label": "Read on Substack"
         }
       ]
     },
@@ -262,6 +268,12 @@
           "platform": "x",
           "url": "https://x.com/ChaseWang/status/2086302763164516555",
           "label": "在 X 上阅读"
+        },
+        {
+          "lang": "zh",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/ai-btc",
+          "label": "在 Substack 阅读"
         }
       ]
     },
@@ -291,6 +303,12 @@
           "platform": "x",
           "url": "https://x.com/ChaseWang/status/2086757945337901517",
           "label": "在 X 上阅读"
+        },
+        {
+          "lang": "zh",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/crypto-k",
+          "label": "在 Substack 阅读"
         }
       ]
     },
@@ -349,6 +367,115 @@
           "platform": "x",
           "url": "https://x.com/ChaseWang/status/2091360293163016402",
           "label": "在 X 上阅读"
+        }
+      ]
+    },
+    {
+      "id": "ai-agents-stablecoins-us-debt",
+      "publishedAt": "2026-09-01",
+      "primaryLang": "zh",
+      "format": "analysis",
+      "tags": [
+        "ai",
+        "stablecoin",
+        "macro",
+        "treasuries"
+      ],
+      "title": {
+        "zh": "当 AI 接管全球经济，美债会突然多出四条逃生通道吗？"
+      },
+      "excerpt": {
+        "zh": "在技术与宏观金融的交叉讨论中，一种推演广为流传：随着自主智能体普及，机器间毫秒级微支付与合规稳定币将带来庞大的美元短期国债配置需求，承接联邦政府举债压力，在链上结算中化解主权债务困局。"
+      },
+      "channels": [
+        {
+          "lang": "zh",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/ai-agents-stablecoins-us-debt",
+          "label": "在 Substack 阅读"
+        }
+      ]
+    },
+    {
+      "id": "ai-is-here-who-am-i",
+      "publishedAt": "2026-03-08",
+      "primaryLang": "en",
+      "format": "essay",
+      "tags": [
+        "ai",
+        "work"
+      ],
+      "title": {
+        "en": "AI is here. And who am I now?",
+        "zh": "AI 来了，而我又是谁？"
+      },
+      "subtitle": {
+        "en": "A letter with resolution. First chapter has all the questions/prompt that you could discuss with your agent to have your own answer."
+      },
+      "excerpt": {
+        "en": "You’re a second-year student sitting in a lecture hall, half-listening to a professor explain something you already watched a chatbot summarize in twelve seconds. You’re thinking: Why am I here? Why am I paying for this? If AI already knows everything in this textbook, what exactly am I building toward?"
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/ai-is-here-and-who-am-i-nowai",
+          "label": "Read on Substack"
+        }
+      ]
+    },
+    {
+      "id": "machine-outruns-social-contract",
+      "publishedAt": "2026-02-28",
+      "primaryLang": "en",
+      "format": "essay",
+      "tags": [
+        "ai",
+        "macro",
+        "inequality"
+      ],
+      "title": {
+        "en": "When the Machine Outruns the Social Contract"
+      },
+      "subtitle": {
+        "en": "AI, inequality, and the recurring pattern in which productivity leaps destabilize nations faster than institutions can adapt."
+      },
+      "excerpt": {
+        "en": "Here is a claim that can be tested against data: when a productivity leap concentrates economic gains faster than a society's institutions can redistribute them, the resulting pressure creates conditions under which political instability becomes significantly more likely. This is not a prediction of war."
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/when-the-machine-outruns-the-social",
+          "label": "Read on Substack"
+        }
+      ]
+    },
+    {
+      "id": "buffett-9000-years",
+      "publishedAt": "2026-02-22",
+      "primaryLang": "en",
+      "format": "essay",
+      "tags": [
+        "ai",
+        "valuation"
+      ],
+      "title": {
+        "en": "What if Buffett Could Live for 9,000 Years?!"
+      },
+      "subtitle": {
+        "en": "A thought on valuation model for post-AI era"
+      },
+      "excerpt": {
+        "en": "Standard valuation benchmarks—GDP, P/E multiples, and Yield—are the industry’s lingua franca. While ubiquitously adopted, they are rarely scrutinized through a First Principles lens."
+      },
+      "channels": [
+        {
+          "lang": "en",
+          "platform": "substack",
+          "url": "https://chasewang2026.substack.com/p/what-if-buffett-could-live-for-9000",
+          "label": "Read on Substack"
         }
       ]
     }
