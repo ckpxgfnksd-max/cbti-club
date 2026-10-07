@@ -17,6 +17,13 @@ import { AUTHOR_REF, FORMAT, HOME, PERSON_ID, UI, classify, esc, htmlLang, kindL
 
 export const MARK = 'data-cw-normalized';
 
+/** The writing lives on chasewang.me (2026-10-07): an adapter page's cbti.club URL maps to its home copy there.
+ *  chasewang.me builds /writings/<id>/ from these same repository files. Other URLs are returned unchanged. */
+export function homeCanonical(url) {
+  const m = String(url).match(/^https:\/\/cbti\.club\/writings\/([a-z0-9][a-z0-9-]*)\/$/);
+  return m ? `${HOME}/writings/${m[1]}/` : url;
+}
+
 /** True when the document's own <html> start tag carries the marker (text elsewhere does not count). */
 export function isNormalized(html) {
   const tag = String(html).match(/<html\b[^>]*>/i);
@@ -87,7 +94,7 @@ export function normalizeWritingPage(html, { item = null } = {}) {
   const L = htmlLang(lang);
   const format = FORMAT[item ? classify(item) : 'analysis'];
   const kind = (item && kindLabel(item)) || { zh: 'X 长文', en: 'X Article' };
-  const canonical = unesc(p.canonical);
+  const canonical = homeCanonical(unesc(p.canonical));
   const x = unesc(p.xUrl);
   // The adapter builds its meta description by escaping text that was already escaped HTML, so the
   // fallback (no manifest entry) needs two unescapes; tag stripping also left spaces before punctuation.
@@ -147,7 +154,7 @@ export function normalizeWritingPage(html, { item = null } = {}) {
       type: unesc(p.og.type || 'article'),
       title: unesc(p.og.title || p.headline),
       description,
-      url: unesc(p.og.url || p.canonical),
+      url: canonical,
       image: p.og.image ? unesc(p.og.image) : '',
     },
     htmlAttrs: [`${MARK}="1"`],

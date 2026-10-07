@@ -149,7 +149,8 @@ for (const t of TEMPLATES) {
     css: page.css || [], jsonld, body: html, scripts,
   });
   await put(t.out, out);
-  sitemap.push({ loc: `${ORIGIN}${t.path}`, lastmod: page.lastmod });
+  // The sitemap lists only pages whose canonical is on this site (landscape and the research page now live on chasewang.me).
+  if (String(page.canonical).startsWith(`${ORIGIN}/`)) sitemap.push({ loc: `${ORIGIN}${t.path}`, lastmod: page.lastmod });
 }
 
 // Adapter pages: copy assets, normalize HTML (repository files stay untouched).
@@ -174,7 +175,8 @@ for (const id of writingDirs) {
   }
   if (!byId.has(id)) warn(`writings/${id}/ has no manifest entry`);
   await put(`writings/${id}/index.html`, result.html);
-  sitemap.push({ loc: `${ORIGIN}/writings/${id}/`, lastmod: byId.get(id)?.publishedAt });
+  // Normalized adapter pages are canonical to chasewang.me/writings/<id>/, so they stay out of this sitemap.
+  if (result.status === 'unrecognized') sitemap.push({ loc: `${ORIGIN}/writings/${id}/`, lastmod: byId.get(id)?.publishedAt });
 }
 
 // Landing: the author's latest three pieces.

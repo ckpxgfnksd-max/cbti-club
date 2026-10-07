@@ -243,6 +243,8 @@ export function mapUrl(u) {
   const url = new URL(u);
   if (url.hostname === 'cbti.club' || url.hostname === 'www.cbti.club') {
     const p = url.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+    // The writing lives on chasewang.me (2026-10-07): link to the home copy, not to this site's mirror.
+    if (/^\/writings\/[a-z0-9][a-z0-9-]*\/$/.test(p) || p === '/research/crypto-crime-timeline/' || p === '/landscape') return `${HOME}${p}${url.hash}`;
     return (p || '/') + url.hash;
   }
   return url.toString();

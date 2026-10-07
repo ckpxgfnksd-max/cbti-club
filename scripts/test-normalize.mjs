@@ -13,7 +13,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { MARK, cleanDescription, isNormalized, normalizeWritingPage, parseAdapterPage } from './lib/normalize.mjs';
+import { MARK, cleanDescription, isNormalized, normalizeWritingPage, parseAdapterPage, homeCanonical } from './lib/normalize.mjs';
 import { LEGACY_HASH_ROUTES, classify, esc, kindLabel, mapUrl, parseManifest, unesc, validItem, writingRow } from './lib/site.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -49,9 +49,11 @@ function assertNormalized(name, html, item) {
   check(`${name}: no adapter inline CSS`, !out.includes('--bg:#050506') && !out.includes('/redesign.css'));
   check(`${name}: no /#chase or /#read links`, !/href="\/#(chase|read)"/.test(out));
   check(`${name}: writing links go to chasewang.me/writing`, out.includes('href="https://chasewang.me/writing"'));
-  check(`${name}: canonical kept as-is`, out.includes(`<link rel="canonical" href="${p.canonical}">`));
+  const home = homeCanonical(unesc(p.canonical));
+  check(`${name}: canonical is the chasewang.me copy`, home.startsWith('https://chasewang.me/writings/') && out.includes(`<link rel="canonical" href="${home}">`), home);
   check(`${name}: title kept`, out.includes(`<title>${p.title}</title>`));
-  for (const k of ['type', 'title', 'url', 'image']) {
+  check(`${name}: og:url is the chasewang.me copy`, unesc(attr(/<meta property="og:url" content="([^"]*)">/) || '') === home);
+  for (const k of ['type', 'title', 'image']) {
     const v = attr(new RegExp(`<meta property="og:${k}" content="([^"]*)">`));
     check(`${name}: og:${k} kept`, v !== null && unesc(v) === unesc(p.og[k]), `${v} vs ${p.og[k]}`);
   }
@@ -68,7 +70,7 @@ function assertNormalized(name, html, item) {
   let ld = null;
   try { ld = JSON.parse(ldText); } catch { /* reported below */ }
   check(`${name}: Article JSON-LD`, !!ld && ld['@type'] === 'Article' && ld.author?.['@id'] === 'https://chasewang.me/#person'
-    && ld.url === unesc(p.canonical) && ld.mainEntityOfPage === unesc(p.canonical) && ld.datePublished === p.date
+    && ld.url === home && ld.mainEntityOfPage === home && ld.datePublished === p.date
     && ld.headline === unesc(p.headline) && ld.inLanguage === L, ldText?.slice(0, 120));
 
   const again = normalizeWritingPage(out, { item });
@@ -160,6 +162,10 @@ check('classify and kindLabel ignore tags that are not a list', classify({ tags:
     }
   }
   check('mapUrl decodes the hash as app.js does', mapUrl('#chase%2Dtools') === 'https://chasewang.me/work');
+  check('mapUrl sends adapter writing to its chasewang.me home', mapUrl('https://cbti.club/writings/arc/') === 'https://chasewang.me/writings/arc/');
+  check('mapUrl sends the research page and the field map home', mapUrl('https://cbti.club/research/crypto-crime-timeline/') === 'https://chasewang.me/research/crypto-crime-timeline/'
+    && mapUrl('https://cbti.club/landscape.html') === 'https://chasewang.me/landscape');
+  check('mapUrl keeps other cbti.club paths local', mapUrl('https://cbti.club/assets/paper/crypto-body.pdf') === '/assets/paper/crypto-body.pdf');
   for (const u of ['#nope', '#chase-nope', '#node', '#landing', '#constructor', '#__proto__', '#', '#%E0%A4%A']) {
     let threw = false;
     try { mapUrl(u); } catch { threw = true; }
