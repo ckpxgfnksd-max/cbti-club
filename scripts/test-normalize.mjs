@@ -49,10 +49,14 @@ function assertNormalized(name, html, item) {
   check(`${name}: no adapter inline CSS`, !out.includes('--bg:#050506') && !out.includes('/redesign.css'));
   check(`${name}: no /#chase or /#read links`, !/href="\/#(chase|read)"/.test(out));
   check(`${name}: writing links go to chasewang.me/writing`, out.includes('href="https://chasewang.me/writing"'));
-  const home = homeCanonical(unesc(p.canonical));
-  check(`${name}: canonical is the chasewang.me copy`, home.startsWith('https://chasewang.me/writings/') && out.includes(`<link rel="canonical" href="${home}">`), home);
+  // With a manifest item that links this page, chasewang.me hosts it and the canonical names that copy; without one
+  // chasewang.me does not build it, so the adapter's own canonical is kept.
+  const linked = (item?.channels || []).some((c) => c.url === unesc(p.canonical));
+  const home = linked ? unesc(p.canonical).replace('https://cbti.club/writings/', 'https://chasewang.me/writings/') : unesc(p.canonical);
+  check(`${name}: canonical is ${linked ? 'the chasewang.me copy' : 'kept (no manifest link)'}`,
+    home.startsWith(linked ? 'https://chasewang.me/writings/' : 'https://cbti.club/writings/') && out.includes(`<link rel="canonical" href="${esc(home)}">`), home);
   check(`${name}: title kept`, out.includes(`<title>${p.title}</title>`));
-  check(`${name}: og:url is the chasewang.me copy`, unesc(attr(/<meta property="og:url" content="([^"]*)">/) || '') === home);
+  check(`${name}: og:url equals the canonical`, unesc(attr(/<meta property="og:url" content="([^"]*)">/) || '') === home);
   for (const k of ['type', 'title', 'image']) {
     const v = attr(new RegExp(`<meta property="og:${k}" content="([^"]*)">`));
     check(`${name}: og:${k} kept`, v !== null && unesc(v) === unesc(p.og[k]), `${v} vs ${p.og[k]}`);
@@ -82,7 +86,8 @@ const excerpts = JSON.parse(await readFile(path.join(FIXTURES, 'adapter-excerpts
 for (const lang of ['zh', 'en']) {
   const html = await readFile(path.join(FIXTURES, `adapter-${lang}.html`), 'utf8');
   const id = `fixture-${lang}`;
-  const item = { id, primaryLang: lang, tags: ['deep-research', 'x-article'], excerpt: { [lang]: excerpts[id] } };
+  const item = { id, primaryLang: lang, tags: ['deep-research', 'x-article'], excerpt: { [lang]: excerpts[id] },
+    channels: [{ url: `https://cbti.club/writings/${id}/` }] };
   assertNormalized(`fixture ${lang}`, html, item);
   assertNormalized(`fixture ${lang} (no manifest entry)`, html, null);
 
@@ -162,7 +167,14 @@ check('classify and kindLabel ignore tags that are not a list', classify({ tags:
     }
   }
   check('mapUrl decodes the hash as app.js does', mapUrl('#chase%2Dtools') === 'https://chasewang.me/work');
-  check('mapUrl sends adapter writing to its chasewang.me home', mapUrl('https://cbti.club/writings/arc/') === 'https://chasewang.me/writings/arc/');
+  check('mapUrl keeps adapter writing on this site', mapUrl('https://cbti.club/writings/arc/') === '/writings/arc/');
+  check('homeCanonical maps only a page its manifest item links', homeCanonical('https://cbti.club/writings/arc/', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://chasewang.me/writings/arc/'
+    && homeCanonical('https://www.cbti.club/writings/arc/index.html', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://chasewang.me/writings/arc/'
+    && homeCanonical('https://cbti.club/writings/arc/', null) === 'https://cbti.club/writings/arc/'
+    && homeCanonical('https://cbti.club/writings/arc/', { channels: [{ url: 'https://cbti.club/writings/agent/' }] }) === 'https://cbti.club/writings/arc/'
+    && homeCanonical('https://cbti.club/writings/arc/?x=1', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://cbti.club/writings/arc/?x=1'
+    && homeCanonical('https://evil.example/writings/arc/', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://evil.example/writings/arc/'
+    && homeCanonical('https://cbti.club/writings/arc/x/', { channels: [{ url: 'https://cbti.club/writings/arc/' }] }) === 'https://cbti.club/writings/arc/x/');
   check('mapUrl sends the research page and the field map home', mapUrl('https://cbti.club/research/crypto-crime-timeline/') === 'https://chasewang.me/research/crypto-crime-timeline/'
     && mapUrl('https://cbti.club/landscape.html') === 'https://chasewang.me/landscape');
   check('mapUrl keeps other cbti.club paths local', mapUrl('https://cbti.club/assets/paper/crypto-body.pdf') === '/assets/paper/crypto-body.pdf');

@@ -243,8 +243,10 @@ export function mapUrl(u) {
   const url = new URL(u);
   if (url.hostname === 'cbti.club' || url.hostname === 'www.cbti.club') {
     const p = url.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
-    // The writing lives on chasewang.me (2026-10-07): link to the home copy, not to this site's mirror.
-    if (/^\/writings\/[a-z0-9][a-z0-9-]*\/$/.test(p) || p === '/research/crypto-crime-timeline/' || p === '/landscape') return `${HOME}${p}${url.hash}`;
+    // The research page and the field map live on chasewang.me (2026-10-07): link to the home copy. Adapter writing
+    // pages stay linked here: chasewang.me picks a new one up on its next rebuild (up to 6 h later), and this site's
+    // copy, whose canonical names chasewang.me, exists from the moment it is published.
+    if (p === '/research/crypto-crime-timeline/' || p === '/landscape') return `${HOME}${p}${url.hash}`;
     return (p || '/') + url.hash;
   }
   return url.toString();

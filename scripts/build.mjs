@@ -134,6 +134,11 @@ await put('writings/index.json', manifestText);
 
 // Author pages kept as templates.
 const sitemap = [{ loc: `${ORIGIN}/` }];
+/** A page belongs in this sitemap unless its canonical names another origin (a missing canonical counts as local). */
+function localCanonical(url) {
+  if (!url) return true;
+  try { return new URL(url.replace(/&amp;/g, '&')).origin === ORIGIN; } catch { return true; }
+}
 for (const t of TEMPLATES) {
   const raw = await readFile(path.join(ROOT, t.src), 'utf8');
   const { page, body } = frontMatter(raw, t.src);
@@ -150,7 +155,7 @@ for (const t of TEMPLATES) {
   });
   await put(t.out, out);
   // The sitemap lists only pages whose canonical is on this site (landscape and the research page now live on chasewang.me).
-  if (String(page.canonical).startsWith(`${ORIGIN}/`)) sitemap.push({ loc: `${ORIGIN}${t.path}`, lastmod: page.lastmod });
+  if (localCanonical(page.canonical)) sitemap.push({ loc: `${ORIGIN}${t.path}`, lastmod: page.lastmod });
 }
 
 // Adapter pages: copy assets, normalize HTML (repository files stay untouched).
@@ -175,8 +180,10 @@ for (const id of writingDirs) {
   }
   if (!byId.has(id)) warn(`writings/${id}/ has no manifest entry`);
   await put(`writings/${id}/index.html`, result.html);
-  // Normalized adapter pages are canonical to chasewang.me/writings/<id>/, so they stay out of this sitemap.
-  if (result.status === 'unrecognized') sitemap.push({ loc: `${ORIGIN}/writings/${id}/`, lastmod: byId.get(id)?.publishedAt });
+  // Pages whose emitted canonical is chasewang.me/writings/<id>/ stay out of this sitemap.
+  if (localCanonical(result.html.match(/<link rel="canonical" href="([^"]*)"/i)?.[1])) {
+    sitemap.push({ loc: `${ORIGIN}/writings/${id}/`, lastmod: byId.get(id)?.publishedAt });
+  }
 }
 
 // Landing: the author's latest three pieces.

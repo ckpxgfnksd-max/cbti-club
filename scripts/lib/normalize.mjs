@@ -17,11 +17,19 @@ import { AUTHOR_REF, FORMAT, HOME, PERSON_ID, UI, classify, esc, htmlLang, kindL
 
 export const MARK = 'data-cw-normalized';
 
-/** The writing lives on chasewang.me (2026-10-07): an adapter page's cbti.club URL maps to its home copy there.
- *  chasewang.me builds /writings/<id>/ from these same repository files. Other URLs are returned unchanged. */
-export function homeCanonical(url) {
-  const m = String(url).match(/^https:\/\/cbti\.club\/writings\/([a-z0-9][a-z0-9-]*)\/$/);
-  return m ? `${HOME}/writings/${m[1]}/` : url;
+/** An adapter writing URL on this site: cbti.club or www, /writings/<id>/ or /writings/<id>/index.html, no query.
+ *  chasewang.me (scripts/lib/hosted.mjs CBTI_WRITING) recognises the same forms; keep the two in step. */
+export const WRITING_URL = /^https:\/\/(?:www\.)?cbti\.club\/writings\/([a-z0-9][a-z0-9-]*)\/(?:index\.html)?(?:#.*)?$/;
+
+/** The writing lives on chasewang.me (2026-10-07): chasewang.me hosts /writings/<id>/ for every manifest item that
+ *  links https://cbti.club/writings/<id>/, built from these same repository files. So an adapter page's canonical
+ *  maps to that home copy only when its manifest item links it; otherwise (no manifest entry, another URL) the URL
+ *  is returned unchanged, so a canonical never points at a page chasewang.me does not build. */
+export function homeCanonical(url, item) {
+  const m = String(url).match(WRITING_URL);
+  const linked = m && Array.isArray(item?.channels)
+    && item.channels.some((c) => typeof c?.url === 'string' && c.url.match(WRITING_URL)?.[1] === m[1]);
+  return linked ? `${HOME}/writings/${m[1]}/` : url;
 }
 
 /** True when the document's own <html> start tag carries the marker (text elsewhere does not count). */
@@ -94,7 +102,7 @@ export function normalizeWritingPage(html, { item = null } = {}) {
   const L = htmlLang(lang);
   const format = FORMAT[item ? classify(item) : 'analysis'];
   const kind = (item && kindLabel(item)) || { zh: 'X 长文', en: 'X Article' };
-  const canonical = homeCanonical(unesc(p.canonical));
+  const canonical = homeCanonical(unesc(p.canonical), item);
   const x = unesc(p.xUrl);
   // The adapter builds its meta description by escaping text that was already escaped HTML, so the
   // fallback (no manifest entry) needs two unescapes; tag stripping also left spaces before punctuation.
