@@ -20,7 +20,7 @@ import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AUTHOR_REF, ORIGIN, PERSON_ID, byDateDesc, parseManifest, renderAuthorPage, writingRow } from './lib/site.mjs';
+import { AUTHOR_REF, ORIGIN, PERSON_ID, byDateDesc, declaredCanonical, localCanonical, parseManifest, renderAuthorPage, writingRow } from './lib/site.mjs';
 import { normalizeWritingPage } from './lib/normalize.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -134,13 +134,6 @@ await put('writings/index.json', manifestText);
 
 // Author pages kept as templates.
 const sitemap = [{ loc: `${ORIGIN}/` }];
-/** A page belongs in this sitemap unless its canonical names another host (a missing canonical counts as local;
- *  http/https and the www form of this host count as this host). */
-function localCanonical(url) {
-  if (!url) return true;
-  const host = (u) => new URL(u).hostname.replace(/^www\./, '');
-  try { return host(url.replace(/&amp;/g, '&')) === host(ORIGIN); } catch { return true; }
-}
 for (const t of TEMPLATES) {
   const raw = await readFile(path.join(ROOT, t.src), 'utf8');
   const { page, body } = frontMatter(raw, t.src);
@@ -182,9 +175,9 @@ for (const id of writingDirs) {
   }
   if (!byId.has(id)) warn(`writings/${id}/ has no manifest entry`);
   await put(`writings/${id}/index.html`, result.html);
-  // Normalized pages whose canonical is chasewang.me/writings/<id>/ stay out of this sitemap. Pages published as-is
-  // keep their own canonical: chasewang.me cannot parse them either, so it does not host them.
-  if (result.status !== 'normalized' || localCanonical(result.canonical)) {
+  // A page whose canonical names another host (chasewang.me/writings/<id>/) stays out of this sitemap: the canonical a
+  // normalized page declares, or the one a page published as-is already carries.
+  if (localCanonical(result.status === 'normalized' ? result.canonical : declaredCanonical(result.html))) {
     sitemap.push({ loc: `${ORIGIN}/writings/${id}/`, lastmod: byId.get(id)?.publishedAt });
   }
 }

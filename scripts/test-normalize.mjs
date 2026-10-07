@@ -13,8 +13,8 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { MARK, cleanDescription, isNormalized, normalizeWritingPage, parseAdapterPage, homeCanonical } from './lib/normalize.mjs';
-import { LEGACY_HASH_ROUTES, classify, esc, kindLabel, mapUrl, parseManifest, unesc, validItem, writingRow } from './lib/site.mjs';
+import { MARK, WRITING_URL, cleanDescription, isNormalized, normalizeWritingPage, parseAdapterPage, homeCanonical } from './lib/normalize.mjs';
+import { LEGACY_HASH_ROUTES, classify, declaredCanonical, esc, kindLabel, localCanonical, mapUrl, parseManifest, unesc, validItem, writingRow } from './lib/site.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURES = path.join(ROOT, 'scripts', 'fixtures');
@@ -188,6 +188,12 @@ check('classify and kindLabel ignore tags that are not a list', classify({ tags:
     && mapUrl('https://cbti.club/landscape.html') === 'https://chasewang.me/landscape');
   check('mapUrl sends slash and .html variants of the moved pages home', mapUrl('https://cbti.club/research/crypto-crime-timeline') === 'https://chasewang.me/research/crypto-crime-timeline/'
     && mapUrl('https://www.cbti.club/landscape/') === 'https://chasewang.me/landscape' && mapUrl('https://cbti.club/research/crypto-crime-timeline/index.html#x') === 'https://chasewang.me/research/crypto-crime-timeline/#x');
+  check('localCanonical: this host in any scheme or www form is local; other hosts and ports are not', localCanonical('https://cbti.club/x')
+    && localCanonical('http://www.cbti.club/x') && localCanonical(undefined) && localCanonical('not a url')
+    && !localCanonical('https://chasewang.me/writings/arc/') && !localCanonical('https://cbti.club:8443/x') && !localCanonical('https://evil.cbti.club.example/x'));
+  check('declaredCanonical reads any attribute order and quoting', declaredCanonical('<link rel="canonical" href="https://a/">') === 'https://a/'
+    && declaredCanonical("<link href='https://b/' rel='canonical'>") === 'https://b/' && declaredCanonical('<link rel=preload href=x><LINK REL=canonical HREF=https://c/>') === 'https://c/'
+    && declaredCanonical('<link rel="stylesheet" href="x.css">') === null);
   check('mapUrl keeps other cbti.club paths local', mapUrl('https://cbti.club/assets/paper/crypto-body.pdf') === '/assets/paper/crypto-body.pdf');
   for (const u of ['#nope', '#chase-nope', '#node', '#landing', '#constructor', '#__proto__', '#', '#%E0%A4%A']) {
     let threw = false;
@@ -233,10 +239,14 @@ if (!fixturesOnly) {
     let html;
     try { html = await readFile(path.join(ROOT, 'writings', id, 'index.html'), 'utf8'); } catch { continue; }
     check(`writings/${id}: repository copy not normalized`, !isNormalized(html));
-    // chasewang.me hosts /writings/<id>/ for these: each real item's only writing channel is https://cbti.club/writings/<id>/.
+    // Expected from chasewang.me's hosting rule, as its scripts/build.mjs states it: for each manifest item it builds
+    // /writings/<slug>/ from the first channel URL matching CBTI_WRITING (pinned equal to WRITING_URL by its
+    // check-shared.mjs). This page is hosted when that slug is this directory and the page's canonical names it.
     const item = byId.get(id) || null;
-    const hosted = (item?.channels || []).map((c) => c.url).find((u) => /^https:\/\/cbti\.club\/writings\//.test(u)) === `https://cbti.club/writings/${id}/`;
-    assertNormalized(`writings/${id}`, html, item, hosted ? `https://chasewang.me/writings/${id}/` : parseAdapterPage(html).canonical);
+    const first = (item?.channels || []).map((c) => c?.url).filter((u) => typeof u === 'string').find((u) => WRITING_URL.test(u));
+    const own = unesc(parseAdapterPage(html).canonical);
+    const hosted = !!first && first.match(WRITING_URL)[1] === id && own.match(WRITING_URL)?.[1] === id;
+    assertNormalized(`writings/${id}`, html, item, hosted ? `https://chasewang.me/writings/${id}/` : own);
   }
 }
 

@@ -5,6 +5,27 @@
 
 export const ORIGIN = 'https://cbti.club';
 export const HOME = 'https://chasewang.me';
+
+/** True unless `url` names another host than this site (a missing or unparsable URL counts as local; http/https and
+ *  the www form count as this site; a different port does not). Decides sitemap membership. */
+export function localCanonical(url) {
+  if (!url) return true;
+  const host = (u) => { const x = new URL(u); return `${x.hostname.replace(/^www\./, '')}${x.port ? `:${x.port}` : ''}`; };
+  try { return host(String(url).replace(/&amp;/g, '&')) === host(ORIGIN); } catch { return true; }
+}
+
+/** The href of the first <link> whose rel includes "canonical", in any attribute order and quoting; null when none. */
+export function declaredCanonical(html) {
+  for (const m of String(html).matchAll(/<link\b((?:[^>"']|"[^"]*"|'[^']*')*)>/gi)) {
+    const attr = (name) => m[1].match(new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`, 'i'));
+    const rel = attr('rel');
+    if (rel && /(^|\s)canonical(\s|$)/i.test(rel[1] ?? rel[2] ?? rel[3])) {
+      const href = attr('href');
+      return href ? (href[1] ?? href[2] ?? href[3]) : null;
+    }
+  }
+  return null;
+}
 export const PERSON_ID = `${HOME}/#person`;
 export const AUTHOR_REF = { '@type': 'Person', '@id': PERSON_ID, name: 'Chase Wang', url: `${HOME}/` };
 
